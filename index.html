@@ -345,6 +345,7 @@ pre code{background:none;border:none;padding:0;color:var(--ink)}
     <button data-p="roadmap"><span class="ic"><svg viewBox="0 0 24 24" width="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>MVP &amp; roadmap</button>
     <button data-p="kit"><span class="ic"><svg viewBox="0 0 24 24" width="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l2.5 5 5.5.8-4 3.9 1 5.5L12 17l-5 2.6 1-5.5-4-3.9 5.5-.8z"/></svg></span>UI kit &amp; mockups</button>
     <button data-p="journey"><span class="ic"><svg viewBox="0 0 24 24" width="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 18c0-7 14-7 14-14M5 18h3M5 18v-3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>User journey</button>
+    <button data-p="future"><span class="ic"><svg viewBox="0 0 24 24" width="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2 4.5 13H11l-1 9 8.5-11H12z" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Future features</button>
   </div>
 
   <div class="sidefoot"><b>Off-peak deals for going out.</b><br>Compiled 25 Jun 2026 · React Native (iOS + Android)</div>
@@ -572,18 +573,6 @@ ORDER BY s.starts_at;</code></pre></div>
         <div class="kbox"><h4>3 · Off-peak streak <span class="badge b-later">Phase 2</span></h4><p>Extra cashback for picking the quiet slots venues most want filled (weekday daytime) — the more off-peak you go, the bigger the reward.</p><p style="font-size:12.5px"><strong>vs EatClub:</strong> turns a passive discount into an active habit — and directly serves the yield goal that earns venue trust. <strong>Simple:</strong> a multiplier on the reward.</p></div>
         <div class="kbox"><h4>4 · Try-something-new bonus <span class="badge b-later">Phase 2</span></h4><p>A one-time bonus the first time you try a new <em>type</em> of activity (first escape room, first karting).</p><p style="font-size:12.5px"><strong>vs EatClub:</strong> restaurants are all "eating" — entertainment spans bowling → theatre. Variety is the moat. <strong>Simple:</strong> one flag per category per user.</p></div>
       </div>
-
-      <h2>More ways to stand out <span style="font-size:13px;color:var(--mut);font-weight:400">— ideation, not MVP</span></h2>
-      <p class="muted" style="margin-top:0">A backlog of bigger, on-brand bets. Each leans on something the market <em>doesn't</em> have — daily scarcity, a real social graph, or owning the whole night out. We'd pick at most one or two; the rest stay parked.</p>
-      <div class="grid2">
-        <div class="kbox"><h4>Daily Drops <span class="badge b-later">Idea</span></h4><p>The day's deals <strong>unlock at a set time</strong> (e.g. 9am), sneaker-drop style. With the 5-deal cap it turns scarcity into a <strong>daily ritual</strong> — a reason to open the app every morning. Nobody in this space has a "drop" moment.</p></div>
-        <div class="kbox"><h4>Rally your crew <span class="badge b-later">Idea</span></h4><p>Pick a deal and <strong>ping mates who are free tonight</strong>; they tap in and (at walk-in venues) each earns their own cashback. Turns solo discovery into a group plan — going out is social, and no competitor owns the social graph.</p></div>
-        <div class="kbox"><h4>Night-out builder <span class="badge b-later">Idea</span></h4><p>Chain a few walk-in deals into <strong>one evening</strong> — drinks → arcade → late bite — all on the Zivvo Card. Own the <em>whole night</em>, not a single stop. A genuinely new unit of "a deal."</p></div>
-        <div class="kbox"><h4>Zivvo+ membership <span class="badge b-later">Idea</span></h4><p>A paid tier: <strong>early access to each day's drops</strong> + boosted cashback. Recurring revenue that leans hard into the members'-club exclusivity — and makes the scarce 5-deal feed feel like a perk worth paying for.</p></div>
-        <div class="kbox"><h4>Flash cashback boosts <span class="badge b-later">Idea</span></h4><p>Venues bump the reward during dead periods — <strong>"2× cashback, next hour"</strong>. Real-time, yield-aligned urgency that pulls people in exactly when a venue is empty. Pure off-peak demand on demand.</p></div>
-        <div class="kbox"><h4>Sold-out waitlist <span class="badge b-later">Idea</span></h4><p>For reserved activities, <strong>capture demand when a slot's full</strong> and auto-offer it the moment someone cancels. Turns no-shows into recovered revenue and keeps hot slots earning.</p></div>
-      </div>
-      <p class="disc">If we ship one, it's <strong>Daily Drops</strong> — it reinforces the exact scarcity model (5 deals, today-first) and builds a daily habit. <strong>Rally</strong> is the natural second: it's the most "entertainment-native" and hardest for EatClub/Groupon to copy.</p>
 
       <div class="call key"><span class="h">Exclusive by design — max 5 deals per venue</span> Every venue lists <strong>at most five live deals at a time</strong>. Scarcity is the point: it keeps the feed curated, makes each deal feel worth grabbing, and forces venues to put their <em>best</em> offer forward rather than dumping a long list (the anti-Groupon). Fewer, better deals = a premium, "members'-club" feel — and easier choices for the customer.</div>
 
@@ -1142,14 +1131,50 @@ ORDER BY s.starts_at;</code></pre></div>
 
       <div class="call key"><span class="h">The rule: pay-at-venue only where a no-show costs nothing</span> Reserved activities (held, perishable slots) must <strong>pre-pay</strong> — Flow A. Walk-in venues reserve nothing, so they get the friction-free <strong>Zivvo Card</strong> path — Flow B, which also unlocks <strong>group cashback</strong> (everyone taps their own card, each gets a reward). Neither uses coupons or QR.</div>
 
-      <div class="pagenav"><button onclick="go('kit')"><div class="d">Previous</div><div class="t">← UI kit &amp; mockups</div></button><button></button></div>
+      <div class="pagenav"><button onclick="go('kit')"><div class="d">Previous</div><div class="t">← UI kit &amp; mockups</div></button><button class="next" onclick="go('future')"><div class="d">Next</div><div class="t">Future features →</div></button></div>
+    </section>
+
+    <!-- ===== FUTURE FEATURES ===== -->
+    <section class="panel-view" id="future">
+      <div class="eyebrow">08 · Backlog</div>
+      <h1 class="title">Future features</h1>
+      <p class="lead">Bigger, on-brand bets beyond the MVP — parked here so they don't bloat the build. Each leans on something the market doesn't have: <strong>daily scarcity</strong>, <strong>owning the whole night</strong>, or <strong>yield on demand</strong>.</p>
+
+      <h2>Stack deals — build your night</h2>
+      <p class="muted" style="margin-top:0">Book one deal, then add another onto it — e.g. <strong>bowling + drinks</strong>. The hook: once the first leg is booked, Zivvo surfaces nearby add-on deals at a <strong>deeper discount</strong> to reward chaining the night together.</p>
+      <div class="flow">
+        <div class="step"><div class="n">STEP 1</div><div class="t">Book the first deal</div><div class="d">e.g. a bowling slot at Strike Lanes (reserved → pre-paid).</div></div>
+        <div class="step"><div class="n">STEP 2</div><div class="t">Zivvo suggests the next leg</div><div class="d">Nearby walk-in add-ons — drinks, arcade, late bite — surfaced as "add to your night".</div></div>
+        <div class="step"><div class="n">STEP 3</div><div class="t">Bigger discount to stack</div><div class="d">Because you've already booked, the second deal shows a <strong>higher</strong> discount — the more you stack, the better it gets.</div></div>
+        <div class="step"><div class="n">STEP 4</div><div class="t">One night, one card</div><div class="d">Walk-in legs all run on the Zivvo Card → cashback on each.</div></div>
+      </div>
+      <p class="disc">Why it's different: nobody sells the <em>whole evening</em>. It also lifts basket size and pushes demand to a second venue that would otherwise sit empty.</p>
+
+      <h2>The backlog</h2>
+      <div class="grid2">
+        <div class="kbox"><h4>Daily Drops <span class="badge b-rec">Build first</span></h4><p>The day's deals <strong>unlock at a set time</strong> (e.g. 9am), sneaker-drop style. With the 5-deal cap it turns scarcity into a <strong>daily ritual</strong> — a reason to open the app every morning. Nobody in this space has a "drop" moment.</p></div>
+        <div class="kbox"><h4>Flash cashback boosts <span class="badge b-later">Future</span></h4><p>Venues bump the reward during dead periods — <strong>"2× cashback, next hour"</strong>. Real-time, yield-aligned urgency that pulls people in exactly when a venue is empty. Off-peak demand on demand.</p></div>
+        <div class="kbox"><h4>Sold-out waitlist <span class="badge b-later">Future</span></h4><p>For reserved activities, <strong>capture demand when a slot's full</strong> and auto-offer it the moment someone cancels. Turns no-shows into recovered revenue and keeps hot slots earning.</p></div>
+        <div class="kbox"><h4>Stack deals <span class="badge b-later">Future</span></h4><p>The bowling + drinks chaining above — book one, get a deeper discount on the next. Owns the whole night and lifts basket size.</p></div>
+      </div>
+
+      <h2>Zivvo+ membership <span style="font-size:13px;color:var(--mut);font-weight:400">— its own tab in the app</span></h2>
+      <div class="call key"><span class="h">A paid tier, surfaced as a dedicated Zivvo+ tab</span> Rather than buried in settings, <strong>Zivvo+ gets its own tab</strong> in the app's bottom nav. Perks that lean into the members'-club exclusivity:
+        <ul class="clean" style="margin-top:8px">
+          <li><strong>Early access to each day's Drops</strong> — see and grab the 5 daily deals before they open to everyone.</li>
+          <li><strong>Boosted cashback</strong> — a higher % back on every Zivvo Card payment.</li>
+          <li><strong>Members-only deals</strong> and the occasional venue perk (skip-the-line, free first game).</li>
+        </ul>
+        Recurring revenue that makes the scarce 5-deal feed feel like a perk worth paying for — and a second monetisation line beyond venue commission.</div>
+
+      <div class="pagenav"><button onclick="go('journey')"><div class="d">Previous</div><div class="t">← User journey</div></button><button></button></div>
     </section>
 
   </div>
 </div>
 
 <script>
-const titles={overview:'Overview',market:'Market & competitors',tech:'Tech stack',features:'Features & UX',payments:'Payments & money flow',roadmap:'MVP & roadmap',kit:'UI kit & mockups',journey:'User journey'};
+const titles={overview:'Overview',market:'Market & competitors',tech:'Tech stack',features:'Features & UX',payments:'Payments & money flow',roadmap:'MVP & roadmap',kit:'UI kit & mockups',journey:'User journey',future:'Future features'};
 function go(id){
   document.querySelectorAll('.panel-view').forEach(p=>p.classList.toggle('show',p.id===id));
   document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('active',b.dataset.p===id));
