@@ -6,12 +6,13 @@
 <title>Zivvo — Research, UI Kit &amp; Mockups</title>
 <style>
 /* ============ THEME TOKENS ============ */
+/* Site chrome is fixed: Cobalt · dark. */
 :root{
-  /* brand (overridden per theme) */
-  --c1:#8b3df0; --c2:#ec4899; --accent:#22d3ee; --brand-text:#a855f7;
-  /* chrome (overridden per theme) */
-  --bg:#0b0915; --panel:#13101f; --card:#191527; --card2:#201b33; --line:#2a2440;
-  --ink:#f1eefb; --mut:#a59fc4; --faint:#6f6890;
+  /* brand */
+  --c1:#3b82f6; --c2:#6366f1; --accent:#38bdf8; --brand-text:#60a5fa;
+  /* chrome */
+  --bg:#080b16; --panel:#0f1422; --card:#151b2c; --card2:#1b2236; --line:#28324a;
+  --ink:#eef2fb; --mut:#9aa6c4; --faint:#6b7596;
   /* semantic (constant) */
   --good:#10b981; --amber:#f59e0b; --red:#ef4444;
   /* app mockup surfaces (constant — phones stay light) */
@@ -19,16 +20,13 @@
   --grad:linear-gradient(120deg,var(--c1),var(--c2));
   --sb:264px;
 }
-[data-theme="cobalt"]{--c1:#3b82f6;--c2:#6366f1;--accent:#38bdf8;--brand-text:#60a5fa;
-  --bg:#080b16;--panel:#0f1422;--card:#151b2c;--card2:#1b2236;--line:#28324a;--ink:#eef2fb;--mut:#9aa6c4;--faint:#6b7596}
-[data-theme="mint"]{--c1:#06b6d4;--c2:#10b981;--accent:#34d399;--brand-text:#14b8a6;
-  --bg:#07120f;--panel:#0d1a16;--card:#12211c;--card2:#182b24;--line:#244038;--ink:#e9faf3;--mut:#93c4b4;--faint:#5f8a7c}
-[data-theme="sunset"]{--c1:#f97316;--c2:#ec4899;--accent:#fbbf24;--brand-text:#fb7185;
-  --bg:#140a0e;--panel:#1d1016;--card:#25141c;--card2:#2f1a24;--line:#43222f;--ink:#fbeef0;--mut:#c9a3ad;--faint:#8a6670}
-[data-theme="arcade"]{--c1:#ff2d95;--c2:#7c3aed;--accent:#00e5ff;--brand-text:#ff4da6;
-  --bg:#07060d;--panel:#0d0b16;--card:#12101d;--card2:#181527;--line:#2a2440;--ink:#f1eefb;--mut:#a59fc4;--faint:#6f6890}
-[data-theme="daylight"]{--c1:#8b3df0;--c2:#ec4899;--accent:#7c2be0;--brand-text:#7c2be0;
-  --bg:#f3f2f9;--panel:#ffffff;--card:#ffffff;--card2:#f6f5fc;--line:#eae7f2;--ink:#1a1430;--mut:#5f5980;--faint:#9b95b5}
+/* UI-KIT-ONLY brand palettes — re-skin the design system & mockups, not the site chrome */
+#kit[data-kit-theme="cobalt"]{--c1:#3b82f6;--c2:#6366f1;--accent:#38bdf8;--brand-text:#3b82f6}
+#kit[data-kit-theme="aurora"]{--c1:#8b3df0;--c2:#ec4899;--accent:#a855f7;--brand-text:#8b3df0}
+#kit[data-kit-theme="mint"]{--c1:#06b6d4;--c2:#10b981;--accent:#14b8a6;--brand-text:#0d9488}
+#kit[data-kit-theme="sunset"]{--c1:#f97316;--c2:#ec4899;--accent:#fb7185;--brand-text:#e11d48}
+#kit[data-kit-theme="arcade"]{--c1:#ff2d95;--c2:#7c3aed;--accent:#d946ef;--brand-text:#c026d3}
+#kit[data-kit-theme="forest"]{--c1:#16a34a;--c2:#0d9488;--accent:#22c55e;--brand-text:#15803d}
 
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
@@ -301,9 +299,18 @@ pre code{background:none;border:none;padding:0;color:var(--ink)}
   .menubtn{display:grid;place-items:center;width:38px;height:38px;border-radius:10px;background:var(--card);border:1px solid var(--line);cursor:pointer}
   .content,.topbar{padding-left:20px;padding-right:20px}
 }
+
+/* ============ UI-KIT COLOUR PICKER ============ */
+.kitpick{display:flex;flex-wrap:wrap;gap:12px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px 18px;margin:6px 0 8px}
+.ktile{display:flex;flex-direction:column;align-items:center;gap:7px;cursor:pointer;padding:6px;border-radius:12px;border:2px solid transparent;transition:.15s;min-width:64px}
+.ktile:hover{background:var(--card2)}
+.ktile.on{border-color:var(--ink)}
+.ktile .dot{width:42px;height:42px;border-radius:12px;box-shadow:0 6px 14px rgba(0,0,0,.3)}
+.ktile .kl{font-size:11.5px;font-weight:600;color:var(--mut)}
+.ktile.on .kl{color:var(--ink)}
 </style>
 </head>
-<body data-theme="aurora">
+<body>
 
 <!-- ============ SIDEBAR ============ -->
 <aside class="sidebar" id="sidebar">
@@ -323,18 +330,7 @@ pre code{background:none;border:none;padding:0;color:var(--ink)}
     <button data-p="kit"><span class="ic"><svg viewBox="0 0 24 24" width="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l2.5 5 5.5.8-4 3.9 1 5.5L12 17l-5 2.6 1-5.5-4-3.9 5.5-.8z"/></svg></span>UI kit &amp; mockups</button>
   </div>
 
-  <div class="navlabel">Theme</div>
-  <div class="themes" id="themes">
-    <div class="swatch on" data-t="aurora" title="Aurora"><span style="background:linear-gradient(120deg,#8b3df0,#ec4899)"></span></div>
-    <div class="swatch" data-t="cobalt" title="Cobalt"><span style="background:linear-gradient(120deg,#3b82f6,#6366f1)"></span></div>
-    <div class="swatch" data-t="mint" title="Mint"><span style="background:linear-gradient(120deg,#06b6d4,#10b981)"></span></div>
-    <div class="swatch" data-t="sunset" title="Sunset"><span style="background:linear-gradient(120deg,#f97316,#ec4899)"></span></div>
-    <div class="swatch" data-t="arcade" title="Arcade"><span style="background:linear-gradient(120deg,#ff2d95,#7c3aed)"></span></div>
-    <div class="swatch" data-t="daylight" title="Daylight (light)"><span style="background:linear-gradient(120deg,#a855f7,#ec4899);border:1px solid #fff"></span></div>
-  </div>
-  <div class="tname" id="tname">Aurora · dark</div>
-
-  <div class="sidefoot"><b>EatClub, for entertainment.</b><br>Compiled 25 Jun 2026 · React Native (iOS + Android)</div>
+  <div class="sidefoot"><b>Off-peak deals for going out.</b><br>Compiled 25 Jun 2026 · React Native (iOS + Android)</div>
 </aside>
 
 <!-- ============ MAIN ============ -->
@@ -352,7 +348,7 @@ pre code{background:none;border:none;padding:0;color:var(--ink)}
     <!-- ===== OVERVIEW ===== -->
     <section class="panel-view show" id="overview">
       <div class="eyebrow">The thesis</div>
-      <h1 class="title">EatClub, but for entertainment.</h1>
+      <h1 class="title">Off-peak deals for going out.</h1>
       <p class="lead">EatClub applies airline-style <strong>yield management</strong> to empty restaurant tables — sell a perishable 6pm-Tuesday seat at up to 50% off rather than let it expire worthless. Zivvo applies the same logic to <strong>entertainment capacity</strong>: a bowling lane at 2pm, an escape room at 4pm, a paintball field on a quiet weekday morning.</p>
       <div class="grid3">
         <div class="card stat"><div class="v">~26%+</div><div class="l">CAGR of the location-based entertainment market</div></div>
@@ -363,6 +359,26 @@ pre code{background:none;border:none;padding:0;color:var(--ink)}
         A leisure venue's capacity is even more perishable and higher-fixed-cost than a restaurant table — lanes, karts and rooms cost the same whether empty or full. Every off-peak booking is near-pure incremental margin. Bowlero (400 venues targeted by 2026) <strong>publicly cites "data-driven yield management" as a survival requirement</strong> — operators already want this tooling; nobody has built the cross-venue marketplace for it.</div>
       <h2>The one-line wedge</h2>
       <p>Be the consumer-loved, <strong>frictionless off-peak yield/demand layer</strong> that integrates with venues' existing booking systems and undercuts Groupon's brutal take — in a market growing ~26%+ a year where incumbents are already asking for exactly this.</p>
+
+      <h2>What you can book on Zivvo</h2>
+      <p class="muted">Any venue that sells <strong>time-boxed, perishable capacity</strong> is a fit — from competitive socialising to live shows. Categories we can list:</p>
+      <div class="tblwrap"><table>
+        <thead><tr><th>Category</th><th>Activities</th><th>Off-peak / perishable fit</th></tr></thead>
+        <tbody>
+          <tr><td>Competitive socialising</td><td>Bowling · darts (Flight Club–style) · shuffleboard · ping pong (Bounce) · pool &amp; snooker · crazy / mini-golf · axe throwing</td><td>★★★★★ Fixed lanes/oches/tables; weekday daytimes sit empty</td></tr>
+          <tr><td>Adrenaline &amp; action</td><td>Paintball · laser tag · go-karting · indoor skydiving (iFLY) · climbing &amp; bouldering · trampoline &amp; inflatable parks · high ropes / zip lines</td><td>★★★★★ Session-based capacity; quiet mornings &amp; midweek slots</td></tr>
+          <tr><td>Puzzles &amp; immersive</td><td>Escape rooms · immersive experiences · mystery / whodunnit games · VR experiences</td><td>★★★★★ Timed slots, hard to refill if missed</td></tr>
+          <tr><td>Arcades &amp; gaming</td><td>Arcades · eSports / gaming lounges · board-game cafés · console &amp; LAN rooms</td><td>★★★★☆ Per-hour stations; off-peak weekday dead time</td></tr>
+          <tr><td>Live shows &amp; theatre</td><td>Theatre &amp; plays · musicals · comedy clubs · live music / gigs · cabaret &amp; magic · cinema</td><td>★★★★★ Empty seats expire at curtain-up — classic yield play</td></tr>
+          <tr><td>Skating &amp; water</td><td>Ice skating · roller skating · water parks · indoor surfing · swimming sessions</td><td>★★★★☆ Session capacity, weather &amp; term-time swings</td></tr>
+          <tr><td>Culture &amp; attractions</td><td>Museums &amp; galleries · aquariums · zoos &amp; safari parks · planetariums · exhibitions · observation decks</td><td>★★★☆☆ Timed-entry tickets; weekday quiet periods</td></tr>
+          <tr><td>Workshops &amp; classes</td><td>Cooking classes · wine / beer / gin &amp; cocktail tastings · pottery &amp; paint-a-pot · art jamming · candle making · dance classes</td><td>★★★★☆ Fixed class sizes; unsold seats vanish</td></tr>
+          <tr><td>Wellness &amp; leisure</td><td>Spa &amp; sauna · thermal baths · float tanks · fitness &amp; yoga studios</td><td>★★★★☆ Off-peak weekday slots heavily under-used</td></tr>
+          <tr><td>Family &amp; kids</td><td>Soft play · theme &amp; amusement parks · fairs · petting farms · kids' activity centres</td><td>★★★★☆ Birthday / group demand — the high-LTV wedge</td></tr>
+        </tbody>
+      </table></div>
+      <p class="disc">Launch focus is the ★★★★★ categories (clearest perishable capacity); shows &amp; theatre add a second, high-volume yield play. Breadth is the long-term moat — one app for everything to do.</p>
+
       <h2>What's in this dossier</h2>
       <div class="grid2">
         <div class="kbox"><h4>Market &amp; competitors</h4><p>The EatClub blueprint, a full competitive table, and where Zivvo wins.</p></div>
@@ -370,7 +386,7 @@ pre code{background:none;border:none;padding:0;color:var(--ink)}
         <div class="kbox"><h4>Features &amp; UX</h4><p>Consumer + operator features, what entertainment demands, and the MVP set.</p></div>
         <div class="kbox"><h4>Payments &amp; money flow</h4><p>Stripe Connect marketplace architecture, commission model, deposits and no-shows.</p></div>
         <div class="kbox"><h4>MVP &amp; roadmap</h4><p>What to ship first vs defer, in three phases.</p></div>
-        <div class="kbox"><h4>UI kit &amp; mockups</h4><p>Full design system + 12 React Native app screens. Try the theme switcher in the sidebar.</p></div>
+        <div class="kbox"><h4>UI kit &amp; mockups</h4><p>Full design system + 12 React Native app screens. Try the colour-scheme options inside the section.</p></div>
       </div>
       <p class="disc">Figures cited from public sources. EatClub's exact venue commission is not publicly disclosed — verify via a competitor demo before finalizing Zivvo's pricing.</p>
       <div class="pagenav"><button></button><button class="next" onclick="go('market')"><div class="d">Next</div><div class="t">Market &amp; competitors →</div></button></div>
@@ -555,10 +571,22 @@ COMMIT;</code></pre><p style="font-size:13px;color:var(--mut)"><code>FOR UPDATE<
     </section>
 
     <!-- ===== UI KIT ===== -->
-    <section class="panel-view" id="kit">
+    <section class="panel-view" id="kit" data-kit-theme="cobalt">
       <div class="eyebrow">06 · Design</div>
       <h1 class="title">UI kit &amp; app mockups</h1>
-      <p class="lead">The full Zivvo design system plus 12 React Native screens. Everything below re-skins live — switch <strong>themes</strong> in the sidebar to preview the brand in different palettes.</p>
+      <p class="lead">The full Zivvo design system plus 12 React Native screens. Pick a <strong>brand colour scheme</strong> below — everything in this section (components &amp; all 12 mockups) re-skins live so you can compare directions.</p>
+
+      <div class="kit-sub">Pick a colour scheme</div>
+      <h2 class="kit-h">Brand palette options</h2>
+      <div class="kitpick" id="kitpick">
+        <div class="ktile on" data-kt="cobalt"><span class="dot" style="background:linear-gradient(120deg,#3b82f6,#6366f1)"></span><span class="kl">Cobalt</span></div>
+        <div class="ktile" data-kt="aurora"><span class="dot" style="background:linear-gradient(120deg,#8b3df0,#ec4899)"></span><span class="kl">Aurora</span></div>
+        <div class="ktile" data-kt="mint"><span class="dot" style="background:linear-gradient(120deg,#06b6d4,#10b981)"></span><span class="kl">Mint</span></div>
+        <div class="ktile" data-kt="sunset"><span class="dot" style="background:linear-gradient(120deg,#f97316,#ec4899)"></span><span class="kl">Sunset</span></div>
+        <div class="ktile" data-kt="arcade"><span class="dot" style="background:linear-gradient(120deg,#ff2d95,#7c3aed)"></span><span class="kl">Arcade</span></div>
+        <div class="ktile" data-kt="forest"><span class="dot" style="background:linear-gradient(120deg,#16a34a,#0d9488)"></span><span class="kl">Forest</span></div>
+      </div>
+      <p class="disc">Site chrome stays fixed (Cobalt · dark) — only the app's brand palette changes here.</p>
 
       <div class="kit-sub">Brand</div>
       <h2 class="kit-h">Logo &amp; mark</h2>
@@ -573,7 +601,7 @@ COMMIT;</code></pre><p style="font-size:13px;color:var(--mut)"><code>FOR UPDATE<
       </div></div>
 
       <div class="kit-sub">Color</div>
-      <h2 class="kit-h">Palette (current theme)</h2>
+      <h2 class="kit-h">Palette (selected scheme)</h2>
       <div class="swatches">
         <div class="sw"><div class="chip" style="background:var(--grad)"></div><div class="meta"><b>Brand gradient</b><span>c1 → c2</span></div></div>
         <div class="sw"><div class="chip" style="background:var(--c1)"></div><div class="meta"><b>Primary</b><span>--c1</span></div></div>
@@ -584,7 +612,7 @@ COMMIT;</code></pre><p style="font-size:13px;color:var(--mut)"><code>FOR UPDATE<
         <div class="sw"><div class="chip" style="background:var(--red)"></div><div class="meta"><b>Error</b><span>#EF4444</span></div></div>
         <div class="sw"><div class="chip" style="background:var(--ink)"></div><div class="meta"><b>Ink</b><span>--ink</span></div></div>
       </div>
-      <div class="call"><span class="h">Usage rule</span> Gradient = brand moments &amp; primary CTAs only. <strong>Green always means money saved.</strong> Keep ~90% of every screen neutral so the brand gradient stays loud. <strong>6 themes</strong> ship in the picker — Aurora, Cobalt, Mint, Sunset, Arcade and a light Daylight mode.</div>
+      <div class="call"><span class="h">Usage rule</span> Gradient = brand moments &amp; primary CTAs only. <strong>Green always means money saved.</strong> Keep ~90% of every screen neutral so the brand gradient stays loud. <strong>6 brand schemes</strong> to compare — Cobalt, Aurora, Mint, Sunset, Arcade &amp; Forest — set via the picker above.</div>
 
       <div class="kit-sub">Type</div>
       <h2 class="kit-h">Typography</h2>
@@ -907,17 +935,16 @@ function go(id){
 }
 document.querySelectorAll('#nav button').forEach(b=>b.addEventListener('click',()=>go(b.dataset.p)));
 
-const tlabels={aurora:'Aurora · dark',cobalt:'Cobalt · dark',mint:'Mint · dark',sunset:'Sunset · dark',arcade:'Arcade · neon',daylight:'Daylight · light'};
-function setTheme(t){
-  document.body.setAttribute('data-theme',t);
-  document.querySelectorAll('#themes .swatch').forEach(s=>s.classList.toggle('on',s.dataset.t===t));
-  document.getElementById('tname').textContent=tlabels[t];
-  try{localStorage.setItem('zivvo-theme',t)}catch(e){}
+// UI-kit-only brand colour scheme (re-skins the kit section, not the site chrome)
+const kitThemes=['cobalt','aurora','mint','sunset','arcade','forest'];
+function setKitTheme(t){
+  document.getElementById('kit').setAttribute('data-kit-theme',t);
+  document.querySelectorAll('#kitpick .ktile').forEach(s=>s.classList.toggle('on',s.dataset.kt===t));
+  try{localStorage.setItem('zivvo-kit-scheme',t)}catch(e){}
 }
-document.querySelectorAll('#themes .swatch').forEach(s=>s.addEventListener('click',()=>setTheme(s.dataset.t)));
+document.querySelectorAll('#kitpick .ktile').forEach(s=>s.addEventListener('click',()=>setKitTheme(s.dataset.kt)));
+try{const t=localStorage.getItem('zivvo-kit-scheme');if(t&&kitThemes.includes(t))setKitTheme(t)}catch(e){}
 
-// restore
-try{const t=localStorage.getItem('zivvo-theme');if(t&&tlabels[t])setTheme(t)}catch(e){}
 const init=location.hash.replace('#','');if(init&&titles[init])go(init);
 </script>
 </body>
