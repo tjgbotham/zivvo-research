@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zivvo — Research, UI Kit &amp; Mockups</title>
+<style>
+/* ============ THEME TOKENS ============ */
+:root{
+  /* brand (overridden per theme) */
+  --c1:#8b3df0; --c2:#ec4899; --accent:#22d3ee; --brand-text:#a855f7;
+  /* chrome (overridden per theme) */
+  --bg:#0b0915; --panel:#13101f; --card:#191527; --card2:#201b33; --line:#2a2440;
+  --ink:#f1eefb; --mut:#a59fc4; --faint:#6f6890;
+  /* semantic (constant) */
+  --good:#10b981; --amber:#f59e0b; --red:#ef4444;
+  /* app mockup surfaces (constant — phones stay light) */
+  --app-bg:#f4f3fa; --app-surface:#fff; --app-ink:#1a1430; --app-mut:#8a85a6; --app-faint:#b9b4cc; --app-line:#eceaf3;
+  --grad:linear-gradient(120deg,var(--c1),var(--c2));
+  --sb:264px;
+}
+[data-theme="cobalt"]{--c1:#3b82f6;--c2:#6366f1;--accent:#38bdf8;--brand-text:#60a5fa;
+  --bg:#080b16;--panel:#0f1422;--card:#151b2c;--card2:#1b2236;--line:#28324a;--ink:#eef2fb;--mut:#9aa6c4;--faint:#6b7596}
+[data-theme="mint"]{--c1:#06b6d4;--c2:#10b981;--accent:#34d399;--brand-text:#14b8a6;
+  --bg:#07120f;--panel:#0d1a16;--card:#12211c;--card2:#182b24;--line:#244038;--ink:#e9faf3;--mut:#93c4b4;--faint:#5f8a7c}
+[data-theme="sunset"]{--c1:#f97316;--c2:#ec4899;--accent:#fbbf24;--brand-text:#fb7185;
+  --bg:#140a0e;--panel:#1d1016;--card:#25141c;--card2:#2f1a24;--line:#43222f;--ink:#fbeef0;--mut:#c9a3ad;--faint:#8a6670}
+[data-theme="arcade"]{--c1:#ff2d95;--c2:#7c3aed;--accent:#00e5ff;--brand-text:#ff4da6;
+  --bg:#07060d;--panel:#0d0b16;--card:#12101d;--card2:#181527;--line:#2a2440;--ink:#f1eefb;--mut:#a59fc4;--faint:#6f6890}
+[data-theme="daylight"]{--c1:#8b3df0;--c2:#ec4899;--accent:#7c2be0;--brand-text:#7c2be0;
+  --bg:#f3f2f9;--panel:#ffffff;--card:#ffffff;--card2:#f6f5fc;--line:#eae7f2;--ink:#1a1430;--mut:#5f5980;--faint:#9b95b5}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);transition:background .3s,color .3s;
+  font:15px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+
+/* ============ SIDEBAR ============ */
+.sidebar{position:fixed;top:0;left:0;bottom:0;width:var(--sb);background:var(--panel);
+  border-right:1px solid var(--line);padding:24px 16px;display:flex;flex-direction:column;z-index:40;overflow-y:auto}
+.brand{display:flex;align-items:center;gap:12px;padding:0 8px 4px}
+.brand .mark{width:40px;height:40px;border-radius:12px;background:var(--grad);display:grid;place-items:center;box-shadow:0 8px 22px rgba(0,0,0,.25)}
+.brand .mark svg{width:24px;height:24px}
+.brand .name{font-weight:800;font-size:26px;letter-spacing:-1px;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.brand .tag{font-size:11px;color:var(--faint);margin-top:-2px}
+
+.navlabel{font-size:10.5px;letter-spacing:2px;text-transform:uppercase;color:var(--faint);padding:0 10px;margin:24px 0 8px}
+.nav{display:flex;flex-direction:column;gap:3px}
+.nav button{display:flex;align-items:center;gap:12px;width:100%;text-align:left;background:none;border:none;cursor:pointer;
+  font:inherit;font-size:14px;color:var(--mut);padding:11px 12px;border-radius:11px;transition:.15s}
+.nav button .ic{width:20px;height:20px;flex:none;display:grid;place-items:center;opacity:.85}
+.nav button:hover{background:var(--card);color:var(--ink)}
+.nav button.active{background:var(--card2);color:var(--ink);box-shadow:inset 3px 0 0 0 var(--c2)}
+.nav button.active .ic{opacity:1;color:var(--brand-text)}
+
+/* theme picker */
+.themes{display:flex;flex-wrap:wrap;gap:8px;padding:0 8px}
+.swatch{width:30px;height:30px;border-radius:9px;cursor:pointer;border:2px solid transparent;position:relative;transition:.15s}
+.swatch:hover{transform:scale(1.08)}
+.swatch.on{border-color:var(--ink);box-shadow:0 0 0 2px var(--bg) inset}
+.swatch span{position:absolute;inset:0;border-radius:6px}
+.tname{font-size:11px;color:var(--mut);padding:8px 10px 0}
+
+.sidefoot{margin-top:auto;padding:14px 10px 0;border-top:1px solid var(--line);font-size:11.5px;color:var(--faint)}
+.sidefoot b{color:var(--mut)}
+
+/* ============ MAIN ============ */
+.main{margin-left:var(--sb);min-height:100vh}
+.topbar{position:sticky;top:0;z-index:30;background:var(--panel);border-bottom:1px solid var(--line);
+  padding:15px 44px;display:flex;align-items:center;justify-content:space-between}
+.crumb{font-size:13px;color:var(--mut)}
+.crumb b{color:var(--ink)}
+.topbar .meta{font-size:12px;color:var(--faint)}
+.content{padding:44px 44px 120px;max-width:1000px}
+
+.panel-view{display:none;animation:fade .35s ease}
+.panel-view.show{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+h1.title{font-size:34px;font-weight:800;letter-spacing:-1px;margin:0 0 6px}
+.eyebrow{font-size:12px;letter-spacing:2.5px;text-transform:uppercase;color:var(--brand-text);font-weight:800;margin-bottom:10px}
+.lead{font-size:18px;color:var(--mut);margin:0 0 28px;max-width:780px}
+h2{font-size:22px;margin:42px 0 14px;letter-spacing:-.3px;display:flex;align-items:center;gap:10px}
+h2:before{content:"";width:8px;height:22px;border-radius:3px;background:var(--grad);display:inline-block;flex:none}
+h3{font-size:16px;color:var(--ink);margin:28px 0 12px}
+h4{font-size:14px;color:var(--accent);margin:0 0 8px}
+p{margin:12px 0}
+strong{color:var(--ink)}
+.muted{color:var(--mut)}
+
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px 22px;margin:16px 0}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+@media(max-width:900px){.grid2,.grid3{grid-template-columns:1fr}}
+
+.kbox{background:var(--card2);border:1px solid var(--line);border-radius:14px;padding:16px 18px}
+.kbox h4{color:var(--ink);font-size:15px;margin-bottom:8px}
+.kbox p{margin:6px 0;font-size:14px;color:var(--mut)}
+
+.stat{text-align:center;padding:22px 16px}
+.stat .v{font-size:34px;font-weight:800;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.stat .l{font-size:13px;color:var(--mut);margin-top:6px}
+
+.call{border-left:4px solid var(--c1);background:var(--card);border-radius:0 12px 12px 0;padding:15px 18px;margin:18px 0}
+.call.win{border-color:var(--good)} .call.warn{border-color:var(--amber)}
+.call.key{border-color:var(--c2)}
+.call .h{font-weight:800;font-size:12px;text-transform:uppercase;letter-spacing:1px;display:block;margin-bottom:5px;color:var(--brand-text)}
+.call.win .h{color:var(--good)} .call.warn .h{color:var(--amber)} .call.key .h{color:var(--c2)}
+
+.tblwrap{overflow-x:auto;border:1px solid var(--line);border-radius:14px;margin:16px 0}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th,td{padding:12px 14px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:var(--card2);color:var(--accent);font-size:11px;text-transform:uppercase;letter-spacing:.6px;font-weight:700}
+tr:last-child td{border-bottom:none}
+td:first-child{font-weight:700;color:var(--ink)}
+
+.badge{display:inline-block;font-size:10.5px;font-weight:800;padding:3px 8px;border-radius:6px;letter-spacing:.3px;white-space:nowrap}
+.b-must{background:rgba(16,185,129,.18);color:var(--good)}
+.b-nice{background:rgba(168,85,247,.18);color:var(--brand-text)}
+.b-later{background:rgba(245,158,11,.16);color:var(--amber)}
+.b-rec{background:var(--grad);color:#fff}
+
+ul.clean{list-style:none;padding:0;margin:10px 0}
+ul.clean li{padding:8px 0 8px 24px;position:relative;border-bottom:1px solid var(--line);font-size:14px}
+ul.clean li:last-child{border:none}
+ul.clean li:before{content:"›";position:absolute;left:4px;color:var(--c2);font-weight:800}
+
+.flow{display:flex;flex-wrap:wrap;margin:18px 0;border-radius:12px;overflow:hidden;border:1px solid var(--line)}
+.flow .step{flex:1;min-width:150px;background:var(--card2);padding:14px 16px;border-right:1px solid var(--line)}
+.flow .step:last-child{border-right:none}
+.flow .step .n{font-size:10.5px;color:var(--c2);font-weight:800;letter-spacing:.5px}
+.flow .step .t{font-weight:700;color:var(--ink);font-size:14px;margin:4px 0}
+.flow .step .d{font-size:12px;color:var(--mut)}
+
+code{background:rgba(127,127,127,.12);border:1px solid var(--line);border-radius:6px;padding:1px 7px;font-size:12.5px;color:var(--accent);font-family:ui-monospace,Menlo,monospace}
+pre{background:rgba(127,127,127,.1);border:1px solid var(--line);border-radius:12px;padding:15px;overflow-x:auto;font-size:12.5px;line-height:1.55;margin:10px 0}
+pre code{background:none;border:none;padding:0;color:var(--ink)}
+
+.phase{border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin:14px 0;background:var(--card)}
+.ph{display:inline-block;font-size:11px;font-weight:800;letter-spacing:1px;padding:4px 11px;border-radius:7px;margin-bottom:10px}
+.ph0{background:rgba(16,185,129,.16);color:var(--good)}
+.ph1{background:rgba(34,211,238,.16);color:var(--accent)}
+.ph2{background:rgba(245,158,11,.16);color:var(--amber)}
+
+.disc{font-size:12.5px;color:var(--faint);font-style:italic}
+.pagenav{display:flex;justify-content:space-between;margin-top:54px;padding-top:24px;border-top:1px solid var(--line);gap:14px}
+.pagenav button{flex:1;text-align:left;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 18px;cursor:pointer;color:var(--ink);font:inherit;transition:.15s}
+.pagenav button:hover{border-color:var(--c1);background:var(--card2)}
+.pagenav button.next{text-align:right}
+.pagenav button .d{font-size:11px;color:var(--faint);text-transform:uppercase;letter-spacing:1px}
+.pagenav button .t{font-size:15px;font-weight:700;color:var(--ink);margin-top:3px}
+.pagenav button:empty{visibility:hidden}
+
+/* ============ UI KIT BITS ============ */
+.kit-sub{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--c2);margin:52px 0 4px;font-weight:800}
+.kit-h{font-size:24px;font-weight:800;letter-spacing:-.5px;margin:0 0 18px}
+.swatches{display:grid;grid-template-columns:repeat(auto-fill,minmax(118px,1fr));gap:12px}
+.sw{border-radius:14px;overflow:hidden;border:1px solid var(--line)}
+.sw .chip{height:64px}
+.sw .meta{padding:8px 10px;background:var(--card)}
+.sw .meta b{display:block;font-size:12px;color:var(--ink)}
+.sw .meta span{font-size:10.5px;color:var(--faint);font-family:ui-monospace,Menlo,monospace}
+
+.typescale{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:6px 22px}
+.typescale .trow{display:flex;align-items:baseline;gap:18px;padding:13px 0;border-bottom:1px solid var(--line)}
+.typescale .trow:last-child{border:none}
+.typescale .lab{width:120px;flex:none;font-size:11px;color:var(--faint);font-family:ui-monospace,Menlo,monospace}
+
+.board{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:22px;margin:16px 0}
+.board h4{margin:0 0 14px;font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:var(--faint)}
+.cluster{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+
+/* component samples (use app-neutral surfaces so they read on any chrome) */
+.btn{border:none;border-radius:13px;font-weight:700;font-size:14px;padding:12px 20px;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:8px}
+.btn-primary{background:var(--grad);color:#fff;box-shadow:0 10px 24px rgba(0,0,0,.18)}
+.btn-secondary{background:rgba(168,85,247,.14);color:var(--brand-text)}
+.btn-ghost{background:transparent;color:var(--brand-text);border:1.5px solid var(--line)}
+.btn-dark{background:var(--ink);color:var(--bg)}
+.btn-sm{padding:8px 13px;font-size:13px;border-radius:10px}
+.btn-lg{padding:15px 24px;font-size:15px;width:100%;justify-content:center}
+.btn:disabled{opacity:.4}
+
+.chip-pill{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:8px 14px;font-size:13px;font-weight:600;background:var(--card2);color:var(--mut);border:1px solid var(--line)}
+.chip-pill.active{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.chip-pill.brand{background:rgba(168,85,247,.14);color:var(--brand-text)}
+.toggle{width:48px;height:28px;border-radius:999px;background:var(--grad);position:relative}
+.toggle.off{background:var(--line)}
+.toggle:after{content:"";position:absolute;width:22px;height:22px;border-radius:50%;background:#fff;top:3px;right:3px}
+.toggle.off:after{right:auto;left:3px}
+.stars{color:var(--amber);letter-spacing:2px;font-size:15px}
+.seg{display:inline-flex;background:var(--card2);border:1px solid var(--line);border-radius:11px;padding:4px}
+.seg span{padding:7px 15px;border-radius:8px;font-size:13px;font-weight:600;color:var(--mut)}
+.seg span.on{background:var(--grad);color:#fff}
+.badge-deal{background:var(--c2);color:#fff}
+.badge-save{background:rgba(16,185,129,.18);color:var(--good)}
+.badge-dark{background:var(--ink);color:var(--bg)}
+.avatar{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;color:#fff;font-weight:700;font-size:15px}
+
+.tokrow{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
+.tok{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px}
+.tok .demo{background:var(--grad);border-radius:8px;height:30px;margin-bottom:10px}
+.tok b{font-size:13px;color:var(--ink)} .tok small{color:var(--faint);font-family:ui-monospace,Menlo,monospace;font-size:11px}
+
+.iconrow{display:flex;gap:22px;flex-wrap:wrap;color:var(--ink)}
+.cat{width:64px;text-align:center}
+.cat .ci{width:54px;height:54px;border-radius:18px;display:grid;place-items:center;margin:0 auto 5px;font-size:24px}
+.cat .cl{font-size:11px;color:var(--mut);font-weight:600}
+
+/* ============ PHONE MOCKUPS ============ */
+.screens{display:flex;gap:32px;flex-wrap:wrap;justify-content:flex-start;margin-top:18px}
+.device{width:290px;flex:none}
+.device .cap{text-align:center;margin-top:13px;font-size:12.5px;color:var(--mut)}
+.device .cap b{display:block;color:var(--ink);font-size:14px;margin-bottom:2px}
+.phone{width:290px;height:620px;background:#000;border-radius:40px;padding:10px;box-shadow:0 30px 60px rgba(0,0,0,.4),0 0 0 2px var(--line);position:relative}
+.notch{position:absolute;top:10px;left:50%;transform:translateX(-50%);width:115px;height:24px;background:#000;border-radius:0 0 15px 15px;z-index:30}
+.screen{width:100%;height:100%;background:var(--app-bg);border-radius:31px;overflow:hidden;position:relative;color:var(--app-ink)}
+.scroll{position:absolute;inset:0;overflow:hidden}
+.statusbar{height:40px;display:flex;align-items:center;justify-content:space-between;padding:0 22px;font-size:12px;font-weight:600;color:var(--app-ink)}
+.statusbar.onbrand{color:#fff}
+.gradtop{background:var(--grad);color:#fff;border-radius:0 0 26px 26px}
+.bgrad{background:var(--grad)}
+.pad{padding:0 16px}
+.h1{font-size:22px;font-weight:800;letter-spacing:-.5px;line-height:1.2;color:var(--app-ink)}
+.sub{color:var(--app-mut);font-size:13px}
+.rowb{display:flex;align-items:center;justify-content:space-between}
+.mt8{margin-top:8px}.mt12{margin-top:12px}.mt16{margin-top:16px}.mt20{margin-top:20px}
+.sectitle{font-size:15px;font-weight:800;color:var(--app-ink)}
+.link{font-size:12px;color:var(--brand-text);font-weight:700}
+.searchbar{display:flex;align-items:center;gap:9px;background:var(--app-surface);border-radius:13px;padding:11px 13px;box-shadow:0 2px 8px rgba(26,20,48,.06);font-size:13px;color:var(--app-mut)}
+.chips{display:flex;gap:8px;overflow:hidden}
+.minichip{flex:none;background:var(--app-surface);border:1px solid var(--app-line);border-radius:999px;padding:7px 12px;font-size:12px;font-weight:600;color:var(--app-ink);display:flex;align-items:center;gap:5px}
+.minichip.on{background:var(--app-ink);color:#fff;border-color:var(--app-ink)}
+.acat{flex:none;width:58px;text-align:center}
+.acat .ic{width:52px;height:52px;border-radius:17px;display:grid;place-items:center;margin:0 auto 5px;font-size:22px}
+.acat .lb{font-size:10.5px;color:var(--app-ink);font-weight:600}
+.hrail{display:flex;gap:12px;overflow:hidden;padding-bottom:4px}
+.deal{background:var(--app-surface);border-radius:17px;overflow:hidden;box-shadow:0 2px 8px rgba(26,20,48,.06);border:1px solid var(--app-line);margin-bottom:13px}
+.deal .img{height:104px;position:relative}
+.deal .img .tl{position:absolute;top:9px;left:9px}
+.deal .img .tr{position:absolute;top:9px;right:9px;width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.92);display:grid;place-items:center;color:var(--c2)}
+.deal .img .bl{position:absolute;bottom:9px;left:9px;color:#fff;font-size:10.5px;font-weight:600;text-shadow:0 1px 3px rgba(0,0,0,.5)}
+.deal .b{padding:11px 12px}
+.deal .t{font-weight:700;font-size:14px;color:var(--app-ink)}
+.deal .m{font-size:11px;color:var(--app-mut);margin:2px 0 7px}
+.deal .pr{display:flex;align-items:baseline;gap:7px}
+.deal .pr .n{font-weight:800;font-size:16px;color:var(--brand-text)}
+.deal .pr .w{font-size:12px;color:var(--app-faint);text-decoration:line-through}
+.deal .pr .sv{margin-left:auto;font-size:11px;font-weight:800;color:var(--good)}
+.dcard{width:200px;background:var(--app-surface);border-radius:16px;overflow:hidden;box-shadow:0 2px 8px rgba(26,20,48,.06);border:1px solid var(--app-line)}
+.dcard .ph2{height:96px;position:relative}
+.dcard .ph2 .bd{position:absolute;top:9px;left:9px}
+.dcard .ph2 .bd2{position:absolute;bottom:9px;left:9px}
+.dcard .bd3{padding:11px 12px}
+.tabbar{position:absolute;bottom:0;left:0;right:0;height:62px;background:var(--app-surface);border-top:1px solid var(--app-line);display:flex;justify-content:space-around;align-items:center;padding-bottom:6px}
+.tab{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:10px;font-weight:600;color:var(--app-faint)}
+.tab.on{color:var(--brand-text)}
+.tab .fab{width:48px;height:48px;border-radius:15px;background:var(--grad);display:grid;place-items:center;box-shadow:0 8px 18px rgba(0,0,0,.25);margin-top:-22px}
+.vhero{height:185px;position:relative}
+.vround{position:absolute;width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.92);display:grid;place-items:center}
+.sheet{background:var(--app-bg);border-radius:22px 22px 0 0;margin-top:-24px;position:relative;padding:16px 16px 0}
+.infochip{display:flex;flex-direction:column;align-items:center;gap:3px;flex:1;background:var(--app-surface);border-radius:13px;padding:10px 6px;box-shadow:0 2px 8px rgba(26,20,48,.06)}
+.infochip b{font-size:12.5px;color:var(--app-ink)}.infochip span{font-size:9.5px;color:var(--app-mut)}
+.slot{flex:none;border:1.5px solid var(--app-line);background:var(--app-surface);border-radius:12px;padding:8px 12px;text-align:center;min-width:70px}
+.slot.on{border-color:var(--c1);background:rgba(168,85,247,.1)}
+.slot .tm{font-weight:700;font-size:13px;color:var(--app-ink)}
+.slot .sv{font-size:9.5px;font-weight:700;color:var(--good)}
+.slot.full{opacity:.4}
+.bottombar{position:absolute;bottom:0;left:0;right:0;background:var(--app-surface);border-top:1px solid var(--app-line);padding:12px 16px 16px;display:flex;align-items:center;gap:12px}
+.lrow{display:flex;align-items:center;gap:11px;background:var(--app-surface);border-radius:13px;padding:12px 13px;box-shadow:0 2px 8px rgba(26,20,48,.06);margin-bottom:10px}
+.lrow .ic{width:36px;height:36px;border-radius:11px;background:rgba(168,85,247,.12);display:grid;place-items:center;flex:none;font-size:16px}
+.lrow .tx{flex:1}.lrow .tx b{font-size:13px;color:var(--app-ink)}.lrow .tx span{font-size:11px;color:var(--app-mut);display:block}
+.qty{display:flex;align-items:center;gap:11px;color:var(--app-ink);font-weight:700;font-size:13px}
+.qty button{width:26px;height:26px;border-radius:8px;border:1.5px solid var(--app-line);background:var(--app-surface);font-size:15px;font-weight:700;color:var(--brand-text)}
+.summary{background:var(--app-surface);border-radius:15px;padding:14px;box-shadow:0 2px 8px rgba(26,20,48,.06)}
+.summary .sr{display:flex;justify-content:space-between;font-size:12.5px;padding:5px 0;color:var(--app-mut)}
+.summary .sr.tot{border-top:1px dashed var(--app-line);margin-top:6px;padding-top:10px;font-weight:800;color:var(--app-ink);font-size:14px}
+.summary .free{color:var(--good);font-weight:700}
+.qrwrap{background:var(--app-surface);border-radius:20px;padding:20px;box-shadow:0 10px 30px rgba(26,20,48,.12);text-align:center}
+.qrbox{width:150px;height:150px;margin:0 auto;border-radius:14px;background:repeating-linear-gradient(90deg,#1a1430 0 8px,#fff 8px 16px);border:6px solid #fff;box-shadow:inset 0 0 0 2px var(--app-line);position:relative}
+.qrbox:after{content:"";position:absolute;inset:28px;background:repeating-linear-gradient(0deg,#1a1430 0 9px,#fff 9px 18px);opacity:.85;border-radius:4px}
+.successcheck{width:64px;height:64px;border-radius:50%;background:rgba(16,185,129,.15);display:grid;place-items:center;margin:0 auto}
+.loyalcard{background:var(--grad);border-radius:18px;padding:16px;color:#fff;box-shadow:0 10px 24px rgba(0,0,0,.2)}
+.progress{height:8px;border-radius:99px;background:rgba(255,255,255,.3);overflow:hidden;margin-top:8px}
+.progress i{display:block;height:100%;width:68%;background:#fff;border-radius:99px}
+.passport{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}
+.pp{aspect-ratio:1;border-radius:15px;display:grid;place-items:center;background:var(--app-surface);box-shadow:0 2px 8px rgba(26,20,48,.06);font-size:22px}
+.pp.locked{opacity:.4}
+.scanview{position:absolute;inset:0;background:#0c0a1c;color:#fff}
+.scanframe{position:absolute;top:110px;left:38px;right:38px;height:210px;border-radius:22px;box-shadow:0 0 0 2000px rgba(0,0,0,.45)}
+.scanframe .corner{position:absolute;width:24px;height:24px;border:4px solid var(--accent)}
+.scanline{position:absolute;left:38px;right:38px;top:215px;height:2px;background:var(--accent);box-shadow:0 0 12px var(--accent)}
+
+/* mobile */
+.menubtn{display:none}
+@media(max-width:840px){
+  .sidebar{transform:translateX(-100%);transition:.25s}
+  .sidebar.open{transform:none}
+  .main{margin-left:0}
+  .menubtn{display:grid;place-items:center;width:38px;height:38px;border-radius:10px;background:var(--card);border:1px solid var(--line);cursor:pointer}
+  .content,.topbar{padding-left:20px;padding-right:20px}
+}
+</style>
+</head>
+<body data-theme="aurora">
+
+<!-- ============ SIDEBAR ============ -->
+<aside class="sidebar" id="sidebar">
+  <div class="brand">
+    <span class="mark"><svg viewBox="0 0 24 24" fill="none"><path d="M4 4l8 16 8-16" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+    <div><div class="name">zivvo</div><div class="tag">Research &amp; design dossier</div></div>
+  </div>
+
+  <div class="navlabel">Sections</div>
+  <div class="nav" id="nav">
+    <button data-p="overview" class="active"><span class="ic"><svg viewBox="0 0 24 24" width="18" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l3 2"/></svg></span>Overview</button>
+    <button data-p="market"><span class="ic"><svg viewBox="0 0 24 24" width="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19V9m5 10V5m5 14v-7m5 7V8"/></svg></span>Market &amp; competitors</button>
+    <button data-p="tech"><span class="ic"><svg viewBox="0 0 24 24" width="18" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="6" height="6" rx="1"/><rect x="14" y="4" width="6" height="6" rx="1"/><rect x="4" y="14" width="6" height="6" rx="1"/><path d="M14 14h6v6h-6z"/></svg></span>Tech stack</button>
+    <button data-p="features"><span class="ic"><svg viewBox="0 0 24 24" width="18" fill="none" stroke="currentColor" stroke-width="2"><rect x="6" y="3" width="12" height="18" rx="2"/><path d="M10 18h4"/></svg></span>Features &amp; UX</button>
+    <button data-p="payments"><span class="ic"><svg viewBox="0 0 24 24" width="18" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 10h18"/></svg></span>Payments &amp; money flow</button>
+    <button data-p="roadmap"><span class="ic"><svg viewBox="0 0 24 24" width="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>MVP &amp; roadmap</button>
+    <button data-p="kit"><span class="ic"><svg viewBox="0 0 24 24" width="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l2.5 5 5.5.8-4 3.9 1 5.5L12 17l-5 2.6 1-5.5-4-3.9 5.5-.8z"/></svg></span>UI kit &amp; mockups</button>
+  </div>
+
+  <div class="navlabel">Theme</div>
+  <div class="themes" id="themes">
+    <div class="swatch on" data-t="aurora" title="Aurora"><span style="background:linear-gradient(120deg,#8b3df0,#ec4899)"></span></div>
+    <div class="swatch" data-t="cobalt" title="Cobalt"><span style="background:linear-gradient(120deg,#3b82f6,#6366f1)"></span></div>
+    <div class="swatch" data-t="mint" title="Mint"><span style="background:linear-gradient(120deg,#06b6d4,#10b981)"></span></div>
+    <div class="swatch" data-t="sunset" title="Sunset"><span style="background:linear-gradient(120deg,#f97316,#ec4899)"></span></div>
+    <div class="swatch" data-t="arcade" title="Arcade"><span style="background:linear-gradient(120deg,#ff2d95,#7c3aed)"></span></div>
+    <div class="swatch" data-t="daylight" title="Daylight (light)"><span style="background:linear-gradient(120deg,#a855f7,#ec4899);border:1px solid #fff"></span></div>
+  </div>
+  <div class="tname" id="tname">Aurora · dark</div>
+
+  <div class="sidefoot"><b>EatClub, for entertainment.</b><br>Compiled 25 Jun 2026 · React Native (iOS + Android)</div>
+</aside>
+
+<!-- ============ MAIN ============ -->
+<div class="main">
+  <div class="topbar">
+    <div style="display:flex;align-items:center;gap:14px">
+      <button class="menubtn" onclick="document.getElementById('sidebar').classList.toggle('open')"><svg viewBox="0 0 24 24" width="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+      <div class="crumb">Zivvo / <b id="crumb">Overview</b></div>
+    </div>
+    <div class="meta">Off-peak yield marketplace for leisure</div>
+  </div>
+
+  <div class="content">
+
+    <!-- ===== OVERVIEW ===== -->
+    <section class="panel-view show" id="overview">
+      <div class="eyebrow">The thesis</div>
+      <h1 class="title">EatClub, but for entertainment.</h1>
+      <p class="lead">EatClub applies airline-style <strong>yield management</strong> to empty restaurant tables — sell a perishable 6pm-Tuesday seat at up to 50% off rather than let it expire worthless. Zivvo applies the same logic to <strong>entertainment capacity</strong>: a bowling lane at 2pm, an escape room at 4pm, a paintball field on a quiet weekday morning.</p>
+      <div class="grid3">
+        <div class="card stat"><div class="v">~26%+</div><div class="l">CAGR of the location-based entertainment market</div></div>
+        <div class="card stat"><div class="v">$11.9B</div><div class="l">US bowling alone (2024) → $16.8B by 2030</div></div>
+        <div class="card stat"><div class="v">$0</div><div class="l">Dominant off-peak yield marketplaces for leisure today</div></div>
+      </div>
+      <div class="call key"><span class="h">Why entertainment is a stronger version of the model</span>
+        A leisure venue's capacity is even more perishable and higher-fixed-cost than a restaurant table — lanes, karts and rooms cost the same whether empty or full. Every off-peak booking is near-pure incremental margin. Bowlero (400 venues targeted by 2026) <strong>publicly cites "data-driven yield management" as a survival requirement</strong> — operators already want this tooling; nobody has built the cross-venue marketplace for it.</div>
+      <h2>The one-line wedge</h2>
+      <p>Be the consumer-loved, <strong>frictionless off-peak yield/demand layer</strong> that integrates with venues' existing booking systems and undercuts Groupon's brutal take — in a market growing ~26%+ a year where incumbents are already asking for exactly this.</p>
+      <h2>What's in this dossier</h2>
+      <div class="grid2">
+        <div class="kbox"><h4>Market &amp; competitors</h4><p>The EatClub blueprint, a full competitive table, and where Zivvo wins.</p></div>
+        <div class="kbox"><h4>Tech stack</h4><p>One TypeScript stack — React Native, NestJS, Postgres — and the booking engine that makes or breaks it.</p></div>
+        <div class="kbox"><h4>Features &amp; UX</h4><p>Consumer + operator features, what entertainment demands, and the MVP set.</p></div>
+        <div class="kbox"><h4>Payments &amp; money flow</h4><p>Stripe Connect marketplace architecture, commission model, deposits and no-shows.</p></div>
+        <div class="kbox"><h4>MVP &amp; roadmap</h4><p>What to ship first vs defer, in three phases.</p></div>
+        <div class="kbox"><h4>UI kit &amp; mockups</h4><p>Full design system + 12 React Native app screens. Try the theme switcher in the sidebar.</p></div>
+      </div>
+      <p class="disc">Figures cited from public sources. EatClub's exact venue commission is not publicly disclosed — verify via a competitor demo before finalizing Zivvo's pricing.</p>
+      <div class="pagenav"><button></button><button class="next" onclick="go('market')"><div class="d">Next</div><div class="t">Market &amp; competitors →</div></button></div>
+    </section>
+
+    <!-- ===== MARKET ===== -->
+    <section class="panel-view" id="market">
+      <div class="eyebrow">01 · Landscape</div>
+      <h1 class="title">Market &amp; competitors</h1>
+      <p class="lead">The competitive set splits cleanly into three camps: <strong>deal marketplaces</strong> operators dislike, <strong>activity OTAs</strong> built for tourists, and <strong>booking software</strong> that holds the inventory but generates zero demand. Nobody has assembled EatClub's full stack for leisure.</p>
+      <h2>The blueprint: how EatClub works</h2>
+      <div class="card"><ul class="clean">
+        <li><strong>Yield management for empty tables.</strong> Restaurants post time-limited deals — typically up to <strong>50% off the whole bill</strong> — targeted at off-peak windows. Venues set days/times; AI recommends when and how deep to discount.</li>
+        <li><strong>Frictionless redemption is the killer UX.</strong> "EatClub Pay" is a digital Mastercard in Apple/Google Wallet — tap to pay and the discount applies automatically. No codes, no vouchers, no staff training.</li>
+        <li><strong>Margin-contribution framing</strong> (Marco Pierre White: <em>"It's all about contribution to costs"</em>) — a half-price cover beats an empty seat absorbing fixed costs.</li>
+        <li><strong>Consultative, sales-led onboarding.</strong> Exact commission isn't public — pricing gated behind "book a demo." Implies a negotiated success-fee and a BD-heavy supply side.</li>
+      </ul>
+      <p class="disc">Benchmark: ~3,000–5,000 venues, 2M+ downloads, AU + UK (London May 2025), ~$27M Series B at ~$200M valuation, partnered with CommBank's 8.8M users. Claims ~10× off-peak uplift, ~12% annual revenue lift.</p></div>
+      <h2>The competitive landscape</h2>
+      <div class="tblwrap"><table>
+        <thead><tr><th>Player</th><th>What it is</th><th>Take / pricing</th><th>Why it's beatable</th></tr></thead>
+        <tbody>
+          <tr><td>Groupon</td><td>Original local-deals voucher marketplace; covers bowling, escape rooms, karting, mini-golf</td><td><strong>35–50%</strong> of voucher</td><td>Merchant-hated. Big take + discount = venues lose money, attract one-time deal-hunters. Static vouchers. <strong>Biggest "do it better" target.</strong></td></tr>
+          <tr><td>Fever</td><td>Discovery + ticketing for curated experiences (60M+ monthly uniques)</td><td>~10–25% fee; 50%+ on "Originals"</td><td>Sells <em>out</em> produced events; doesn't fill <em>empty</em> recurring capacity. Not a yield tool for arcades.</td></tr>
+          <tr><td>Viator / GetYourGuide</td><td>Tours &amp; activities OTAs</td><td><strong>20–30%</strong>, they own the customer</td><td>Tourist-centric, ignores local "fill a Tuesday" use case. Steep commissions.</td></tr>
+          <tr><td>Klook</td><td>Activities OTA with same-day "Near You" discounting</td><td>20–30%; flash 20–40% off</td><td>Closest to off-peak fill — but tourist-oriented, not local leisure.</td></tr>
+          <tr><td>FareHarbor / Peek Pro</td><td>Booking software for operators</td><td>~6–8% booking fee</td><td>Back-office tools, <strong>no demand engine.</strong> Hold inventory but can't fill the empty 2pm slot. <strong>Integrate, don't compete.</strong></td></tr>
+          <tr><td>Rezdy / Checkfront / Resova</td><td>Operator booking SaaS (Resova = escape-room strong)</td><td>$49–$295/mo, 0–2% direct</td><td>Inventory without demand. Public APIs = easy integration targets.</td></tr>
+          <tr><td>DesignMyNight (UK)</td><td>Nightlife discovery + booking + SaaS (~5,000 venues)</td><td>SaaS + marketing packages</td><td>Nightlife/hospitality, not LBE, and <em>not</em> off-peak discounting.</td></tr>
+        </tbody>
+      </table></div>
+      <h2>Where Zivvo wins</h2>
+      <div class="grid2">
+        <div class="kbox"><h4>Where incumbents fail venues</h4><p>• Groupon's 35–50% take + deal-hunter churn destroys margins.</p><p>• OTAs charge 20–30% and own the customer.</p><p>• Booking SaaS has inventory but no demand.</p><p>• Chains discount in silos, no aggregation or AI pricing.</p></div>
+        <div class="kbox"><h4>Where incumbents fail consumers</h4><p>• No single "what discounted fun can I do <em>tonight</em>?" app.</p><p>• Voucher friction: codes, print-outs, "show staff."</p><p>• Nothing personalized to who you're booking for.</p></div>
+      </div>
+      <div class="call key"><span class="h">Zivvo's five strategic moves</span>
+        <ol style="margin:6px 0 0;padding-left:20px">
+          <li><strong>Copy EatClub-Pay frictionless redemption</strong> — the defensible UX moat.</li>
+          <li><strong>Sell "margin contribution," not "discounting"</strong> — LBE's higher perishability makes this an easier pitch.</li>
+          <li><strong>Integrate, don't displace</strong> — be the demand layer on Resova/FareHarbor/Peek via their APIs.</li>
+          <li><strong>Undercut Groupon hard</strong> — a transparent take well below 35–50%.</li>
+          <li><strong>Win the clearest verticals first</strong> — escape rooms, bowling, karting/paintball, trampoline parks.</li>
+        </ol></div>
+      <div class="pagenav"><button onclick="go('overview')"><div class="d">Previous</div><div class="t">← Overview</div></button><button class="next" onclick="go('tech')"><div class="d">Next</div><div class="t">Tech stack →</div></button></div>
+    </section>
+
+    <!-- ===== TECH ===== -->
+    <section class="panel-view" id="tech">
+      <div class="eyebrow">02 · Architecture</div>
+      <h1 class="title">Technology stack</h1>
+      <p class="lead">The decisive fact: <strong>this is an inventory + booking system, not a coupon catalog.</strong> Venues sell capacity over time. Get the booking engine right — with database-enforced conflict prevention — and the rest is conventional. Highest-leverage decision: <strong>one TypeScript stack</strong> from mobile → dashboard → API.</p>
+      <div class="tblwrap"><table>
+        <thead><tr><th>Layer</th><th>Recommendation</th><th>Why</th></tr></thead>
+        <tbody>
+          <tr><td>Mobile app</td><td><span class="badge b-rec">React Native + Expo</span></td><td>Shares TS types with the dashboard &amp; backend; bigger hiring pool than Flutter; mature SDKs for Stripe, Mapbox, Algolia, push.</td></tr>
+          <tr><td>Backend</td><td><span class="badge b-rec">NestJS</span></td><td>Modular bounded contexts; shares types end-to-end. Extract a Go booking service later only if it's a hotspot.</td></tr>
+          <tr><td>Primary DB</td><td><span class="badge b-rec">PostgreSQL</span> + PostGIS</td><td>ACID transactions, row locking, <code>EXCLUDE</code> constraints, PostGIS geo, <code>tstzrange</code> time slots.</td></tr>
+          <tr><td>Cache / jobs</td><td>Redis + BullMQ</td><td>Hot lists, rate-limiting, cart "holds" with TTL, Pub/Sub fan-out, background jobs.</td></tr>
+          <tr><td>Search</td><td><span class="badge b-rec">Algolia</span></td><td>Hosted, geo-aware, typo-tolerant, faceted, instant-search RN SDKs.</td></tr>
+          <tr><td>Maps</td><td>Mapbox</td><td>Brandable styling, better pricing at scale, marker clustering. PostGIS = source of truth.</td></tr>
+          <tr><td>Dashboard</td><td>Next.js</td><td>Same types &amp; components as the app; in-app QR redemption.</td></tr>
+          <tr><td>Notifications</td><td>FCM/APNs · Postmark · Twilio</td><td>Push deal alerts; transactional email; SMS for time-critical deals.</td></tr>
+          <tr><td>Payments</td><td><span class="badge b-rec">Stripe Connect</span></td><td>Marketplace split payments, venue KYC/payouts.</td></tr>
+          <tr><td>Infra</td><td>AWS ECS Fargate · RDS · ElastiCache</td><td>Serverless containers, managed Postgres, GitHub Actions + EAS; Amplitude + Sentry.</td></tr>
+        </tbody>
+      </table></div>
+      <h2>The booking engine — where Zivvo is won or lost</h2>
+      <p>Model <strong>capacity over time</strong>. Entities: <code>Venue</code> → <code>Resource</code> → <code>InventorySlot</code> (a <code>tstzrange</code> with capacity &amp; price) → <code>Booking</code>. Two safeguards prevent double-booking:</p>
+      <div class="grid2">
+        <div class="kbox"><h4>1 · Time-overlap integrity</h4><pre><code>ALTER TABLE inventory_slot
+  ADD CONSTRAINT no_overlap
+  EXCLUDE USING gist (
+    resource_id WITH =,
+    slot_range  WITH &&)
+  WHERE (status &lt;&gt; 'closed');</code></pre><p style="font-size:13px;color:var(--mut)">The same resource can never have two overlapping bookings — the database enforces it.</p></div>
+        <div class="kbox"><h4>2 · Capacity under concurrency</h4><pre><code>BEGIN;
+SELECT reserved_capacity, total_capacity
+  FROM inventory_slot
+  WHERE id = $1 FOR UPDATE;
+-- check reserved + party &lt;= total
+UPDATE inventory_slot SET
+  reserved_capacity = reserved_capacity + $party
+  WHERE id = $1;
+INSERT INTO booking (...) VALUES (...);
+COMMIT;</code></pre><p style="font-size:13px;color:var(--mut)"><code>FOR UPDATE</code> serializes concurrent buyers. Add a Redis counter for flash-sale spikes.</p></div>
+      </div>
+      <p><strong>Cart "hold":</strong> on checkout, create <code>Booking(status='held', expires_at=now()+10min)</code>; a BullMQ job releases expired holds. <strong>Dynamic pricing:</strong> start rule-based, materialize the final price onto each slot. Defer ML.</p>
+      <div class="call warn"><span class="h">POS integration is the hardest non-engineering problem</span>
+        The entertainment-POS landscape (Semnox, Intercard, Embed; QubicaAMF, Brunswick) is fragmented and often closed. <strong>MVP ships with NO POS integration</strong> — operators manage inventory in the dashboard, redemption is in-app QR. Then an adapter pattern (FareHarbor/Bookeo/Resova first), then deep partnerships.</div>
+      <div class="pagenav"><button onclick="go('market')"><div class="d">Previous</div><div class="t">← Market &amp; competitors</div></button><button class="next" onclick="go('features')"><div class="d">Next</div><div class="t">Features &amp; UX →</div></button></div>
+    </section>
+
+    <!-- ===== FEATURES ===== -->
+    <section class="panel-view" id="features">
+      <div class="eyebrow">03 · Product</div>
+      <h1 class="title">Features &amp; UX</h1>
+      <p class="lead">Restaurants discount a fungible table; entertainment sells <strong>time-boxed, capacity-constrained, pre-bookable slots</strong>. Zivvo is a hybrid of <strong>EatClub's yield + Fever's discovery + Peek Pro's slot/waiver/add-on engine</strong>. <span class="badge b-must">MVP</span> <span class="badge b-nice">Nice</span> <span class="badge b-later">Later</span></p>
+      <h2>Consumer app</h2>
+      <div class="grid2">
+        <div class="kbox"><h4>Discovery — the heart</h4><p><span class="badge b-must">MVP</span> Personalized feed (venue, % off, time, distance)</p><p><span class="badge b-must">MVP</span> Category browse (bowling, escape, karting…)</p><p><span class="badge b-must">MVP</span> Map view with deal pins</p><p><span class="badge b-must">MVP</span> <b>"Tonight"</b> + <b>"This weekend"</b> rails</p><p><span class="badge b-nice">Nice</span> Curated collections</p></div>
+        <div class="kbox"><h4>Booking flow</h4><p><span class="badge b-must">MVP</span> Activity → date → slot → party → add-ons → pay</p><p><span class="badge b-must">MVP</span> Real-time capacity check</p><p><span class="badge b-must">MVP</span> In-app payment + deposits</p><p><span class="badge b-must">MVP</span> <b>Digital waiver per participant</b></p><p><span class="badge b-must">MVP</span> QR confirmation + calendar</p></div>
+        <div class="kbox"><h4>Group / party — flagship</h4><p><span class="badge b-must">MVP</span> Dedicated party flow</p><p><span class="badge b-must">MVP</span> Package selection</p><p><span class="badge b-must">MVP</span> Per-guest waiver via link</p><p><span class="badge b-nice">Nice</span> Split-the-bill, RSVP</p><p style="color:var(--c2);font-size:12.5px;margin-top:8px"><b>The high-LTV wedge restaurants can't match. Don't cut this.</b></p></div>
+        <div class="kbox"><h4>Retention &amp; loyalty</h4><p><span class="badge b-must">MVP</span> Points/credits + referrals</p><p><span class="badge b-must">MVP</span> Favorites + deal alerts</p><p><span class="badge b-must">MVP</span> Verified reviews</p><p><span class="badge b-nice">Nice</span> Activity passport, streaks</p><p><span class="badge b-nice">Nice</span> <b>Birthday engine</b></p></div>
+      </div>
+      <div class="call"><span class="h">Design principle</span> Make gamification <strong>pull users toward the slots operators most need filled</strong> — that's the line between gimmick and growth engine.</div>
+      <h2>Venue operator portal</h2>
+      <ul class="clean">
+        <li><span class="badge b-must">MVP</span> <strong>Inventory &amp; capacity model</strong> — the hardest, most important config.</li>
+        <li><span class="badge b-must">MVP</span> <strong>Off-peak deal creator</strong> + rules-based recurring auto-discounts.</li>
+        <li><span class="badge b-must">MVP</span> <strong>Party/package builder</strong> with deposits.</li>
+        <li><span class="badge b-must">MVP</span> <strong>Check-in console</strong> — QR scan, no-show, waiver lookup.</li>
+        <li><span class="badge b-must">MVP</span> <strong>Analytics</strong> — fill rate, redemption, revenue uplift. <em>Proves the ROI that retains operators.</em></li>
+        <li><span class="badge b-later">Later</span> Promoted placement, multi-location roles, POS, ML pricing.</li>
+      </ul>
+      <h2>What entertainment demands that restaurants don't</h2>
+      <div class="grid2">
+        <div class="kbox"><h4>Fixed-capacity timed slots</h4><p>A true reservation engine — overbooking a finite asset is unacceptable.</p></div>
+        <div class="kbox"><h4>Group/party bookings</h4><p>High-value, planned, recurring (annual birthdays).</p></div>
+        <div class="kbox"><h4>Waivers &amp; liability</h4><p>Paintball, karting, axe — legally required, captured before arrival.</p></div>
+        <div class="kbox"><h4>Age &amp; height gates</h4><p>Hard floors, filterable and enforced at booking.</p></div>
+        <div class="kbox"><h4>Duration pricing &amp; bundles</h4><p>Per game/hour/session; bundles + add-ons drive revenue.</p></div>
+        <div class="kbox"><h4>Seasonality &amp; weather</h4><p>Off-peak logic is season-aware — the inverse of restaurants.</p></div>
+      </div>
+      <div class="pagenav"><button onclick="go('tech')"><div class="d">Previous</div><div class="t">← Tech stack</div></button><button class="next" onclick="go('payments')"><div class="d">Next</div><div class="t">Payments &amp; money flow →</div></button></div>
+    </section>
+
+    <!-- ===== PAYMENTS ===== -->
+    <section class="panel-view" id="payments">
+      <div class="eyebrow">04 · Money</div>
+      <h1 class="title">Payments &amp; money flow</h1>
+      <p class="lead">Zivvo is a marketplace, not a normal merchant: when a consumer pays $40, <strong>most belongs to the venue</strong> — you keep commission. That requires split payments, KYC'd payees, and correct liability/tax attribution. A plain processor can't do this.</p>
+      <div class="call key"><span class="h">Headline recommendation</span> Build on <strong>Stripe Connect</strong> with <strong>Express</strong> accounts, using <strong>destination charges + <code>application_fee_amount</code></strong>, and <strong>manual capture</strong> for deposits &amp; group bookings. Fastest compliant, low-PCI-scope path. Evaluate Adyen only at 8-figure GMV.</div>
+      <h2>Provider comparison</h2>
+      <div class="tblwrap"><table>
+        <thead><tr><th>Provider</th><th>Fee (US)</th><th>Verdict</th></tr></thead>
+        <tbody>
+          <tr><td>Stripe Connect <span class="badge b-rec">Pick</span></td><td>2.9% + $0.30; $2/mo per account</td><td>Fastest launch, best docs, transparent pricing, Stripe-hosted KYC, native split.</td></tr>
+          <tr><td>Adyen for Platforms</td><td>Interchange++; <strong>~€1,000/mo min</strong></td><td>Best rate at high volume + EU acquiring. Phase-2 migration.</td></tr>
+          <tr><td>PayPal / Braintree</td><td>~2.59–2.9% + $0.49</td><td>Good secondary method; weaker core ledger.</td></tr>
+        </tbody>
+      </table></div>
+      <p style="font-size:14px"><strong>Account type → Express</strong> (Stripe-hosted branded KYC). <strong>Charge type → destination charges</strong> for single-venue; <strong>separate charges + transfers</strong> for bundles / redemption-gated payouts.</p>
+      <h2>Money flow — a $40 booking at 18%</h2>
+      <div class="flow">
+        <div class="step"><div class="n">STEP 1</div><div class="t">Consumer pays $40</div><div class="d">Card / Apple Pay via Stripe Element — card data never touches your servers.</div></div>
+        <div class="step"><div class="n">STEP 2</div><div class="t">Destination charge</div><div class="d"><code>destination</code> = venue, <code>application_fee_amount</code> = $7.20.</div></div>
+        <div class="step"><div class="n">STEP 3</div><div class="t">Stripe fee ~$1.46</div><div class="d">Platform absorbs it → Zivvo nets ~$5.74.</div></div>
+        <div class="step"><div class="n">STEP 4</div><div class="t">Venue gets $32.80</div><div class="d">Lands in connected-account balance.</div></div>
+        <div class="step"><div class="n">STEP 5</div><div class="t">Payout</div><div class="d">Daily/weekly with ~2-day buffer, or redemption-gated.</div></div>
+      </div>
+      <p style="font-size:14px"><strong>Refunds:</strong> reverse fee &amp; transfer so the venue's share unwinds. <strong>Disputes:</strong> platform is liable for uncovered negatives — mitigate with payout buffers, redemption-gated payouts, Radar, 3DS/SCA, <code>on_behalf_of</code>.</p>
+      <h2>Recommended commission model</h2>
+      <div class="grid2">
+        <div class="kbox"><h4>Core: 18% venue commission</h4><p>Well below Groupon's 30–50%, in line with Fever. Anchor launch venues at 15%.</p></div>
+        <div class="kbox"><h4>+ ~5% consumer service fee</h4><p>Transparent at checkout. Boosts margin without touching the venue's take.</p></div>
+        <div class="kbox"><h4>Future SaaS tier</h4><p>$0 / $49 / $99/mo that reduces commission (18% → 12%) for whales.</p></div>
+        <div class="kbox"><h4>Avoid at launch</h4><p>Listing fees deter sign-ups with no demand yet. Add promoted placement later.</p></div>
+      </div>
+      <h2>Methods, deposits &amp; compliance</h2>
+      <div class="grid3">
+        <div class="kbox"><h4>Payment methods</h4><p>Cards + <strong>Apple/Google Pay</strong>, saved cards, <strong>Klarna/Afterpay above ~$150</strong> (parties), internal wallet for gift cards.</p></div>
+        <div class="kbox"><h4>Deposits &amp; no-shows</h4><p><strong>Manual capture</strong> holds funds (7–30 days). Parties: 25–30% deposit + pre-auth. <strong>Partial capture</strong> for no-show fees.</p></div>
+        <div class="kbox"><h4>Compliance</h4><p>Stripe Elements → <strong>SAQ A</strong> PCI. Stripe-hosted <strong>KYC/AML</strong>, Radar fraud, auto <strong>3DS/SCA</strong>, Stripe Tax.</p></div>
+      </div>
+      <div class="pagenav"><button onclick="go('features')"><div class="d">Previous</div><div class="t">← Features &amp; UX</div></button><button class="next" onclick="go('roadmap')"><div class="d">Next</div><div class="t">MVP &amp; roadmap →</div></button></div>
+    </section>
+
+    <!-- ===== ROADMAP ===== -->
+    <section class="panel-view" id="roadmap">
+      <div class="eyebrow">05 · Plan</div>
+      <h1 class="title">MVP &amp; roadmap</h1>
+      <p class="lead">Ship a tight, defensible v1 that proves the core loop: <strong>operator lists off-peak slots → consumer discovers &amp; books → redeems → both see value.</strong></p>
+      <div class="phase"><span class="ph ph0">PHASE 0 · MVP</span><div class="grid2">
+        <div><h4>Consumer</h4><p style="font-size:13.5px;color:var(--mut)">Onboarding + activity quiz · feed, browse, map · <b>"Tonight"/"Weekend" rails</b> · filters (party size, age) · venue profiles · <b>slot booking + waivers</b> · <b>party flow</b> · QR redemption · favorites · reviews · push/SMS · points + referrals</p></div>
+        <div><h4>Operator + Infra</h4><p style="font-size:13.5px;color:var(--mut)">Onboarding · inventory/capacity · deal creator + auto-discounts · package builder · calendar + QR check-in · analytics · payouts. <b>Tech:</b> single ECS + RDS Postgres (EXCLUDE + FOR UPDATE) + Redis holds · Stripe Connect · Algolia · no POS, rule-based pricing.</p></div>
+      </div></div>
+      <div class="phase"><span class="ph ph1">PHASE 1 · Engagement &amp; liquidity</span><p style="font-size:13.5px;color:var(--mut);margin:0">Real-time pushes ("3 slots left") · lifecycle messaging · referral &amp; group-invite virality · richer analytics · first POS adapters · split-the-bill, RSVP, gamified passport.</p></div>
+      <div class="phase"><span class="ph ph2">PHASE 2 · Scale &amp; moat</span><p style="font-size:13.5px;color:var(--mut);margin:0">Extract booking into a Go service if hot · ML dynamic pricing · deep POS integrations (Semnox/Embed/Qubica) · Elasticsearch · evaluate Adyen · venue SaaS tier · multi-region.</p></div>
+      <div class="call win"><span class="h">The one thing to over-invest in early</span> The time-slot/capacity booking engine with database-enforced conflict prevention. Everything else is replaceable — a marketplace that double-books venues is not.</div>
+      <div class="pagenav"><button onclick="go('payments')"><div class="d">Previous</div><div class="t">← Payments &amp; money flow</div></button><button class="next" onclick="go('kit')"><div class="d">Next</div><div class="t">UI kit &amp; mockups →</div></button></div>
+    </section>
+
+    <!-- ===== UI KIT ===== -->
+    <section class="panel-view" id="kit">
+      <div class="eyebrow">06 · Design</div>
+      <h1 class="title">UI kit &amp; app mockups</h1>
+      <p class="lead">The full Zivvo design system plus 12 React Native screens. Everything below re-skins live — switch <strong>themes</strong> in the sidebar to preview the brand in different palettes.</p>
+
+      <div class="kit-sub">Brand</div>
+      <h2 class="kit-h">Logo &amp; mark</h2>
+      <div class="card"><div style="display:flex;gap:30px;flex-wrap:wrap;align-items:center">
+        <div style="width:110px;height:110px;border-radius:30px;background:var(--grad);display:grid;place-items:center;box-shadow:0 14px 30px rgba(0,0,0,.25)"><svg viewBox="0 0 24 24" width="58" height="58" fill="none"><path d="M4 4l8 16 8-16" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div style="flex:1;min-width:260px"><p class="muted" style="margin-top:0">The <strong>V mark</strong> doubles as a chevron / play-arrow and a downward "fill the gap" motion — referencing <strong>play</strong> and <strong>filling empty capacity</strong>. Wordmark is lowercase, geometric. The signature gesture is the brand gradient — used for the mark, primary actions, and savings highlights only.</p>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px">
+            <div style="background:var(--app-surface);color:#1a1430;border-radius:11px;padding:12px 18px;font-weight:800;font-size:24px;letter-spacing:-1px"><span style="background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent">zivvo</span></div>
+            <div style="background:var(--ink);border-radius:11px;padding:12px 18px;font-weight:800;font-size:24px;letter-spacing:-1px;color:var(--bg)">zivvo</div>
+            <div style="background:var(--grad);border-radius:11px;padding:12px 18px;font-weight:800;font-size:24px;letter-spacing:-1px;color:#fff">zivvo</div>
+          </div></div>
+      </div></div>
+
+      <div class="kit-sub">Color</div>
+      <h2 class="kit-h">Palette (current theme)</h2>
+      <div class="swatches">
+        <div class="sw"><div class="chip" style="background:var(--grad)"></div><div class="meta"><b>Brand gradient</b><span>c1 → c2</span></div></div>
+        <div class="sw"><div class="chip" style="background:var(--c1)"></div><div class="meta"><b>Primary</b><span>--c1</span></div></div>
+        <div class="sw"><div class="chip" style="background:var(--c2)"></div><div class="meta"><b>Secondary</b><span>--c2</span></div></div>
+        <div class="sw"><div class="chip" style="background:var(--accent)"></div><div class="meta"><b>Accent</b><span>--accent</span></div></div>
+        <div class="sw"><div class="chip" style="background:var(--good)"></div><div class="meta"><b>Savings</b><span>#10B981</span></div></div>
+        <div class="sw"><div class="chip" style="background:var(--amber)"></div><div class="meta"><b>Rating</b><span>#F59E0B</span></div></div>
+        <div class="sw"><div class="chip" style="background:var(--red)"></div><div class="meta"><b>Error</b><span>#EF4444</span></div></div>
+        <div class="sw"><div class="chip" style="background:var(--ink)"></div><div class="meta"><b>Ink</b><span>--ink</span></div></div>
+      </div>
+      <div class="call"><span class="h">Usage rule</span> Gradient = brand moments &amp; primary CTAs only. <strong>Green always means money saved.</strong> Keep ~90% of every screen neutral so the brand gradient stays loud. <strong>6 themes</strong> ship in the picker — Aurora, Cobalt, Mint, Sunset, Arcade and a light Daylight mode.</div>
+
+      <div class="kit-sub">Type</div>
+      <h2 class="kit-h">Typography</h2>
+      <p class="muted">Inter / platform default (SF Pro · Roboto), with tabular numerals for prices.</p>
+      <div class="typescale">
+        <div class="trow"><span class="lab">Display / 32·800</span><span style="font-size:30px;font-weight:800;letter-spacing:-1px">Tonight near you</span></div>
+        <div class="trow"><span class="lab">H1 / 23·800</span><span style="font-size:22px;font-weight:800;letter-spacing:-.5px">What are you up for?</span></div>
+        <div class="trow"><span class="lab">H2 / 18·800</span><span style="font-size:18px;font-weight:800">Strike Lanes — Shoreditch</span></div>
+        <div class="trow"><span class="lab">Body / 15·400</span><span style="font-size:15px">2 games of bowling, shoe hire &amp; a drink included.</span></div>
+        <div class="trow"><span class="lab">Label / 13·600</span><span style="font-size:13px;font-weight:600;color:var(--mut)">Off-peak · Mon–Thu</span></div>
+        <div class="trow"><span class="lab">Price / 18·800</span><span style="font-size:18px;font-weight:800;color:var(--brand-text)">£18 <span style="font-size:13px;color:var(--faint);text-decoration:line-through;font-weight:400">£32</span></span></div>
+      </div>
+
+      <div class="kit-sub">Tokens</div>
+      <h2 class="kit-h">Spacing, radius &amp; elevation</h2>
+      <div class="tokrow">
+        <div class="tok"><div class="demo" style="height:10px"></div><b>4 / 8 / 12</b><br><small>base spacing</small></div>
+        <div class="tok"><div class="demo" style="height:20px"></div><b>16 / 20 / 24</b><br><small>section gaps</small></div>
+        <div class="tok"><div class="demo" style="border-radius:10px"></div><b>radius 10</b><br><small>chips, inputs</small></div>
+        <div class="tok"><div class="demo" style="border-radius:16px"></div><b>radius 16</b><br><small>cards</small></div>
+        <div class="tok"><div class="demo" style="border-radius:22px"></div><b>radius 22</b><br><small>sheets</small></div>
+        <div class="tok"><div class="demo" style="box-shadow:0 10px 24px rgba(0,0,0,.25)"></div><b>elevation</b><br><small>card shadow</small></div>
+      </div>
+
+      <div class="kit-sub">Components</div>
+      <h2 class="kit-h">Library</h2>
+      <div class="board"><h4>Buttons</h4><div class="cluster">
+        <button class="btn btn-primary">Book this deal</button>
+        <button class="btn btn-secondary">Save</button>
+        <button class="btn btn-ghost">See menu</button>
+        <button class="btn btn-dark">Directions</button>
+        <button class="btn btn-primary btn-sm">Book</button>
+        <button class="btn btn-primary" disabled>Disabled</button>
+      </div></div>
+      <div class="board"><h4>Chips · toggles · segments</h4><div class="cluster">
+        <span class="chip-pill active">All</span><span class="chip-pill">Bowling</span><span class="chip-pill brand">⚡ Tonight</span>
+        <span class="seg"><span class="on">Deals</span><span>Map</span></span>
+        <div class="toggle"></div><div class="toggle off"></div>
+      </div></div>
+      <div class="board"><h4>Badges · rating · avatars</h4><div class="cluster">
+        <span class="badge badge-deal">44% OFF</span><span class="badge badge-dark">⚡ TONIGHT</span><span class="badge badge-save">SAVE £14</span>
+        <span class="badge b-nice">PARTY PACKAGE</span>
+        <span class="stars">★★★★<span style="opacity:.3">★</span></span><span class="muted" style="font-size:13px">4.6 (212)</span>
+        <div class="avatar" style="background:var(--grad)">PA</div><div class="avatar" style="background:var(--ink)">+3</div>
+      </div></div>
+
+      <div class="kit-sub">Icons</div>
+      <h2 class="kit-h">Iconography</h2>
+      <p class="muted">2px stroke, rounded caps, 24px grid (Lucide / Phosphor via <code>react-native-svg</code>). Activity glyphs get a soft tinted square.</p>
+      <div class="board"><h4>System</h4><div class="iconrow">
+        <svg viewBox="0 0 24 24" width="26" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-7 9 7M5 10v9h14v-9"/></svg>
+        <svg viewBox="0 0 24 24" width="26" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg>
+        <svg viewBox="0 0 24 24" width="26" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-4.5-9.5-9C1 9 2.5 5.5 6 5.5c2 0 3.2 1.2 4 2.3.8-1.1 2-2.3 4-2.3 3.5 0 5 3.5 3.5 6.5C19 16.5 12 21 12 21z"/></svg>
+        <svg viewBox="0 0 24 24" width="26" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="11" r="3"/><path d="M12 21c-5-5-7-8-7-11a7 7 0 0114 0c0 3-2 6-7 11z"/></svg>
+        <svg viewBox="0 0 24 24" width="26" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+        <svg viewBox="0 0 24 24" width="26" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="5" width="16" height="16" rx="3"/><path d="M8 3v4M16 3v4M4 10h16"/></svg>
+        <svg viewBox="0 0 24 24" width="26" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>
+        <svg viewBox="0 0 24 24" width="26" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l2.5 5 5.5.8-4 3.9 1 5.5L12 17l-5 2.6 1-5.5-4-3.9 5.5-.8z"/></svg>
+        <svg viewBox="0 0 24 24" width="26" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>
+      </div>
+      <h4 style="margin-top:22px">Activity glyphs</h4><div class="iconrow">
+        <div class="cat"><div class="ci" style="background:rgba(168,85,247,.14)">🎳</div><div class="cl">Bowling</div></div>
+        <div class="cat"><div class="ci" style="background:rgba(236,72,153,.14)">🔐</div><div class="cl">Escape</div></div>
+        <div class="cat"><div class="ci" style="background:rgba(34,211,238,.14)">🏎️</div><div class="cl">Karting</div></div>
+        <div class="cat"><div class="ci" style="background:rgba(16,185,129,.14)">🎯</div><div class="cl">Paintball</div></div>
+        <div class="cat"><div class="ci" style="background:rgba(245,158,11,.14)">🕹️</div><div class="cl">Arcade</div></div>
+        <div class="cat"><div class="ci" style="background:rgba(168,85,247,.14)">🤸</div><div class="cl">Trampoline</div></div>
+      </div></div>
+
+      <div class="kit-sub">Mockups</div>
+      <h2 class="kit-h">Consumer app — core flow</h2>
+      <div class="screens">
+
+        <!-- 1 ONBOARDING -->
+        <div class="device"><div class="phone"><div class="notch"></div><div class="screen">
+          <div class="gradtop" style="height:100%;border-radius:31px">
+            <div class="statusbar onbrand"><span>9:41</span><span>📶 🔋</span></div>
+            <div style="padding:36px 24px 0;color:#fff;text-align:center">
+              <div style="width:78px;height:78px;border-radius:22px;background:rgba(255,255,255,.18);display:grid;place-items:center;margin:0 auto 22px"><svg viewBox="0 0 24 24" width="42" fill="none"><path d="M4 4l8 16 8-16" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+              <div style="font-size:27px;font-weight:800;letter-spacing:-1px;line-height:1.15">Half-price fun,<br>filling the gaps</div>
+              <p style="opacity:.92;font-size:14px;margin-top:12px">Bowling, karting, escape rooms &amp; more — up to 50% off off-peak slots near you.</p>
+            </div>
+            <div style="position:absolute;bottom:0;left:0;right:0;padding:20px;text-align:center">
+              <div style="background:rgba(255,255,255,.18);border-radius:14px;padding:10px;display:flex;justify-content:space-around;margin-bottom:14px"><div><div style="font-weight:800">2,400+</div><div style="font-size:10px;opacity:.85">venues</div></div><div><div style="font-weight:800">£14</div><div style="font-size:10px;opacity:.85">avg saving</div></div><div><div style="font-weight:800">⚡</div><div style="font-size:10px;opacity:.85">last-minute</div></div></div>
+              <button class="btn btn-lg" style="background:#fff;color:var(--brand-text)"> Continue with Apple</button>
+              <button class="btn btn-lg" style="background:rgba(255,255,255,.16);color:#fff;margin-top:10px">Continue with email</button>
+            </div>
+          </div>
+        </div></div><div class="cap"><b>1 · Onboarding</b>Brand promise + social sign-in</div></div>
+
+        <!-- 2 QUIZ -->
+        <div class="device"><div class="phone"><div class="notch"></div><div class="screen"><div class="scroll">
+          <div class="statusbar"><span>9:41</span><span>📶 🔋</span></div>
+          <div class="pad">
+            <div class="rowb"><span class="link">Skip</span><span style="font-size:12px;color:var(--app-mut)">Step 2 of 3</span></div>
+            <div class="progress" style="background:var(--app-line);margin-top:10px"><i style="background:var(--grad)"></i></div>
+            <div class="h1 mt20">What are you<br>up for?</div><p class="sub mt8">Pick a few — we'll tune your feed.</p>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px">
+              <div class="minichip on" style="justify-content:center;padding:15px;border-radius:15px;flex-direction:column;gap:6px;font-size:12.5px">🎳<span>Bowling</span></div>
+              <div class="minichip" style="justify-content:center;padding:15px;border-radius:15px;flex-direction:column;gap:6px;font-size:12.5px">🏎️<span>Karting</span></div>
+              <div class="minichip on" style="justify-content:center;padding:15px;border-radius:15px;flex-direction:column;gap:6px;font-size:12.5px">🔐<span>Escape rooms</span></div>
+              <div class="minichip" style="justify-content:center;padding:15px;border-radius:15px;flex-direction:column;gap:6px;font-size:12.5px">🎯<span>Paintball</span></div>
+              <div class="minichip on" style="justify-content:center;padding:15px;border-radius:15px;flex-direction:column;gap:6px;font-size:12.5px">🕹️<span>Arcade</span></div>
+              <div class="minichip" style="justify-content:center;padding:15px;border-radius:15px;flex-direction:column;gap:6px;font-size:12.5px">🪓<span>Axe throwing</span></div>
+            </div>
+            <div class="sectitle mt20" style="font-size:13.5px">Mostly booking for…</div>
+            <div class="chips mt12" style="flex-wrap:wrap"><span class="minichip on">Date night</span><span class="minichip">Family</span><span class="minichip">Mates</span><span class="minichip">Team</span></div>
+          </div>
+          <div class="bottombar"><button class="btn btn-primary btn-lg">Continue</button></div>
+        </div></div></div><div class="cap"><b>2 · Preference quiz</b>Seeds the personalized feed</div></div>
+
+        <!-- 3 HOME -->
+        <div class="device"><div class="phone"><div class="notch"></div><div class="screen"><div class="scroll">
+          <div class="statusbar"><span>9:41</span><span>📶 🔋</span></div>
+          <div class="pad">
+            <div class="rowb"><div><div style="font-size:11px;color:var(--app-mut)">📍 Shoreditch, London</div><div class="h1" style="font-size:21px">Tonight near you</div></div><div class="avatar" style="background:var(--grad);width:38px;height:38px">PA</div></div>
+            <div class="searchbar mt12"><svg viewBox="0 0 24 24" width="17" fill="none" stroke="var(--app-mut)" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg>Search activities or venues</div>
+            <div class="chips mt12"><span class="minichip on">⚡ Tonight</span><span class="minichip">Weekend</span><span class="minichip">Under £15</span><span class="minichip">Kids</span></div>
+          </div>
+          <div class="pad mt16"><div class="hrail">
+            <div class="acat"><div class="ic" style="background:rgba(168,85,247,.14)">🎳</div><div class="lb">Bowling</div></div>
+            <div class="acat"><div class="ic" style="background:rgba(236,72,153,.14)">🔐</div><div class="lb">Escape</div></div>
+            <div class="acat"><div class="ic" style="background:rgba(34,211,238,.14)">🏎️</div><div class="lb">Karting</div></div>
+            <div class="acat"><div class="ic" style="background:rgba(245,158,11,.14)">🎯</div><div class="lb">Paint</div></div>
+            <div class="acat"><div class="ic" style="background:rgba(16,185,129,.14)">🕹️</div><div class="lb">Arcade</div></div>
+          </div></div>
+          <div class="pad mt20"><div class="rowb"><span class="sectitle">⚡ Last-minute tonight</span><span class="link">See all</span></div></div>
+          <div class="pad"><div class="hrail mt12">
+            <div class="dcard"><div class="ph2 bgrad" style="height:90px"><span class="badge badge-deal bd">44% OFF</span><span class="badge badge-dark bd2">8PM</span></div><div class="bd3"><div style="font-weight:700;font-size:13.5px;color:var(--app-ink)">Strike Lanes</div><div style="font-size:11px;color:var(--app-mut);margin:3px 0 6px">★ 4.6 · 1.2km</div><div style="display:flex;align-items:baseline;gap:6px"><span style="font-weight:800;color:var(--brand-text)">£18</span><span style="font-size:12px;color:var(--app-faint);text-decoration:line-through">£32</span></div></div></div>
+            <div class="dcard"><div class="ph2 bgrad" style="height:90px"><span class="badge badge-deal bd">35% OFF</span><span class="badge badge-dark bd2">9PM</span></div><div class="bd3"><div style="font-weight:700;font-size:13.5px;color:var(--app-ink)">Apex Karting</div><div style="font-size:11px;color:var(--app-mut);margin:3px 0 6px">★ 4.8 · 2.4km</div><div style="display:flex;align-items:baseline;gap:6px"><span style="font-weight:800;color:var(--brand-text)">£26</span><span style="font-size:12px;color:var(--app-faint);text-decoration:line-through">£40</span></div></div></div>
+          </div></div>
+          <div class="pad mt20" style="padding-bottom:78px"><div class="rowb"><span class="sectitle">Great for date night</span><span class="link">See all</span></div>
+            <div class="deal mt12"><div class="img bgrad"><span class="badge badge-deal tl">30% OFF</span><span class="tr">♡</span><span class="bl">📍 Hoxton · till 11pm</span></div><div class="b"><div class="t">The Vault — Escape Rooms</div><div class="m">★ 4.9 (340) · Escape · 0.8km</div><div class="pr"><span class="n">£21</span><span class="w">£30</span><span class="sv">Save £9</span></div></div></div>
+          </div>
+          <div class="tabbar">
+            <div class="tab on"><svg viewBox="0 0 24 24" width="21" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l9-7 9 7M5 10v9h14v-9"/></svg>Home</div>
+            <div class="tab"><svg viewBox="0 0 24 24" width="21" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="11" r="3"/><path d="M12 21c-5-5-7-8-7-11a7 7 0 0114 0c0 3-2 6-7 11z"/></svg>Map</div>
+            <div class="tab"><div class="fab"><svg viewBox="0 0 24 24" width="22" fill="none" stroke="#fff" stroke-width="2.4"><path d="M12 5v14M5 12h14"/></svg></div></div>
+            <div class="tab"><svg viewBox="0 0 24 24" width="21" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-4.5-9.5-9C1 9 2.5 5.5 6 5.5c2 0 3.2 1.2 4 2.3.8-1.1 2-2.3 4-2.3 3.5 0 5 3.5 3.5 6.5C19 16.5 12 21 12 21z"/></svg>Saved</div>
+            <div class="tab"><svg viewBox="0 0 24 24" width="21" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>Profile</div>
+          </div>
+        </div></div></div><div class="cap"><b>3 · Home / Discovery</b>Feed + Tonight rail + categories</div></div>
+
+        <!-- 4 MAP -->
+        <div class="device"><div class="phone"><div class="notch"></div><div class="screen">
+          <div style="position:absolute;inset:0;background:linear-gradient(0deg,var(--app-bg),transparent 30%),repeating-linear-gradient(50deg,#e3e0ef 0 2px,transparent 2px 40px),repeating-linear-gradient(-40deg,#e3e0ef 0 2px,transparent 2px 54px),#eceef6"></div>
+          <div class="statusbar"><span>9:41</span><span>📶 🔋</span></div>
+          <div class="pad"><div class="searchbar"><svg viewBox="0 0 24 24" width="17" fill="none" stroke="var(--app-mut)" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg>Deals near Shoreditch</div><div class="chips mt12"><span class="minichip on">⚡ Tonight</span><span class="minichip">Bowling</span><span class="minichip">£</span></div></div>
+          <div style="position:absolute;top:195px;left:55px"><div style="background:var(--grad);color:#fff;font-weight:800;font-size:11.5px;padding:6px 11px;border-radius:999px;box-shadow:0 8px 18px rgba(0,0,0,.25)">£18 · 44%↓</div></div>
+          <div style="position:absolute;top:290px;left:165px"><div style="background:var(--app-surface);color:var(--brand-text);font-weight:800;font-size:11.5px;padding:6px 11px;border-radius:999px;box-shadow:0 6px 16px rgba(26,20,48,.18)">£26</div></div>
+          <div style="position:absolute;top:245px;left:195px"><div style="background:var(--app-surface);color:var(--brand-text);font-weight:800;font-size:11.5px;padding:6px 11px;border-radius:999px;box-shadow:0 6px 16px rgba(26,20,48,.18)">£21</div></div>
+          <div style="position:absolute;top:345px;left:85px"><div style="background:var(--app-surface);color:var(--brand-text);font-weight:800;font-size:11.5px;padding:6px 11px;border-radius:999px;box-shadow:0 6px 16px rgba(26,20,48,.18)">£12</div></div>
+          <div style="position:absolute;top:320px;left:40px;width:28px;height:28px;border-radius:50%;background:var(--accent);border:3px solid #fff;box-shadow:0 4px 10px rgba(0,0,0,.2)"></div>
+          <div style="position:absolute;bottom:76px;left:13px;right:13px"><div class="dcard" style="width:100%;display:flex"><div class="ph2 bgrad" style="width:90px;height:auto;flex:none"></div><div class="bd3" style="flex:1"><span class="badge badge-dark" style="font-size:9px">⚡ TONIGHT 8PM</span><div style="font-weight:700;font-size:13.5px;margin-top:6px;color:var(--app-ink)">Strike Lanes — Shoreditch</div><div style="font-size:11px;color:var(--app-mut)">★ 4.6 · Bowling · 1.2km</div><div style="display:flex;align-items:baseline;gap:6px;margin-top:3px"><span style="font-weight:800;color:var(--brand-text)">£18</span><span style="font-size:12px;color:var(--app-faint);text-decoration:line-through">£32</span><span style="margin-left:auto;color:var(--good);font-weight:800;font-size:11px">Save £14</span></div></div></div></div>
+          <div class="tabbar">
+            <div class="tab"><svg viewBox="0 0 24 24" width="21" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l9-7 9 7M5 10v9h14v-9"/></svg>Home</div>
+            <div class="tab on"><svg viewBox="0 0 24 24" width="21" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="11" r="3"/><path d="M12 21c-5-5-7-8-7-11a7 7 0 0114 0c0 3-2 6-7 11z"/></svg>Map</div>
+            <div class="tab"><div class="fab"><svg viewBox="0 0 24 24" width="22" fill="none" stroke="#fff" stroke-width="2.4"><path d="M12 5v14M5 12h14"/></svg></div></div>
+            <div class="tab"><svg viewBox="0 0 24 24" width="21" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-4.5-9.5-9C1 9 2.5 5.5 6 5.5c2 0 3.2 1.2 4 2.3.8-1.1 2-2.3 4-2.3 3.5 0 5 3.5 3.5 6.5C19 16.5 12 21 12 21z"/></svg>Saved</div>
+            <div class="tab"><svg viewBox="0 0 24 24" width="21" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>Profile</div>
+          </div>
+        </div></div><div class="cap"><b>4 · Map</b>"Deals near me" with price pins</div></div>
+
+        <!-- 5 VENUE -->
+        <div class="device"><div class="phone"><div class="notch"></div><div class="screen"><div class="scroll" style="bottom:74px">
+          <div class="vhero bgrad">
+            <div class="statusbar onbrand"><span>9:41</span><span>📶 🔋</span></div>
+            <div class="vround" style="top:46px;left:14px"><svg viewBox="0 0 24 24" width="17" fill="none" stroke="#1a1430" stroke-width="2.4"><path d="M15 6l-6 6 6 6"/></svg></div>
+            <div class="vround" style="top:46px;right:14px;color:var(--c2)"><svg viewBox="0 0 24 24" width="17" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-4.5-9.5-9C1 9 2.5 5.5 6 5.5c2 0 3.2 1.2 4 2.3.8-1.1 2-2.3 4-2.3 3.5 0 5 3.5 3.5 6.5C19 16.5 12 21 12 21z"/></svg></div>
+            <span class="badge badge-deal" style="position:absolute;bottom:38px;left:16px;font-size:12px;padding:6px 11px">⚡ 44% OFF TONIGHT</span>
+          </div>
+          <div class="sheet">
+            <div class="rowb"><div><div class="h1" style="font-size:20px">Strike Lanes</div><div class="sub">Bowling · Shoreditch</div></div><span class="stars" style="font-size:13px">★ 4.6</span></div>
+            <div class="chips mt16" style="gap:8px">
+              <div class="infochip"><svg viewBox="0 0 24 24" width="18" fill="none" stroke="var(--brand-text)" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><b>Off-peak</b><span>Mon–Thu</span></div>
+              <div class="infochip"><svg viewBox="0 0 24 24" width="18" fill="none" stroke="var(--brand-text)" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg><b>Up to 8</b><span>per lane</span></div>
+              <div class="infochip"><svg viewBox="0 0 24 24" width="18" fill="none" stroke="var(--brand-text)" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg><b>All ages</b><span>family</span></div>
+            </div>
+            <div class="sectitle mt20" style="font-size:14px">The deal</div>
+            <div class="lrow mt12" style="background:rgba(168,85,247,.1);box-shadow:none;margin-bottom:0"><div class="ic" style="background:var(--app-surface)">🎳</div><div class="tx"><b>2 games + shoes + a drink</b><span>Mon–Thu before 6pm</span></div><div style="text-align:right"><div style="font-weight:800;color:var(--brand-text)">£18</div><div style="font-size:11px;color:var(--app-faint);text-decoration:line-through">£32</div></div></div>
+            <div class="sectitle mt20" style="font-size:14px">Pick a time — tonight</div>
+            <div class="hrail mt12"><div class="slot"><div class="tm">2:00</div><div class="sv">−44%</div></div><div class="slot on"><div class="tm">3:30</div><div class="sv">−44%</div></div><div class="slot"><div class="tm">4:00</div><div class="sv">−40%</div></div><div class="slot full"><div class="tm">5:30</div><div class="sv">full</div></div></div>
+            <div class="sectitle mt20" style="font-size:14px">Good to know</div>
+            <div class="sub mt8" style="line-height:1.6;padding-bottom:14px">Socks required. Lanes hold up to 8. Free cancellation up to 2h before. ★ 4.6 from 212 verified bookings.</div>
+          </div>
+        </div>
+        <div class="bottombar"><div><div style="font-size:11px;color:var(--app-mut)">3:30pm · save £14</div><div style="font-weight:800;font-size:17px;color:var(--app-ink)">£18</div></div><button class="btn btn-primary" style="flex:1">Book this deal</button></div>
+        </div></div><div class="cap"><b>5 · Venue &amp; deal</b>Rules, slots, off-peak pricing</div></div>
+
+        <!-- 6 BOOKING -->
+        <div class="device"><div class="phone"><div class="notch"></div><div class="screen"><div class="scroll" style="bottom:82px">
+          <div class="statusbar"><span>9:41</span><span>📶 🔋</span></div>
+          <div class="pad">
+            <div class="chips" style="align-items:center"><div class="vround" style="position:static;background:var(--app-surface);box-shadow:0 2px 8px rgba(26,20,48,.06)"><svg viewBox="0 0 24 24" width="17" fill="none" stroke="var(--app-ink)" stroke-width="2.4"><path d="M15 6l-6 6 6 6"/></svg></div><span class="sectitle" style="margin-left:6px">Your booking</span></div>
+            <div class="h1 mt20" style="font-size:19px">Strike Lanes</div><div class="sub">Tonight · 3:30pm · 2 games</div>
+            <div class="lrow mt20"><div class="ic"><svg viewBox="0 0 24 24" width="18" fill="none" stroke="var(--brand-text)" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg></div><div class="tx"><b>Players</b><span>Lane holds up to 8</span></div><div class="qty"><button>−</button><b>4</b><button>+</button></div></div>
+            <div class="sectitle mt20" style="font-size:13.5px">Add-ons</div>
+            <div class="lrow mt12"><div class="ic">🍕</div><div class="tx"><b>Sharing pizza</b><span>+ £12</span></div><div class="qty"><button>−</button><b>1</b><button>+</button></div></div>
+            <div class="lrow"><div class="ic">🥤</div><div class="tx"><b>Drinks jug</b><span>+ £8</span></div><div class="qty"><button>−</button><b>0</b><button>+</button></div></div>
+            <div class="summary mt20"><div class="sr"><span>2 games × 4 (44% off)</span><span>£72 → £40</span></div><div class="sr"><span>Add-ons</span><span>£12</span></div><div class="sr"><span>Service fee</span><span>£2.60</span></div><div class="sr tot"><span>Total</span><span>£54.60</span></div><div class="sr"><span style="color:var(--good);font-weight:700">You're saving</span><span class="free">£32</span></div></div>
+          </div>
+          <div class="bottombar"><button class="btn btn-primary btn-lg">Continue to payment</button></div>
+        </div></div></div><div class="cap"><b>6 · Booking builder</b>Party size · add-ons · live total</div></div>
+
+        <!-- 7 PAYMENT -->
+        <div class="device"><div class="phone"><div class="notch"></div><div class="screen"><div class="scroll" style="bottom:82px">
+          <div class="statusbar"><span>9:41</span><span>📶 🔋</span></div>
+          <div class="pad">
+            <div class="chips" style="align-items:center"><div class="vround" style="position:static;background:var(--app-surface);box-shadow:0 2px 8px rgba(26,20,48,.06)"><svg viewBox="0 0 24 24" width="17" fill="none" stroke="var(--app-ink)" stroke-width="2.4"><path d="M15 6l-6 6 6 6"/></svg></div><span class="sectitle" style="margin-left:6px">Payment</span></div>
+            <button class="btn btn-dark btn-lg mt20" style="font-size:16px"> Pay</button>
+            <div class="rowb mt16" style="color:var(--app-faint);font-size:12px"><div style="height:1px;background:var(--app-line);flex:1"></div><span style="padding:0 12px">or pay with card</span><div style="height:1px;background:var(--app-line);flex:1"></div></div>
+            <div class="lrow mt16" style="margin-bottom:11px"><svg viewBox="0 0 24 24" width="20" fill="none" stroke="var(--app-mut)" stroke-width="2" style="margin:0 4px"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 10h18"/></svg><div class="tx"><b>4242 4242 4242 4242</b><span>Visa · expires 06/28</span></div><span style="color:var(--good)">✓</span></div>
+            <div class="lrow" style="background:rgba(168,85,247,.1);box-shadow:none"><div class="ic" style="background:var(--app-surface)">🅺</div><div class="tx"><b>Pay in 3 with Klarna</b><span>3 × £18.20, 0% interest</span></div><span class="badge b-nice">NEW</span></div>
+            <div class="summary mt16"><div class="sr"><span>Bowling deal × 4</span><span>£40</span></div><div class="sr"><span>Add-ons + service</span><span>£14.60</span></div><div class="sr tot"><span>Total today</span><span>£54.60</span></div></div>
+            <div class="chips mt16" style="gap:6px;font-size:11px;color:var(--app-mut);align-items:center"><svg viewBox="0 0 24 24" width="14" fill="none" stroke="var(--good)" stroke-width="2"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 018 0v3"/></svg>Secured by Stripe · free cancel up to 2h before</div>
+          </div>
+          <div class="bottombar"><button class="btn btn-primary btn-lg">Pay £54.60 · save £32</button></div>
+        </div></div></div><div class="cap"><b>7 · Payment</b>Apple Pay · card · Klarna (Stripe)</div></div>
+
+        <!-- 8 CONFIRM -->
+        <div class="device"><div class="phone"><div class="notch"></div><div class="screen"><div class="scroll">
+          <div class="statusbar"><span>9:41</span><span>📶 🔋</span></div>
+          <div class="pad" style="text-align:center;padding-top:12px">
+            <div class="successcheck"><svg viewBox="0 0 24 24" width="34" fill="none" stroke="var(--good)" stroke-width="3"><path d="M20 6 9 17l-5-5"/></svg></div>
+            <div class="h1 mt16" style="font-size:21px">You're booked! 🎳</div><p class="sub mt8">Show this QR at the desk.</p>
+            <div class="qrwrap mt20"><div class="qrbox"></div><div style="font-weight:800;font-size:15px;margin-top:12px;color:var(--app-ink)">Strike Lanes — Shoreditch</div><div class="sub">Booking #VZ-4821</div>
+              <div class="rowb mt16" style="text-align:left"><div><div style="font-size:10px;color:var(--app-mut)">DATE</div><b style="font-size:13px;color:var(--app-ink)">Tonight</b></div><div><div style="font-size:10px;color:var(--app-mut)">TIME</div><b style="font-size:13px;color:var(--app-ink)">3:30 PM</b></div><div><div style="font-size:10px;color:var(--app-mut)">PLAYERS</div><b style="font-size:13px;color:var(--app-ink)">4</b></div><div><div style="font-size:10px;color:var(--app-mut)">PAID</div><b style="font-size:13px;color:var(--brand-text)">£54.60</b></div></div>
+            </div>
+            <div class="chips mt20" style="gap:12px"><button class="btn btn-ghost" style="flex:1"><svg viewBox="0 0 24 24" width="17" fill="none" stroke="var(--brand-text)" stroke-width="2"><rect x="4" y="5" width="16" height="16" rx="3"/><path d="M8 3v4M16 3v4M4 10h16"/></svg>Calendar</button><button class="btn btn-dark" style="flex:1"><svg viewBox="0 0 24 24" width="17" fill="none" stroke="var(--bg)" stroke-width="2"><path d="M12 21c-5-5-7-8-7-11a7 7 0 0114 0c0 3-2 6-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>Directions</button></div>
+            <p class="link mt16">Invite friends to this booking →</p>
+          </div>
+        </div></div></div><div class="cap"><b>8 · Confirmation</b>QR redemption + add to calendar</div></div>
+
+        <!-- 9 PARTY -->
+        <div class="device"><div class="phone"><div class="notch"></div><div class="screen"><div class="scroll" style="bottom:82px">
+          <div class="gradtop" style="border-radius:0 0 26px 26px;padding-bottom:20px">
+            <div class="statusbar onbrand"><span>9:41</span><span>📶 🔋</span></div>
+            <div class="pad" style="color:#fff"><span class="badge" style="background:rgba(255,255,255,.22);color:#fff">🎉 PARTY PACKAGE</span><div class="h1 mt12" style="color:#fff;font-size:23px">Book a party</div><p style="opacity:.92;font-size:13px;margin-top:6px">Birthdays, work do's &amp; big groups — deposit now, collect waivers, pay the rest on the day.</p></div>
+          </div>
+          <div class="pad mt16">
+            <div class="lrow"><div class="ic">🎈</div><div class="tx"><b>Birthday Bash — 10 jumpers</b><span>2 hrs · room · host · food</span></div><b style="color:var(--brand-text)">£180</b></div>
+            <div class="lrow" style="border:1.5px solid var(--c1)"><div class="ic bgrad">⭐</div><div class="tx"><b>Ultimate — 15 jumpers</b><span>2 hrs · 2 rooms · pizza + drinks</span></div><b style="color:var(--brand-text)">£260</b></div>
+            <div class="lrow"><div class="ic">🏢</div><div class="tx"><b>Corporate / team day</b><span>Invoice · 10–40 people</span></div><span class="link">Enquire</span></div>
+            <div class="sectitle mt20" style="font-size:13.5px">How it works</div>
+            <div class="lrow mt12" style="box-shadow:none;background:rgba(168,85,247,.1)"><div class="ic" style="background:var(--app-surface)">1️⃣</div><div class="tx"><b>Pay 25% deposit</b><span>£65 now · secures your slot</span></div></div>
+            <div class="lrow" style="box-shadow:none;background:rgba(168,85,247,.1)"><div class="ic" style="background:var(--app-surface)">2️⃣</div><div class="tx"><b>Share waiver link</b><span>Each parent signs for their child</span></div></div>
+            <div class="lrow" style="box-shadow:none;background:rgba(168,85,247,.1)"><div class="ic" style="background:var(--app-surface)">3️⃣</div><div class="tx"><b>Balance on the day</b><span>Or split the bill with guests</span></div></div>
+          </div>
+          <div class="bottombar"><div><div style="font-size:11px;color:var(--app-mut)">25% deposit</div><div style="font-weight:800;font-size:17px;color:var(--app-ink)">£65</div></div><button class="btn btn-primary" style="flex:1">Reserve party</button></div>
+        </div></div></div><div class="cap"><b>9 · Party booking</b>The high-LTV wedge — deposits + waivers</div></div>
+
+        <!-- 10 LOYALTY -->
+        <div class="device"><div class="phone"><div class="notch"></div><div class="screen"><div class="scroll" style="bottom:74px">
+          <div class="statusbar"><span>9:41</span><span>📶 🔋</span></div>
+          <div class="pad">
+            <div class="rowb"><span class="sectitle" style="font-size:17px">Profile</span><svg viewBox="0 0 24 24" width="21" fill="none" stroke="var(--app-ink)" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 00.3 1.9l.1.1a2 2 0 11-2.8 2.8l-.1-.1a1.7 1.7 0 00-2.9 1.2V21a2 2 0 11-4 0v-.1A1.7 1.7 0 006 19.3l-.1.1a2 2 0 11-2.8-2.8l.1-.1a1.7 1.7 0 00-1.2-2.9H2a2 2 0 110-4h.1A1.7 1.7 0 004.7 6l-.1-.1A2 2 0 117.4 3.1l.1.1A1.7 1.7 0 0010 4.6V4a2 2 0 114 0v.1A1.7 1.7 0 0018 5.7l.1-.1a2 2 0 112.8 2.8l-.1.1a1.7 1.7 0 001.2 2.9H22a2 2 0 110 4h-.1a1.7 1.7 0 00-1.5 1z"/></svg></div>
+            <div class="chips mt16" style="align-items:center"><div class="avatar" style="width:52px;height:52px;background:var(--grad);font-size:19px">PA</div><div style="margin-left:4px"><div style="font-weight:800;font-size:16px;color:var(--app-ink)">Pulkit A.</div><div class="sub">Gold member · joined 2026</div></div></div>
+            <div class="loyalcard mt20"><div class="rowb"><div><div style="font-size:11px;opacity:.9">ZIVVO POINTS</div><div style="font-size:28px;font-weight:800">1,840</div></div><div style="text-align:right"><div style="font-size:11px;opacity:.9">= £18 credit</div><span class="badge" style="background:rgba(255,255,255,.22);color:#fff;margin-top:5px">🥇 GOLD</span></div></div><div class="progress"><i></i></div><div style="font-size:11px;opacity:.92;margin-top:6px">160 pts to Platinum — unlocks early last-minute drops</div></div>
+            <div class="rowb mt20"><span class="sectitle" style="font-size:14px">Activity passport</span><span class="link">6 / 10</span></div>
+            <div class="passport mt12"><div class="pp">🎳</div><div class="pp">🔐</div><div class="pp">🏎️</div><div class="pp">🕹️</div><div class="pp">🎯</div><div class="pp">🤸</div><div class="pp locked">🪓</div><div class="pp locked">⛳</div></div>
+            <div class="sectitle mt20" style="font-size:14px">This week's challenge</div>
+            <div class="lrow mt12" style="margin-bottom:60px"><div class="ic bgrad">⚡</div><div class="tx"><b>Book a weekday daytime slot</b><span>Earn 250 bonus points</span></div><span class="badge badge-save">+250</span></div>
+          </div>
+          <div class="tabbar">
+            <div class="tab"><svg viewBox="0 0 24 24" width="21" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l9-7 9 7M5 10v9h14v-9"/></svg>Home</div>
+            <div class="tab"><svg viewBox="0 0 24 24" width="21" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="11" r="3"/><path d="M12 21c-5-5-7-8-7-11a7 7 0 0114 0c0 3-2 6-7 11z"/></svg>Map</div>
+            <div class="tab"><div class="fab"><svg viewBox="0 0 24 24" width="22" fill="none" stroke="#fff" stroke-width="2.4"><path d="M12 5v14M5 12h14"/></svg></div></div>
+            <div class="tab"><svg viewBox="0 0 24 24" width="21" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-4.5-9.5-9C1 9 2.5 5.5 6 5.5c2 0 3.2 1.2 4 2.3.8-1.1 2-2.3 4-2.3 3.5 0 5 3.5 3.5 6.5C19 16.5 12 21 12 21z"/></svg>Saved</div>
+            <div class="tab on"><svg viewBox="0 0 24 24" width="21" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>Profile</div>
+          </div>
+        </div></div></div><div class="cap"><b>10 · Loyalty / Profile</b>Points · passport · off-peak challenges</div></div>
+
+        <!-- 11 SCANNER -->
+        <div class="device"><div class="phone"><div class="notch"></div><div class="screen">
+          <div class="scanview">
+            <div class="statusbar onbrand"><span>9:41</span><span>📶 🔋</span></div>
+            <div style="text-align:center;padding:8px 0;color:#fff"><b>Scan booking QR</b><div style="font-size:11px;opacity:.7">Strike Lanes · front desk</div></div>
+            <div class="scanframe"><span class="corner" style="top:-3px;left:-3px;border-right:none;border-bottom:none;border-radius:22px 0 0 0"></span><span class="corner" style="top:-3px;right:-3px;border-left:none;border-bottom:none;border-radius:0 22px 0 0"></span><span class="corner" style="bottom:-3px;left:-3px;border-right:none;border-top:none;border-radius:0 0 0 22px"></span><span class="corner" style="bottom:-3px;right:-3px;border-left:none;border-top:none;border-radius:0 0 22px 0"></span></div>
+            <div class="scanline"></div>
+            <div style="position:absolute;bottom:22px;left:16px;right:16px;background:var(--app-surface);border-radius:18px;padding:15px;color:var(--app-ink)"><div class="chips" style="align-items:center"><div class="successcheck" style="width:42px;height:42px"><svg viewBox="0 0 24 24" width="22" fill="none" stroke="var(--good)" stroke-width="3"><path d="M20 6 9 17l-5-5"/></svg></div><div style="flex:1;margin-left:6px"><b style="font-size:14px;color:var(--app-ink)">Valid · #VZ-4821</b><div class="sub" style="font-size:11px">Pulkit A. · 4 players · 3:30pm</div></div></div><div class="chips mt12" style="gap:10px"><button class="btn btn-sm" style="background:var(--app-line);color:var(--app-mut);flex:1">No-show</button><button class="btn btn-primary btn-sm" style="flex:2">✓ Check in &amp; redeem</button></div></div>
+          </div>
+        </div></div><div class="cap"><b>11 · Operator — Scanner</b>One-tap QR redemption</div></div>
+
+        <!-- 12 DEAL SCHEDULER -->
+        <div class="device"><div class="phone"><div class="notch"></div><div class="screen"><div class="scroll" style="bottom:82px">
+          <div class="statusbar"><span>9:41</span><span>📶 🔋</span></div>
+          <div class="pad">
+            <div class="rowb"><span class="sectitle" style="font-size:17px">Off-peak deals</span><span class="badge badge-save">FILL 41%</span></div><div class="sub">Strike Lanes · this week</div>
+            <div class="lrow mt16" style="background:rgba(168,85,247,.1);box-shadow:none"><div class="ic" style="background:var(--app-surface)">📊</div><div class="tx"><b>£2,140 off-peak revenue</b><span>+18% vs last week · 96 bookings</span></div></div>
+            <div class="sectitle mt20" style="font-size:13.5px">Active deal</div>
+            <div class="lrow mt12"><div class="ic">🎳</div><div class="tx"><b>2 games + shoes + drink</b><span>Mon–Thu before 6pm</span></div><div class="toggle" style="flex:none"></div></div>
+            <div class="sectitle mt20" style="font-size:13.5px">Discount depth</div>
+            <div style="background:var(--app-surface);border-radius:15px;padding:15px;box-shadow:0 2px 8px rgba(26,20,48,.06);margin-top:12px"><div class="rowb" style="font-size:12.5px;color:var(--app-mut)"><span>Off-peak discount</span><b style="color:var(--brand-text);font-size:16px">44%</b></div><div style="height:6px;border-radius:99px;background:var(--app-line);margin-top:12px;position:relative"><i style="display:block;height:100%;width:62%;background:var(--grad);border-radius:99px"></i><span style="position:absolute;top:-7px;left:60%;width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 4px 10px rgba(0,0,0,.2);border:3px solid var(--c1)"></span></div><div class="rowb" style="font-size:11px;color:var(--app-faint);margin-top:8px"><span>10%</span><span>50%</span></div></div>
+            <div class="lrow mt16" style="background:rgba(168,85,247,.1);box-shadow:none"><div class="ic" style="background:var(--app-surface)">⚡</div><div class="tx"><b>Auto-deepen last-minute</b><span>+10% if &lt;30% full at T-2h</span></div><div class="toggle" style="flex:none"></div></div>
+            <div class="sectitle mt20" style="font-size:13.5px">Apply to days</div>
+            <div class="chips mt12" style="flex-wrap:wrap;gap:7px"><span class="minichip on">Mon</span><span class="minichip on">Tue</span><span class="minichip on">Wed</span><span class="minichip on">Thu</span><span class="minichip">Fri</span><span class="minichip">Sat</span><span class="minichip">Sun</span></div>
+          </div>
+          <div class="bottombar"><button class="btn btn-primary btn-lg">Save deal</button></div>
+        </div></div></div><div class="cap"><b>12 · Operator — Deal scheduler</b>Dynamic off-peak yield controls</div></div>
+
+      </div>
+
+      <div class="call"><span class="h">RN implementation notes</span> Stack/tab navigator (<code>@react-navigation</code>); gradient = <code>expo-linear-gradient</code>; icons = <code>lucide-react-native</code>; maps = <code>@rnmapbox/maps</code>; payment sheet = <code>@stripe/stripe-react-native</code> (Apple/Google Pay, card &amp; Klarna in one component); QR = <code>react-native-vision-camera</code> + <code>react-native-qrcode-svg</code>. Tokenize this kit as a theme object consumed via a <code>ThemeProvider</code> — exactly like the live theme switcher here.</div>
+
+      <div class="pagenav"><button onclick="go('roadmap')"><div class="d">Previous</div><div class="t">← MVP &amp; roadmap</div></button><button></button></div>
+    </section>
+
+  </div>
+</div>
+
+<script>
+const titles={overview:'Overview',market:'Market & competitors',tech:'Tech stack',features:'Features & UX',payments:'Payments & money flow',roadmap:'MVP & roadmap',kit:'UI kit & mockups'};
+function go(id){
+  document.querySelectorAll('.panel-view').forEach(p=>p.classList.toggle('show',p.id===id));
+  document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('active',b.dataset.p===id));
+  document.getElementById('crumb').textContent=titles[id];
+  document.getElementById('sidebar').classList.remove('open');
+  window.scrollTo(0,0);
+  history.replaceState(null,'','#'+id);
+}
+document.querySelectorAll('#nav button').forEach(b=>b.addEventListener('click',()=>go(b.dataset.p)));
+
+const tlabels={aurora:'Aurora · dark',cobalt:'Cobalt · dark',mint:'Mint · dark',sunset:'Sunset · dark',arcade:'Arcade · neon',daylight:'Daylight · light'};
+function setTheme(t){
+  document.body.setAttribute('data-theme',t);
+  document.querySelectorAll('#themes .swatch').forEach(s=>s.classList.toggle('on',s.dataset.t===t));
+  document.getElementById('tname').textContent=tlabels[t];
+  try{localStorage.setItem('zivvo-theme',t)}catch(e){}
+}
+document.querySelectorAll('#themes .swatch').forEach(s=>s.addEventListener('click',()=>setTheme(s.dataset.t)));
+
+// restore
+try{const t=localStorage.getItem('zivvo-theme');if(t&&tlabels[t])setTheme(t)}catch(e){}
+const init=location.hash.replace('#','');if(init&&titles[init])go(init);
+</script>
+</body>
+</html>
