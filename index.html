@@ -560,7 +560,7 @@ ORDER BY s.starts_at;</code></pre></div>
       <h2>What makes Zivvo different from EatClub</h2>
       <p class="lead" style="font-size:16px">EatClub is <strong>solo, dining, last-minute</strong>. Entertainment is <strong>social and varied</strong> — so our standout features lean on <em>group</em>, <em>spontaneity</em> and the <em>Zivvo Card</em>. Kept deliberately small: <strong>ship #1 and #2 first</strong>, hold the rest as easy reward tweaks.</p>
       <div class="grid2">
-        <div class="kbox" style="border-color:var(--c1)"><h4>1 · Group cashback <span class="badge b-rec">Ship first</span></h4><p>One person picks the activity; everyone taps with <strong>their own Zivvo Card</strong> on the day and <strong>each gets the reward automatically</strong> — no splitting math, no one fronts the bill.</p><p style="font-size:12.5px"><strong>vs EatClub:</strong> built for a single diner. This is entertainment-native (mates, parties, dates). <strong>Simple:</strong> the card reward you're already building, applied to N cards.</p></div>
+        <div class="kbox" style="border-color:var(--c1)"><h4>1 · Group cashback <span class="badge b-rec">Ship first</span></h4><p>At a <strong>walk-in venue</strong> (bar, arcade), everyone in the group taps with <strong>their own Zivvo Card</strong> and <strong>each gets the reward automatically</strong> — no splitting math, no one fronts the bill.</p><p style="font-size:12.5px"><strong>vs EatClub:</strong> built for a single diner. This is entertainment-native (mates, parties, dates). <strong>Simple:</strong> the card reward you're already building, applied to N cards.</p></div>
         <div class="kbox" style="border-color:var(--c1)"><h4>2 · "Free tonight?" button <span class="badge b-rec">Ship first</span></h4><p>One big button — <em>"Find something to do now"</em> — surfacing the nearest discounted activity with <strong>capacity left right now</strong>, one tap to book.</p><p style="font-size:12.5px"><strong>vs EatClub:</strong> they surface tables; we surface <em>plans</em>. Boredom is the #1 entertainment trigger. <strong>Simple:</strong> your availability feed + a filter.</p></div>
         <div class="kbox"><h4>3 · Off-peak streak <span class="badge b-later">Phase 2</span></h4><p>Extra cashback for picking the quiet slots venues most want filled (weekday daytime) — the more off-peak you go, the bigger the reward.</p><p style="font-size:12.5px"><strong>vs EatClub:</strong> turns a passive discount into an active habit — and directly serves the yield goal that earns venue trust. <strong>Simple:</strong> a multiplier on the reward.</p></div>
         <div class="kbox"><h4>4 · Try-something-new bonus <span class="badge b-later">Phase 2</span></h4><p>A one-time bonus the first time you try a new <em>type</em> of activity (first escape room, first karting).</p><p style="font-size:12.5px"><strong>vs EatClub:</strong> restaurants are all "eating" — entertainment spans bowling → theatre. Variety is the moat. <strong>Simple:</strong> one flag per category per user.</p></div>
@@ -575,23 +575,23 @@ ORDER BY s.starts_at;</code></pre></div>
     <section class="panel-view" id="payments">
       <div class="eyebrow">04 · Money</div>
       <h1 class="title">Payments &amp; money flow</h1>
-      <p class="lead">The redemption mechanism is the <strong>Zivvo Card</strong> — no coupons, no QR codes. Underneath, Zivvo is still a marketplace: when money moves, <strong>most belongs to the venue</strong> and Zivvo keeps a commission, which needs split payments and KYC'd payees.</p>
+      <p class="lead">No coupons, no QR codes. <strong>Reserved activities are pre-paid in the app</strong>; <strong>walk-in venues</strong> (bars, restaurants, arcades) use the <strong>Zivvo Card</strong> — pay on the day, get cashback. Underneath, Zivvo is a marketplace: when money moves, <strong>most belongs to the venue</strong> and Zivvo keeps a commission, needing split payments and KYC'd payees.</p>
 
       <div class="call key"><span class="h">The core idea</span> Customers link their real credit/debit card once; Zivvo issues them a <strong>virtual Zivvo Card</strong> in Apple/Google Wallet. The discount is delivered as <strong>automatic cashback — but only when they pay with the Zivvo Card</strong> at a Zivvo venue during an eligible deal. Pay with any other card and there's no reward. That single rule keeps spend on-platform, makes redemption invisible to floor staff (they just take a normal card payment), and gives Zivvo the transaction data.</div>
 
-      <h2>How the Zivvo Card works</h2>
+      <h2>How the Zivvo Card works <span style="font-size:13px;color:var(--mut);font-weight:400">— walk-in venues</span></h2>
       <div class="flow">
         <div class="step"><div class="n">STEP 1</div><div class="t">Link a card</div><div class="d">Customer adds their real card; Zivvo issues a virtual card (Stripe Issuing) funded by it, into their wallet.</div></div>
-        <div class="step"><div class="n">STEP 2</div><div class="t">Book a deal</div><div class="d">Reserves capacity — checked live against the venue availability feed. Optional small pre-auth holds the slot.</div></div>
+        <div class="step"><div class="n">STEP 2</div><div class="t">Walk in today</div><div class="d">Nothing to reserve at these venues — just turn up any time the deal is live.</div></div>
         <div class="step"><div class="n">STEP 3</div><div class="t">Pay at the venue</div><div class="d">Tap the Zivvo Card like any card. Venue is paid in full — no code, no QR, nothing for staff to learn.</div></div>
         <div class="step"><div class="n">STEP 4</div><div class="t">Zivvo matches it</div><div class="d">It's our issued card, so we see the transaction and match it to the booking, venue &amp; off-peak window.</div></div>
         <div class="step"><div class="n">STEP 5</div><div class="t">Reward auto-credited</div><div class="d">The discount lands back on the linked card as cashback. No coupon ever shown.</div></div>
       </div>
 
-      <div class="call"><span class="h">Two redemption modes — choose per deal</span>
-        <strong>① Card-linked cashback (default):</strong> pay full at the venue with the Zivvo Card, discount returned as cashback. Simplest, no coupons/QR — and it's what unlocks <strong>group cashback</strong> (every Zivvo Card in a group gets its own reward). <br>
-        <strong>② Pre-paid booking:</strong> charge the discounted price up front via Stripe for high-demand or party slots (cuts no-shows). Still no QR — arrival is matched by name/booking. <br>
-        Both <strong>gate on the live availability feed</strong>, so you never sell a slot the venue can't honour.</div>
+      <div class="call"><span class="h">Two modes — set by activity type, not by the user</span>
+        <strong>① Pre-paid booking — reserved activities</strong> (bowling, escape rooms, karting, paintball): anything with a finite, time-boxed slot. The customer <strong>pre-pays the discounted price in-app</strong>, because a held slot is perishable — a no-show would waste capacity that can't be resold. No QR; arrival matched by name. <br>
+        <strong>② Pay-at-venue cashback — walk-in venues only</strong> (bars, restaurants, arcades): no slot is reserved, so a no-show costs the venue nothing. Pay with the <strong>Zivvo Card</strong> on the day; discount returns as cashback. This is what unlocks <strong>group cashback</strong>. <br>
+        <strong>The rule:</strong> pay-at-venue is enabled <em>only</em> where nothing is reserved. Capacity-constrained activities must pre-pay.</div>
 
       <div class="call key"><span class="h">Headline stack</span> Deliver the discount as cashback on a <strong>Zivvo virtual card (Stripe Issuing)</strong> funded by the customer's real card; move venue money &amp; commission with <strong>Stripe Connect</strong> (Express, destination charges); <strong>manual capture</strong> for party deposits. No coupons, no QR. Evaluate Adyen only at 8-figure GMV.</div>
 
@@ -999,9 +999,9 @@ ORDER BY s.starts_at;</code></pre></div>
     <section class="panel-view" id="journey">
       <div class="eyebrow">07 · Flows</div>
       <h1 class="title">User journey</h1>
-      <p class="lead">Two ways to redeem a Zivvo deal. Discovery is shared; the paths split at the deal screen — <strong>pay now in the app</strong>, or <strong>reserve and pay at the venue with the Zivvo Card</strong> (card-linked cashback, no QR). Scroll each row →</p>
-      <div class="jintro"><b>Flow A</b> · Book &amp; pay in the app</div>&nbsp;
-      <div class="jintro"><b>Flow B</b> · Pay at the venue with the Zivvo Card</div>
+      <p class="lead">Which flow a deal uses is <strong>decided by the activity, not the user</strong>. <strong>Reserved activities</strong> (bowling, escape rooms, karting) are <strong>pre-paid in the app</strong> — a held slot is perishable, so a no-show can't be allowed to waste it. <strong>Walk-in venues</strong> (bars, restaurants, arcades) reserve nothing, so they skip booking entirely: pay on the day with the <strong>Zivvo Card</strong> and get cashback. Scroll each row →</p>
+      <div class="jintro"><b>Flow A</b> · Reserved activity — book &amp; pre-pay</div>&nbsp;
+      <div class="jintro"><b>Flow B</b> · Walk-in venue — Zivvo Card cashback</div>
 
       <h2>Shared start</h2>
       <div class="jflow">
@@ -1011,28 +1011,28 @@ ORDER BY s.starts_at;</code></pre></div>
           <div class="pad"><div class="rowb"><div><div style="font-size:11px;color:var(--app-mut)">📍 Shoreditch</div><div class="h1" style="font-size:19px">What's on · Today</div></div><div class="avatar" style="background:var(--grad);width:34px;height:34px;font-size:13px">PA</div></div>
             <div class="chips mt12"><span class="minichip on">Today</span><span class="minichip">Thu 26</span><span class="minichip">Fri 27</span><span class="minichip">Sat 28</span></div></div>
           <div class="pad mt16">
-            <div class="deal"><div class="img bgrad"><span class="badge badge-deal tl">44% OFF</span><span class="bl">📍 1.2km · 3 left today</span></div><div class="b"><div class="t">Strike Lanes</div><div class="m">★ 4.6 · Bowling</div><div class="pr"><span class="n">£18</span><span class="w">£32</span><span class="sv">Save £14</span></div></div></div>
-            <div class="deal"><div class="img bgrad"><span class="badge badge-deal tl">30% OFF</span><span class="bl">📍 0.8km · 5 left today</span></div><div class="b"><div class="t">The Vault — Escape</div><div class="m">★ 4.9 · Escape room</div><div class="pr"><span class="n">£21</span><span class="w">£30</span><span class="sv">Save £9</span></div></div></div>
+            <div class="deal"><div class="img bgrad"><span class="badge badge-deal tl">44% OFF</span><span class="bl">📍 1.2km · 3 slots left</span></div><div class="b"><div class="rowb"><div class="t">Strike Lanes</div><span class="badge" style="background:rgba(56,189,248,.18);color:var(--accent)">BOOK</span></div><div class="m">★ 4.6 · Bowling · reserved slot</div><div class="pr"><span class="n">£18</span><span class="w">£32</span><span class="sv">Save £14</span></div></div></div>
+            <div class="deal"><div class="img bgrad"><span class="badge badge-deal tl">30% OFF</span><span class="bl">📍 0.4km · walk in · till 11pm</span></div><div class="b"><div class="rowb"><div class="t">The Hop — Bar &amp; Games</div><span class="badge badge-save">WALK IN</span></div><div class="m">★ 4.7 · Bar · no booking</div><div class="pr"><span class="n">30% off</span><span class="sv" style="margin-left:auto">food &amp; drink</span></div></div></div>
           </div>
-        </div></div></div></div><div class="jcap"><b>Opens on today's deals.</b> Day picker to switch days; capacity shown ("3 left today").</div></div>
+        </div></div></div></div><div class="jcap"><b>Opens on today's deals.</b> Each venue is tagged <b style="color:var(--accent)">Book</b> (reserved) or <b style="color:var(--good)">Walk in</b> (pay at venue) — that's what picks the flow.</div></div>
+      </div>
 
-        <div class="jarrow">→</div>
-
-        <!-- S2 DEAL DETAIL (branch) -->
-        <div class="jstep"><div class="jnum">2</div><div class="jframe"><div class="phone"><div class="notch"></div><div class="screen"><div class="scroll" style="bottom:104px">
+      <h2>Flow A · Reserved activity — book &amp; pre-pay</h2>
+      <p class="muted" style="margin-top:0"><strong>Bowling, escape rooms, karting, paintball</strong> — anything with a finite time slot. Pre-paid in-app at the discounted price so a no-show can't waste a held slot. <strong>No QR</strong> — arrival matched by name.</p>
+      <div class="jflow">
+        <!-- A DEAL DETAIL -->
+        <div class="jstep"><div class="jnum">2</div><div class="jframe"><div class="phone"><div class="notch"></div><div class="screen"><div class="scroll" style="bottom:74px">
           <div class="vhero bgrad"><div class="statusbar onbrand"><span>9:41</span><span>📶 🔋</span></div><div class="vround" style="top:46px;left:14px"><svg viewBox="0 0 24 24" width="16" fill="none" stroke="#1a1430" stroke-width="2.4"><path d="M15 6l-6 6 6 6"/></svg></div><span class="badge badge-deal" style="position:absolute;bottom:36px;left:16px;font-size:12px;padding:6px 11px">⚡ 44% OFF TODAY</span></div>
-          <div class="sheet"><div class="rowb"><div><div class="h1" style="font-size:19px">Strike Lanes</div><div class="sub">Bowling · Shoreditch</div></div><span class="stars" style="font-size:13px">★ 4.6</span></div>
+          <div class="sheet"><div class="rowb"><div><div class="h1" style="font-size:19px">Strike Lanes</div><div class="sub">Bowling · reserved slot</div></div><span class="stars" style="font-size:13px">★ 4.6</span></div>
             <div class="lrow mt16" style="background:rgba(168,85,247,.1);box-shadow:none;margin-bottom:0"><div class="ic" style="background:var(--app-surface)">🎳</div><div class="tx"><b>2 games + shoes + drink</b><span>Off-peak before 6pm</span></div><div style="text-align:right"><div style="font-weight:800;color:var(--brand-text)">£18</div><div style="font-size:11px;color:var(--app-faint);text-decoration:line-through">£32</div></div></div>
             <div class="sectitle mt20" style="font-size:14px">Pick a time — Today</div>
             <div class="hrail mt12"><div class="slot"><div class="tm">2:00</div><div class="sv">−44%</div></div><div class="slot on"><div class="tm">3:30</div><div class="sv">−44%</div></div><div class="slot"><div class="tm">4:00</div><div class="sv">−40%</div></div></div></div>
-          <div class="bottombar" style="flex-direction:column;gap:8px;align-items:stretch"><button class="btn btn-primary btn-lg">Book &amp; pay now · £18</button><button class="btn btn-ghost btn-lg">Reserve · pay at venue</button></div>
-        </div></div></div></div><div class="jcap"><b>The branch.</b> Two buttons: <b style="color:var(--brand-text)">Book &amp; pay now</b> (Flow A) or <b style="color:var(--brand-text)">Reserve · pay at venue</b> (Flow B).</div></div>
-      </div>
+          <div class="bottombar"><button class="btn btn-primary btn-lg">Book &amp; pay now · £18</button></div>
+        </div></div></div></div><div class="jcap">Reserved slot → one CTA: <b>book &amp; pay</b> up front.</div></div>
 
-      <h2>Flow A · Book &amp; pay in the app</h2>
-      <p class="muted" style="margin-top:0">Best for popular slots and groups who want it locked in. Pre-paid at the discounted price via Stripe; <strong>no QR</strong> — arrival is matched by name/booking.</p>
-      <div class="jflow">
-        <!-- A1 BUILDER -->
+        <div class="jarrow">→</div>
+
+        <!-- A BUILDER -->
         <div class="jstep"><div class="jnum">3</div><div class="jframe"><div class="phone"><div class="notch"></div><div class="screen"><div class="scroll" style="bottom:74px">
           <div class="statusbar"><span>9:41</span><span>📶 🔋</span></div>
           <div class="pad"><div class="h1 mt8" style="font-size:18px">Your booking</div><div class="sub">Strike Lanes · Today 3:30pm</div>
@@ -1070,63 +1070,58 @@ ORDER BY s.starts_at;</code></pre></div>
         </div></div></div></div><div class="jcap"><b>Done.</b> Walk in, give your name — no code to show.</div></div>
       </div>
 
-      <h2>Flow B · Pay at the venue (Zivvo Card)</h2>
-      <p class="muted" style="margin-top:0">The default, friction-free path. Reserve the slot for free now, tap the <strong>Zivvo Card</strong> at the venue, and the discount comes back automatically as <strong>cashback</strong> — no coupons, no QR.</p>
+      <h2>Flow B · Walk-in venue — pay with the Zivvo Card</h2>
+      <p class="muted" style="margin-top:0"><strong>Bars, restaurants, arcades</strong> — nothing is reserved, so a no-show costs the venue nothing. Walk in while the deal's live and pay with the <strong>Zivvo Card</strong>; the discount returns as <strong>cashback</strong>. This is what unlocks <strong>group cashback</strong>.</p>
       <div class="jflow">
-        <!-- B1 RESERVED -->
+        <!-- B DEAL DETAIL (walk-in, no slot) -->
+        <div class="jstep"><div class="jnum">2</div><div class="jframe"><div class="phone"><div class="notch"></div><div class="screen"><div class="scroll" style="bottom:74px">
+          <div class="vhero bgrad"><div class="statusbar onbrand"><span>9:41</span><span>📶 🔋</span></div><div class="vround" style="top:46px;left:14px"><svg viewBox="0 0 24 24" width="16" fill="none" stroke="#1a1430" stroke-width="2.4"><path d="M15 6l-6 6 6 6"/></svg></div><span class="badge badge-deal" style="position:absolute;bottom:36px;left:16px;font-size:12px;padding:6px 11px">⚡ 30% OFF TODAY</span></div>
+          <div class="sheet"><div class="rowb"><div><div class="h1" style="font-size:19px">The Hop</div><div class="sub">Bar &amp; Games · Shoreditch</div></div><span class="stars" style="font-size:13px">★ 4.7</span></div>
+            <div class="lrow mt16" style="background:rgba(168,85,247,.1);box-shadow:none;margin-bottom:0"><div class="ic" style="background:var(--app-surface)">🍻</div><div class="tx"><b>30% off food &amp; drink</b><span>Off-peak before 7pm today</span></div></div>
+            <div class="lrow mt12" style="background:rgba(16,185,129,.1);box-shadow:none"><div class="ic" style="background:var(--app-surface)">🚶</div><div class="tx"><b>No booking needed</b><span>Walk in any time · open till 11pm · 4 min away</span></div></div>
+            <div class="lrow" style="background:var(--app-bg);box-shadow:none"><div class="ic">💳</div><div class="tx"><span>Pay with your <b>Zivvo Card</b> to get the 30% back as cashback.</span></div></div></div>
+          <div class="bottombar"><button class="btn btn-primary btn-lg">Get this deal</button></div>
+        </div></div></div></div><div class="jcap">Walk-in venue → <b>no slot picker</b>; just activate the deal.</div></div>
+
+        <div class="jarrow">→</div>
+
+        <!-- B CARD READY -->
         <div class="jstep"><div class="jnum">3</div><div class="jframe"><div class="phone"><div class="notch"></div><div class="screen"><div class="scroll">
           <div class="statusbar"><span>9:41</span><span>📶 🔋</span></div>
-          <div class="pad" style="text-align:center;padding-top:26px">
-            <div class="holdcircle" style="background:rgba(245,158,11,.15)"><svg viewBox="0 0 24 24" width="34" fill="none" stroke="var(--amber)" stroke-width="2.4"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2" stroke-linecap="round"/></svg></div>
-            <div class="h1 mt16" style="font-size:20px">Slot reserved 🎳</div><p class="sub mt8">Strike Lanes · Today 3:30pm · held 2h</p>
-            <div class="lrow mt20" style="background:rgba(168,85,247,.1);box-shadow:none;text-align:left"><div class="ic" style="background:var(--app-surface)">💳</div><div class="tx"><b>Pay with your Zivvo Card</b><span>Tap it at the venue to unlock <b style="color:var(--good)">£14 back</b>. Pay any other way = no reward.</span></div></div>
-            <div class="summary mt16" style="text-align:left"><div class="sr"><span>Pay at venue</span><span>£32</span></div><div class="sr"><span style="color:var(--good);font-weight:700">Cashback after</span><span class="free">£14</span></div><div class="sr tot"><span>Effective</span><span>£18</span></div></div>
-          </div>
-        </div></div></div></div><div class="jcap"><b>No upfront payment.</b> The slot is held; you're nudged to pay with the Zivvo Card.</div></div>
+          <div class="pad" style="text-align:center;padding-top:14px"><div class="successcheck" style="background:rgba(16,185,129,.15)"><svg viewBox="0 0 24 24" width="30" fill="none" stroke="var(--good)" stroke-width="3"><path d="M20 6 9 17l-5-5"/></svg></div>
+            <div class="h1 mt12" style="font-size:19px">Deal ready 🍻</div><p class="sub mt8">The Hop · walk in before 7pm today</p></div>
+          <div class="zcard"><div class="rowb"><div style="font-weight:800;font-size:18px;letter-spacing:-.5px">zivvo</div><svg viewBox="0 0 24 24" width="22" fill="none" stroke="#fff" stroke-width="2"><path d="M8.5 8a6 6 0 010 8M11.5 5.5a9.5 9.5 0 010 13M5.5 10.5a2.5 2.5 0 010 3" stroke-linecap="round"/></svg></div><div class="num">•••• •••• •••• 4242</div><div class="rowb" style="font-size:11px"><div><div style="opacity:.8">LINKED TO</div><div style="font-weight:700">Visa •• 42</div></div><div style="opacity:.85;font-weight:700">VIRTUAL</div></div></div>
+          <div class="pad"><div class="lrow" style="background:rgba(168,85,247,.1);box-shadow:none;text-align:left"><div class="ic" style="background:var(--app-surface)">⚡</div><div class="tx"><b>Pay with this card to earn</b><span>30% back as cashback. Any other card = no reward.</span></div></div></div>
+        </div></div></div></div><div class="jcap">Zivvo Card (in your wallet) is armed for The Hop — no booking made.</div></div>
 
         <div class="jarrow">→</div>
 
-        <!-- B2 ZIVVO CARD WALLET -->
-        <div class="jstep"><div class="jnum">4</div><div class="jframe"><div class="phone"><div class="notch"></div><div class="screen"><div class="scroll">
-          <div class="statusbar"><span>9:41</span><span>📶 🔋</span></div>
-          <div class="pad"><div class="h1 mt8" style="font-size:18px">Your Zivvo Card</div><p class="sub">Linked to your real card — earns rewards at Zivvo venues.</p></div>
-          <div class="zcard">
-            <div class="rowb"><div style="font-weight:800;font-size:18px;letter-spacing:-.5px">zivvo</div><svg viewBox="0 0 24 24" width="22" fill="none" stroke="#fff" stroke-width="2"><path d="M8.5 8a6 6 0 010 8M11.5 5.5a9.5 9.5 0 010 13M5.5 10.5a2.5 2.5 0 010 3" stroke-linecap="round"/></svg></div>
-            <div class="num">•••• •••• •••• 4242</div>
-            <div class="rowb" style="font-size:11px"><div><div style="opacity:.8">LINKED TO</div><div style="font-weight:700">Visa •• 42</div></div><div style="opacity:.85;font-weight:700">VIRTUAL</div></div>
-          </div>
-          <div class="pad"><button class="btn btn-dark btn-lg" style="font-size:14px"> Add to Apple Wallet</button>
-            <div class="lrow mt16" style="box-shadow:none;background:var(--app-bg)"><div class="ic">ℹ️</div><div class="tx"><span>Spend on the Zivvo Card is charged to your linked Visa; eligible deals are rewarded as cashback.</span></div></div></div>
-        </div></div></div></div><div class="jcap">A virtual card (Stripe Issuing) in Apple/Google Wallet, funded by your real card.</div></div>
-
-        <div class="jarrow">→</div>
-
-        <!-- B3 TAP AT VENUE -->
-        <div class="jstep"><div class="jnum">5</div><div class="jframe"><div class="phone"><div class="notch"></div><div class="screen" style="background:#0c0a1c;color:#fff">
+        <!-- B TAP AT VENUE -->
+        <div class="jstep"><div class="jnum">4</div><div class="jframe"><div class="phone"><div class="notch"></div><div class="screen" style="background:#0c0a1c;color:#fff">
           <div class="statusbar onbrand"><span>9:41</span><span>📶 🔋</span></div>
-          <div style="text-align:center;padding:14px 16px 0"><div style="font-size:13px;opacity:.7">Pay at Strike Lanes</div></div>
+          <div style="text-align:center;padding:14px 16px 0"><div style="font-size:13px;opacity:.7">Pay at The Hop</div></div>
           <div class="zcard" style="margin:18px 16px;height:158px;transform:scale(.96)"><div class="rowb"><div style="font-weight:800;font-size:17px">zivvo</div><svg viewBox="0 0 24 24" width="20" fill="none" stroke="#fff" stroke-width="2"><path d="M8.5 8a6 6 0 010 8M11.5 5.5a9.5 9.5 0 010 13" stroke-linecap="round"/></svg></div><div class="num" style="font-size:14px">•••• 4242</div><div style="font-size:11px;opacity:.85">Visa •• 42</div></div>
           <div style="text-align:center;padding:0 24px"><div class="holdcircle" style="background:rgba(34,211,238,.15);margin-bottom:12px"><svg viewBox="0 0 24 24" width="34" fill="none" stroke="var(--accent)" stroke-width="2"><path d="M8.5 8a6 6 0 010 8M11.5 5.5a9.5 9.5 0 010 13M5.5 10.5a2.5 2.5 0 010 3" stroke-linecap="round"/></svg></div>
             <div style="font-weight:700;font-size:15px">Hold near the reader</div>
-            <div style="margin-top:18px;background:rgba(16,185,129,.16);color:#34d399;border-radius:12px;padding:11px;font-weight:700;font-size:14px">✓ Paid £32.00</div>
+            <div style="margin-top:18px;background:rgba(16,185,129,.16);color:#34d399;border-radius:12px;padding:11px;font-weight:700;font-size:14px">✓ Paid £40.00</div>
           </div>
-        </div></div></div><div class="jcap"><b>Tap to pay</b> like any contactless card — venue is paid in full. Nothing for staff to learn.</div></div>
+        </div></div></div><div class="jcap"><b>Tap to pay</b> the bill like any card — staff do nothing special.</div></div>
 
         <div class="jarrow">→</div>
 
-        <!-- B4 CASHBACK -->
-        <div class="jstep"><div class="jnum">6</div><div class="jframe"><div class="phone"><div class="notch"></div><div class="screen"><div class="scroll">
+        <!-- B CASHBACK -->
+        <div class="jstep"><div class="jnum">5</div><div class="jframe"><div class="phone"><div class="notch"></div><div class="screen"><div class="scroll">
           <div class="statusbar"><span>9:41</span><span>📶 🔋</span></div>
           <div class="pad" style="text-align:center;padding-top:30px">
             <div class="successcheck"><svg viewBox="0 0 24 24" width="34" fill="none" stroke="var(--good)" stroke-width="3"><path d="M12 1v22M17 6H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-            <div class="h1 mt16" style="font-size:20px">£14 cashback! 🎉</div><p class="sub mt8">Zivvo matched your tap at Strike Lanes.</p>
-            <div class="summary mt20" style="text-align:left"><div class="sr"><span>You paid (tap)</span><span>£32.00</span></div><div class="sr"><span style="color:var(--good);font-weight:700">Cashback to Visa •• 42</span><span class="free">£14.00</span></div><div class="sr tot"><span>Effective price</span><span style="color:var(--brand-text)">£18.00</span></div></div>
-            <div class="lrow mt16" style="background:rgba(16,185,129,.1);box-shadow:none;text-align:left"><div class="ic" style="background:var(--app-surface)">⚡</div><div class="tx"><b>Credited within 24h</b><span>No coupon, no QR — automatic because you used the Zivvo Card.</span></div></div>
+            <div class="h1 mt16" style="font-size:20px">£12 cashback! 🎉</div><p class="sub mt8">Zivvo matched your tap at The Hop.</p>
+            <div class="summary mt20" style="text-align:left"><div class="sr"><span>You paid (tap)</span><span>£40.00</span></div><div class="sr"><span style="color:var(--good);font-weight:700">Cashback to Visa •• 42</span><span class="free">£12.00</span></div><div class="sr tot"><span>Effective bill</span><span style="color:var(--brand-text)">£28.00</span></div></div>
+            <div class="lrow mt16" style="background:rgba(16,185,129,.1);box-shadow:none;text-align:left"><div class="ic" style="background:var(--app-surface)">⚡</div><div class="tx"><b>Credited within 24h</b><span>Automatic — because you used the Zivvo Card.</span></div></div>
           </div>
-        </div></div></div></div><div class="jcap"><b>Done.</b> Discount returned as cashback to the linked card — automatically.</div></div>
+        </div></div></div></div><div class="jcap"><b>Done.</b> 30% back as cashback — no booking ever needed.</div></div>
       </div>
 
-      <div class="call key"><span class="h">Same end state, two routes</span> Flow A takes the money up front (locks in popular/group slots, kills no-shows); Flow B keeps it zero-friction and is what unlocks <strong>group cashback</strong> (everyone taps their own Zivvo Card, each gets their own reward). Both gate on the live availability feed and need <strong>no coupons and no QR</strong>.</div>
+      <div class="call key"><span class="h">The rule: pay-at-venue only where a no-show costs nothing</span> Reserved activities (held, perishable slots) must <strong>pre-pay</strong> — Flow A. Walk-in venues reserve nothing, so they get the friction-free <strong>Zivvo Card</strong> path — Flow B, which also unlocks <strong>group cashback</strong> (everyone taps their own card, each gets a reward). Neither uses coupons or QR.</div>
 
       <div class="pagenav"><button onclick="go('kit')"><div class="d">Previous</div><div class="t">← UI kit &amp; mockups</div></button><button></button></div>
     </section>
