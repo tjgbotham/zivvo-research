@@ -529,20 +529,18 @@ ORDER BY s.starts_at;</code></pre></div>
       <h1 class="title">Features &amp; UX</h1>
       <p class="lead">Restaurants discount a fungible table; entertainment sells <strong>time-boxed, capacity-constrained, pre-bookable slots</strong>. Zivvo is a hybrid of <strong>EatClub's yield + Fever's discovery + Peek Pro's slot/waiver/add-on engine</strong>. <span class="badge b-must">MVP</span> <span class="badge b-nice">Nice</span> <span class="badge b-later">Later</span></p>
 
-      <div class="call key"><span class="h">7-day window · opens on today</span> Deals run in a rolling <strong>7-day window</strong>. The app <strong>always opens on today's deals</strong> by default; a day picker lets the user switch to any day (today → +6), and they see only <strong>that day's deals that still have capacity left</strong>. With the 5-deal cap each day stays a short, curated list, and slots visibly disappearing as a day fills creates the urgency. <em>Implication:</em> far-out birthday/party bookings still sit beyond the window (a separate later flow), while <strong>group outings + group cashback</strong> inside the 7 days are fully in scope.</div>
+      <div class="call key"><span class="h">7-day window · opens on today</span> Deals run in a rolling <strong>7-day window</strong>. The app <strong>always opens on today's deals</strong> by default; a day picker lets the user switch to any day (today → +6), and they see only <strong>that day's deals that still have capacity left</strong>. With the 5-deal cap each day stays a short, curated list, and slots visibly disappearing as a day fills creates the urgency. <em>Implication:</em> far-out birthday/party bookings still sit beyond the window (a separate later flow), while <strong>group outings</strong> inside the 7 days are fully in scope.</div>
 
       <h2>Consumer app</h2>
       <div class="grid2">
         <div class="kbox"><h4>Discovery — the heart</h4><p><span class="badge b-must">MVP</span> Personalized feed (venue, % off, time, distance)</p><p><span class="badge b-must">MVP</span> Category browse (bowling, escape, karting…)</p><p><span class="badge b-must">MVP</span> Map view with deal pins</p><p><span class="badge b-must">MVP</span> <b>Opens on today</b>; day picker to switch to any day (→ +6)</p><p><span class="badge b-nice">Nice</span> Curated collections</p></div>
-        <div class="kbox"><h4>Booking flow</h4><p><span class="badge b-must">MVP</span> Activity → date → slot → party → add-ons → pay</p><p><span class="badge b-must">MVP</span> Real-time capacity check</p><p><span class="badge b-must">MVP</span> In-app payment + deposits</p><p><span class="badge b-must">MVP</span> <b>Digital waiver per participant</b></p><p><span class="badge b-must">MVP</span> QR confirmation + calendar</p></div>
-        <div class="kbox"><h4>Groups — two paths</h4>
-          <p style="font-weight:700;color:var(--accent);font-size:12px;margin:0 0 2px">Reserved activity — group booking</p>
+        <div class="kbox"><h4>Booking flow</h4><p><span class="badge b-must">MVP</span> Activity → date → slot → party → add-ons → pay</p><p><span class="badge b-must">MVP</span> Real-time capacity check</p><p><span class="badge b-must">MVP</span> In-app payment + deposits</p><p><span class="badge b-must">MVP</span> <b>Digital waiver per participant</b></p><p><span class="badge b-must">MVP</span> Booking confirmation + calendar (no QR)</p></div>
+        <div class="kbox"><h4>Group booking</h4>
           <p><span class="badge b-must">MVP</span> Book a held slot for the group (bowling, karting)</p>
           <p><span class="badge b-must">MVP</span> Pre-paid up front · per-guest waiver via link</p>
-          <p style="font-weight:700;color:var(--good);font-size:12px;margin:10px 0 2px">Walk-in venue — group cashback</p>
-          <p><span class="badge b-must">MVP</span> <b>Everyone taps their own Zivvo Card → each gets cashback</b></p>
+          <p><span class="badge b-must">MVP</span> Group add-ons (food, drinks, extra time)</p>
           <p><span class="badge b-later">Later</span> Advance birthday parties, split-the-bill, RSVP</p>
-          <p style="color:var(--c2);font-size:12px;margin-top:8px"><b>Group cashback is the entertainment-native wedge restaurants can't match.</b></p></div>
+          <p style="color:var(--c2);font-size:12px;margin-top:8px"><b>Birthdays &amp; team outings are the high-LTV, recurring wedge.</b></p></div>
         <div class="kbox"><h4>Retention &amp; loyalty</h4><p><span class="badge b-must">MVP</span> Points/credits + referrals</p><p><span class="badge b-must">MVP</span> Favorites + deal alerts</p><p><span class="badge b-must">MVP</span> Verified reviews</p><p><span class="badge b-nice">Nice</span> Activity passport, streaks</p><p><span class="badge b-nice">Nice</span> <b>Birthday engine</b></p></div>
       </div>
       <div class="call"><span class="h">Design principle</span> Make gamification <strong>pull users toward the slots operators most need filled</strong> — that's the line between gimmick and growth engine.</div>
@@ -566,12 +564,11 @@ ORDER BY s.starts_at;</code></pre></div>
       </div>
 
       <h2>What makes Zivvo different from EatClub</h2>
-      <p class="lead" style="font-size:16px">EatClub is <strong>solo, dining, last-minute</strong>. Entertainment is <strong>social and varied</strong> — so our standout features lean on <em>group</em>, <em>spontaneity</em> and the <em>Zivvo Card</em>. Kept deliberately small: <strong>ship #1 and #2 first</strong>, hold the rest as easy reward tweaks.</p>
+      <p class="lead" style="font-size:16px">EatClub is <strong>solo, dining, last-minute</strong>. Entertainment is <strong>spontaneous and varied</strong> — so our standout features lean on <em>spontaneity</em>, <em>variety</em> and the <em>Zivvo Card</em>. Kept deliberately small: <strong>ship #1 first</strong>, hold the rest as easy reward tweaks.</p>
       <div class="grid2">
-        <div class="kbox" style="border-color:var(--c1)"><h4>1 · Group cashback <span class="badge b-rec">Ship first</span></h4><p>At a <strong>walk-in venue</strong> (bar, arcade), everyone in the group taps with <strong>their own Zivvo Card</strong> and <strong>each gets the reward automatically</strong> — no splitting math, no one fronts the bill.</p><p style="font-size:12.5px"><strong>vs EatClub:</strong> built for a single diner. This is entertainment-native (mates, parties, dates). <strong>Simple:</strong> the card reward you're already building, applied to N cards.</p></div>
-        <div class="kbox" style="border-color:var(--c1)"><h4>2 · "Free tonight?" button <span class="badge b-rec">Ship first</span></h4><p>One big button — <em>"Find something to do now"</em> — surfacing the nearest discounted activity with <strong>capacity left right now</strong>, one tap to book.</p><p style="font-size:12.5px"><strong>vs EatClub:</strong> they surface tables; we surface <em>plans</em>. Boredom is the #1 entertainment trigger. <strong>Simple:</strong> your availability feed + a filter.</p></div>
-        <div class="kbox"><h4>3 · Off-peak streak <span class="badge b-later">Phase 2</span></h4><p>Extra cashback for picking the quiet slots venues most want filled (weekday daytime) — the more off-peak you go, the bigger the reward.</p><p style="font-size:12.5px"><strong>vs EatClub:</strong> turns a passive discount into an active habit — and directly serves the yield goal that earns venue trust. <strong>Simple:</strong> a multiplier on the reward.</p></div>
-        <div class="kbox"><h4>4 · Try-something-new bonus <span class="badge b-later">Phase 2</span></h4><p>A one-time bonus the first time you try a new <em>type</em> of activity (first escape room, first karting).</p><p style="font-size:12.5px"><strong>vs EatClub:</strong> restaurants are all "eating" — entertainment spans bowling → theatre. Variety is the moat. <strong>Simple:</strong> one flag per category per user.</p></div>
+        <div class="kbox" style="border-color:var(--c1)"><h4>1 · "Free tonight?" button <span class="badge b-rec">Ship first</span></h4><p>One big button — <em>"Find something to do now"</em> — surfacing the nearest discounted activity with <strong>capacity left right now</strong>, one tap to book.</p><p style="font-size:12.5px"><strong>vs EatClub:</strong> they surface tables; we surface <em>plans</em>. Boredom is the #1 entertainment trigger. <strong>Simple:</strong> your availability feed + a filter.</p></div>
+        <div class="kbox"><h4>2 · Off-peak streak <span class="badge b-later">Phase 2</span></h4><p>Extra cashback for picking the quiet slots venues most want filled (weekday daytime) — the more off-peak you go, the bigger the reward.</p><p style="font-size:12.5px"><strong>vs EatClub:</strong> turns a passive discount into an active habit — and directly serves the yield goal that earns venue trust. <strong>Simple:</strong> a multiplier on the reward.</p></div>
+        <div class="kbox"><h4>3 · Try-something-new bonus <span class="badge b-later">Phase 2</span></h4><p>A one-time bonus the first time you try a new <em>type</em> of activity (first escape room, first karting).</p><p style="font-size:12.5px"><strong>vs EatClub:</strong> restaurants are all "eating" — entertainment spans bowling → theatre. Variety is the moat. <strong>Simple:</strong> one flag per category per user.</p></div>
       </div>
 
       <div class="call key"><span class="h">Exclusive by design — max 5 deals per venue</span> Every venue lists <strong>at most five live deals at a time</strong>. Scarcity is the point: it keeps the feed curated, makes each deal feel worth grabbing, and forces venues to put their <em>best</em> offer forward rather than dumping a long list (the anti-Groupon). Fewer, better deals = a premium, "members'-club" feel — and easier choices for the customer.</div>
@@ -598,7 +595,7 @@ ORDER BY s.starts_at;</code></pre></div>
 
       <div class="call"><span class="h">Two modes — set by activity type, not by the user</span>
         <strong>① Pre-paid booking — reserved activities</strong> (bowling, escape rooms, karting, paintball): anything with a finite, time-boxed slot. The customer <strong>pre-pays the discounted price in-app</strong>, because a held slot is perishable — a no-show would waste capacity that can't be resold. No QR; arrival matched by name. <br>
-        <strong>② Pay-at-venue cashback — walk-in venues only</strong> (bars, restaurants, arcades): no slot is reserved, so a no-show costs the venue nothing. Pay with the <strong>Zivvo Card</strong> on the day; discount returns as cashback. This is what unlocks <strong>group cashback</strong>. <br>
+        <strong>② Pay-at-venue cashback — walk-in venues only</strong> (bars, restaurants, arcades): no slot is reserved, so a no-show costs the venue nothing. Pay with the <strong>Zivvo Card</strong> on the day; the discount returns as cashback. <br>
         <strong>The rule:</strong> pay-at-venue is enabled <em>only</em> where nothing is reserved. Capacity-constrained activities must pre-pay.</div>
 
       <div class="call key"><span class="h">Headline stack</span> Deliver the discount as cashback on a <strong>Zivvo virtual card (Stripe Issuing)</strong> funded by the customer's real card; move venue money &amp; commission with <strong>Stripe Connect</strong> (Express, destination charges); <strong>manual capture</strong> for party deposits. No coupons, no QR. Evaluate Adyen only at 8-figure GMV.</div>
@@ -644,7 +641,7 @@ ORDER BY s.starts_at;</code></pre></div>
       <h1 class="title">MVP &amp; roadmap</h1>
       <p class="lead">Ship a tight, defensible v1 that proves the core loop: <strong>operator lists off-peak slots → consumer discovers &amp; books → redeems → both see value.</strong></p>
       <div class="phase"><span class="ph ph0">PHASE 0 · MVP</span><div class="grid2">
-        <div><h4>Consumer</h4><p style="font-size:13.5px;color:var(--mut)">Onboarding + activity quiz · feed, browse, map · <b>"Free tonight?" button</b> · <b>day picker (7-day window)</b> · filters (party size, age) · venue profiles · <b>slot booking + waivers</b> · <b>party flow + group cashback</b> · <b>Zivvo Card cashback (no QR)</b> · favorites · reviews · push/SMS · points + referrals</p></div>
+        <div><h4>Consumer</h4><p style="font-size:13.5px;color:var(--mut)">Onboarding + activity quiz · feed, browse, map · <b>"Free tonight?" button</b> · <b>day picker (7-day window)</b> · filters (party size, age) · venue profiles · <b>slot booking + waivers</b> · <b>party flow</b> · <b>Zivvo Card cashback (no QR)</b> ·favorites · reviews · push/SMS · points + referrals</p></div>
         <div><h4>Operator + Infra</h4><p style="font-size:13.5px;color:var(--mut)">Onboarding · inventory/capacity · deal creator + auto-discounts · package builder · calendar + bookings view (no QR) · analytics · payouts. <b>Tech:</b> venue portal + mock DB with <b>Postgres RLS</b> + availability feed · single ECS + RDS Postgres (EXCLUDE + FOR UPDATE) + Redis holds · Stripe Connect + Issuing · Algolia · no POS, rule-based pricing.</p></div>
       </div></div>
       <div class="phase"><span class="ph ph1">PHASE 1 · Engagement &amp; liquidity</span><p style="font-size:13.5px;color:var(--mut);margin:0">Real-time pushes ("3 slots left") · lifecycle messaging · referral &amp; group-invite virality · richer analytics · first POS adapters · split-the-bill, RSVP, gamified passport.</p></div>
@@ -1079,7 +1076,7 @@ ORDER BY s.starts_at;</code></pre></div>
       </div>
 
       <h2>Flow B · Walk-in venue — pay with the Zivvo Card</h2>
-      <p class="muted" style="margin-top:0"><strong>Bars, restaurants, arcades</strong> — nothing is reserved, so a no-show costs the venue nothing. Walk in while the deal's live and pay with the <strong>Zivvo Card</strong>; the discount returns as <strong>cashback</strong>. This is what unlocks <strong>group cashback</strong>.</p>
+      <p class="muted" style="margin-top:0"><strong>Bars, restaurants, arcades</strong> — nothing is reserved, so a no-show costs the venue nothing. Walk in while the deal's live and pay with the <strong>Zivvo Card</strong>; the discount returns as <strong>cashback</strong>.</p>
       <div class="jflow">
         <!-- B DEAL DETAIL (walk-in, no slot) -->
         <div class="jstep"><div class="jnum">2</div><div class="jframe"><div class="phone"><div class="notch"></div><div class="screen"><div class="scroll" style="bottom:74px">
@@ -1129,7 +1126,7 @@ ORDER BY s.starts_at;</code></pre></div>
         </div></div></div></div><div class="jcap"><b>Done.</b> 30% back as cashback — no booking ever needed.</div></div>
       </div>
 
-      <div class="call key"><span class="h">The rule: pay-at-venue only where a no-show costs nothing</span> Reserved activities (held, perishable slots) must <strong>pre-pay</strong> — Flow A. Walk-in venues reserve nothing, so they get the friction-free <strong>Zivvo Card</strong> path — Flow B, which also unlocks <strong>group cashback</strong> (everyone taps their own card, each gets a reward). Neither uses coupons or QR.</div>
+      <div class="call key"><span class="h">The rule: pay-at-venue only where a no-show costs nothing</span> Reserved activities (held, perishable slots) must <strong>pre-pay</strong> — Flow A. Walk-in venues reserve nothing, so they get the friction-free <strong>Zivvo Card</strong> path — Flow B. Neither uses coupons or QR.</div>
 
       <div class="pagenav"><button onclick="go('kit')"><div class="d">Previous</div><div class="t">← UI kit &amp; mockups</div></button><button class="next" onclick="go('future')"><div class="d">Next</div><div class="t">Future features →</div></button></div>
     </section>
