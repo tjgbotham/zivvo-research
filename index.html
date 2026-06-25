@@ -476,8 +476,31 @@ INSERT INTO booking (...) VALUES (...);
 COMMIT;</code></pre><p style="font-size:13px;color:var(--mut)"><code>FOR UPDATE</code> serializes concurrent buyers. Add a Redis counter for flash-sale spikes.</p></div>
       </div>
       <p><strong>Cart "hold":</strong> on checkout, create <code>Booking(status='held', expires_at=now()+10min)</code>; a BullMQ job releases expired holds. <strong>Dynamic pricing:</strong> start rule-based, materialize the final price onto each slot. Defer ML.</p>
+      <h2>Venue portal &amp; availability sync</h2>
+      <p>Venues need their own <strong>web portal</strong> to log in, post deals and expose how much capacity is left. Two design choices matter here: <strong>multi-tenant isolation</strong> (a venue must only ever see its own data) and a clean <strong>availability feed</strong> the consumer app can read in real time ("are there bookings left for the day?").</p>
+      <div class="grid2">
+        <div class="kbox"><h4>Multi-tenant isolation — Postgres RLS</h4><p style="font-size:13px;color:var(--mut)">Every venue-owned row is filtered by the database itself, not app code — so a bug can never leak one venue's bookings to another. The server sets the tenant per request; <code>FORCE ROW LEVEL SECURITY</code> + a non-superuser app role makes it real.</p><pre><code>ALTER TABLE deal ENABLE ROW LEVEL SECURITY;
+ALTER TABLE deal FORCE ROW LEVEL SECURITY;
+
+CREATE POLICY venue_isolation ON deal
+  USING (venue_id =
+    current_setting('app.venue_id')::int);
+
+-- per request, after login:
+SET LOCAL app.venue_id = '42';</code></pre></div>
+        <div class="kbox"><h4>"Bookings left today" — availability feed</h4><p style="font-size:13px;color:var(--mut)">Each slot tracks total vs reserved capacity; remaining is what the app shows and what gates a booking. Exposed as a small JSON API the consumer app polls.</p><pre><code>-- GET /api/venues/:id/availability?date=
+SELECT s.id, s.starts_at,
+       s.capacity_total
+         - s.capacity_reserved AS remaining
+FROM inventory_slot s
+WHERE s.venue_id = :id
+  AND s.date = :date
+  AND s.capacity_reserved &lt; s.capacity_total
+ORDER BY s.starts_at;</code></pre></div>
+      </div>
+      <p><strong>Mock first, integrate later.</strong> For development we seed a <strong>mock venue database</strong> with several real-looking venues (a bowling alley, an escape-room operator, a karting track) — each with its own operator login, deals and daily capacity — so the whole loop works before any real POS exists. The same <code>availability</code> contract later gets fed by real systems via adapters.</p>
       <div class="call warn"><span class="h">POS integration is the hardest non-engineering problem</span>
-        The entertainment-POS landscape (Semnox, Intercard, Embed; QubicaAMF, Brunswick) is fragmented and often closed. <strong>MVP ships with NO POS integration</strong> — operators manage inventory in the dashboard, redemption is in-app QR. Then an adapter pattern (FareHarbor/Bookeo/Resova first), then deep partnerships.</div>
+        The entertainment-POS landscape (Semnox, Intercard, Embed; QubicaAMF, Brunswick) is fragmented and often closed. <strong>MVP ships with NO POS integration and NO QR/coupons</strong> — operators manage capacity in the Zivvo portal (or our mock DB), and redemption happens automatically when the customer pays with the <strong>Zivvo Card</strong> (see Payments). Real venue systems plug into the same availability feed later via an adapter pattern (FareHarbor/Bookeo/Resova first), then deep partnerships.</div>
       <div class="pagenav"><button onclick="go('market')"><div class="d">Previous</div><div class="t">← Market &amp; competitors</div></button><button class="next" onclick="go('features')"><div class="d">Next</div><div class="t">Features &amp; UX →</div></button></div>
     </section>
 
@@ -499,7 +522,7 @@ COMMIT;</code></pre><p style="font-size:13px;color:var(--mut)"><code>FOR UPDATE<
         <li><span class="badge b-must">MVP</span> <strong>Inventory &amp; capacity model</strong> — the hardest, most important config.</li>
         <li><span class="badge b-must">MVP</span> <strong>Off-peak deal creator</strong> + rules-based recurring auto-discounts.</li>
         <li><span class="badge b-must">MVP</span> <strong>Party/package builder</strong> with deposits.</li>
-        <li><span class="badge b-must">MVP</span> <strong>Check-in console</strong> — QR scan, no-show, waiver lookup.</li>
+        <li><span class="badge b-must">MVP</span> <strong>Bookings &amp; no-show view</strong> — redemption is automatic (no QR/coupons; the Zivvo Card applies the reward), plus waiver lookup.</li>
         <li><span class="badge b-must">MVP</span> <strong>Analytics</strong> — fill rate, redemption, revenue uplift. <em>Proves the ROI that retains operators.</em></li>
         <li><span class="badge b-later">Later</span> Promoted placement, multi-location roles, POS, ML pricing.</li>
       </ul>
@@ -512,6 +535,16 @@ COMMIT;</code></pre><p style="font-size:13px;color:var(--mut)"><code>FOR UPDATE<
         <div class="kbox"><h4>Duration pricing &amp; bundles</h4><p>Per game/hour/session; bundles + add-ons drive revenue.</p></div>
         <div class="kbox"><h4>Seasonality &amp; weather</h4><p>Off-peak logic is season-aware — the inverse of restaurants.</p></div>
       </div>
+
+      <h2>What makes Zivvo different from EatClub</h2>
+      <p class="lead" style="font-size:16px">EatClub is <strong>solo, dining, last-minute</strong>. Entertainment is <strong>social and varied</strong> — so our standout features lean on <em>group</em>, <em>spontaneity</em> and the <em>Zivvo Card</em>. Kept deliberately small: <strong>ship #1 and #2 first</strong>, hold the rest as easy reward tweaks.</p>
+      <div class="grid2">
+        <div class="kbox" style="border-color:var(--c1)"><h4>1 · Group cashback <span class="badge b-rec">Ship first</span></h4><p>One person picks the activity; everyone taps with <strong>their own Zivvo Card</strong> on the day and <strong>each gets the reward automatically</strong> — no splitting math, no one fronts the bill.</p><p style="font-size:12.5px"><strong>vs EatClub:</strong> built for a single diner. This is entertainment-native (mates, parties, dates). <strong>Simple:</strong> the card reward you're already building, applied to N cards.</p></div>
+        <div class="kbox" style="border-color:var(--c1)"><h4>2 · "Free tonight?" button <span class="badge b-rec">Ship first</span></h4><p>One big button — <em>"Find something to do now"</em> — surfacing the nearest discounted activity with <strong>capacity left right now</strong>, one tap to book.</p><p style="font-size:12.5px"><strong>vs EatClub:</strong> they surface tables; we surface <em>plans</em>. Boredom is the #1 entertainment trigger. <strong>Simple:</strong> your availability feed + a filter.</p></div>
+        <div class="kbox"><h4>3 · Off-peak streak <span class="badge b-later">Phase 2</span></h4><p>Extra cashback for picking the quiet slots venues most want filled (weekday daytime) — the more off-peak you go, the bigger the reward.</p><p style="font-size:12.5px"><strong>vs EatClub:</strong> turns a passive discount into an active habit — and directly serves the yield goal that earns venue trust. <strong>Simple:</strong> a multiplier on the reward.</p></div>
+        <div class="kbox"><h4>4 · Try-something-new bonus <span class="badge b-later">Phase 2</span></h4><p>A one-time bonus the first time you try a new <em>type</em> of activity (first escape room, first karting).</p><p style="font-size:12.5px"><strong>vs EatClub:</strong> restaurants are all "eating" — entertainment spans bowling → theatre. Variety is the moat. <strong>Simple:</strong> one flag per category per user.</p></div>
+      </div>
+
       <div class="pagenav"><button onclick="go('tech')"><div class="d">Previous</div><div class="t">← Tech stack</div></button><button class="next" onclick="go('payments')"><div class="d">Next</div><div class="t">Payments &amp; money flow →</div></button></div>
     </section>
 
@@ -519,9 +552,27 @@ COMMIT;</code></pre><p style="font-size:13px;color:var(--mut)"><code>FOR UPDATE<
     <section class="panel-view" id="payments">
       <div class="eyebrow">04 · Money</div>
       <h1 class="title">Payments &amp; money flow</h1>
-      <p class="lead">Zivvo is a marketplace, not a normal merchant: when a consumer pays $40, <strong>most belongs to the venue</strong> — you keep commission. That requires split payments, KYC'd payees, and correct liability/tax attribution. A plain processor can't do this.</p>
-      <div class="call key"><span class="h">Headline recommendation</span> Build on <strong>Stripe Connect</strong> with <strong>Express</strong> accounts, using <strong>destination charges + <code>application_fee_amount</code></strong>, and <strong>manual capture</strong> for deposits &amp; group bookings. Fastest compliant, low-PCI-scope path. Evaluate Adyen only at 8-figure GMV.</div>
-      <h2>Provider comparison</h2>
+      <p class="lead">The redemption mechanism is the <strong>Zivvo Card</strong> — no coupons, no QR codes. Underneath, Zivvo is still a marketplace: when money moves, <strong>most belongs to the venue</strong> and Zivvo keeps a commission, which needs split payments and KYC'd payees.</p>
+
+      <div class="call key"><span class="h">The core idea</span> Customers link their real credit/debit card once; Zivvo issues them a <strong>virtual Zivvo Card</strong> in Apple/Google Wallet. The discount is delivered as <strong>automatic cashback — but only when they pay with the Zivvo Card</strong> at a Zivvo venue during an eligible deal. Pay with any other card and there's no reward. That single rule keeps spend on-platform, makes redemption invisible to floor staff (they just take a normal card payment), and gives Zivvo the transaction data.</div>
+
+      <h2>How the Zivvo Card works</h2>
+      <div class="flow">
+        <div class="step"><div class="n">STEP 1</div><div class="t">Link a card</div><div class="d">Customer adds their real card; Zivvo issues a virtual card (Stripe Issuing) funded by it, into their wallet.</div></div>
+        <div class="step"><div class="n">STEP 2</div><div class="t">Book a deal</div><div class="d">Reserves capacity — checked live against the venue availability feed. Optional small pre-auth holds the slot.</div></div>
+        <div class="step"><div class="n">STEP 3</div><div class="t">Pay at the venue</div><div class="d">Tap the Zivvo Card like any card. Venue is paid in full — no code, no QR, nothing for staff to learn.</div></div>
+        <div class="step"><div class="n">STEP 4</div><div class="t">Zivvo matches it</div><div class="d">It's our issued card, so we see the transaction and match it to the booking, venue &amp; off-peak window.</div></div>
+        <div class="step"><div class="n">STEP 5</div><div class="t">Reward auto-credited</div><div class="d">The discount lands back on the linked card as cashback. No coupon ever shown.</div></div>
+      </div>
+
+      <div class="call"><span class="h">Two redemption modes — choose per deal</span>
+        <strong>① Card-linked cashback (default):</strong> pay full at the venue with the Zivvo Card, discount returned as cashback. Simplest, no coupons/QR — and it's what unlocks <strong>group cashback</strong> (every Zivvo Card in a group gets its own reward). <br>
+        <strong>② Pre-paid booking:</strong> charge the discounted price up front via Stripe for high-demand or party slots (cuts no-shows). Still no QR — arrival is matched by name/booking. <br>
+        Both <strong>gate on the live availability feed</strong>, so you never sell a slot the venue can't honour.</div>
+
+      <div class="call key"><span class="h">Headline stack</span> Deliver the discount as cashback on a <strong>Zivvo virtual card (Stripe Issuing)</strong> funded by the customer's real card; move venue money &amp; commission with <strong>Stripe Connect</strong> (Express, destination charges); <strong>manual capture</strong> for party deposits. No coupons, no QR. Evaluate Adyen only at 8-figure GMV.</div>
+
+      <h2>Provider comparison <span style="font-size:13px;color:var(--mut);font-weight:400">— the plumbing underneath</span></h2>
       <div class="tblwrap"><table>
         <thead><tr><th>Provider</th><th>Fee (US)</th><th>Verdict</th></tr></thead>
         <tbody>
@@ -531,7 +582,7 @@ COMMIT;</code></pre><p style="font-size:13px;color:var(--mut)"><code>FOR UPDATE<
         </tbody>
       </table></div>
       <p style="font-size:14px"><strong>Account type → Express</strong> (Stripe-hosted branded KYC). <strong>Charge type → destination charges</strong> for single-venue; <strong>separate charges + transfers</strong> for bundles / redemption-gated payouts.</p>
-      <h2>Money flow — a $40 booking at 18%</h2>
+      <h2>Underlying settlement — a $40 booking at 18%</h2>
       <div class="flow">
         <div class="step"><div class="n">STEP 1</div><div class="t">Consumer pays $40</div><div class="d">Card / Apple Pay via Stripe Element — card data never touches your servers.</div></div>
         <div class="step"><div class="n">STEP 2</div><div class="t">Destination charge</div><div class="d"><code>destination</code> = venue, <code>application_fee_amount</code> = $7.20.</div></div>
@@ -562,8 +613,8 @@ COMMIT;</code></pre><p style="font-size:13px;color:var(--mut)"><code>FOR UPDATE<
       <h1 class="title">MVP &amp; roadmap</h1>
       <p class="lead">Ship a tight, defensible v1 that proves the core loop: <strong>operator lists off-peak slots → consumer discovers &amp; books → redeems → both see value.</strong></p>
       <div class="phase"><span class="ph ph0">PHASE 0 · MVP</span><div class="grid2">
-        <div><h4>Consumer</h4><p style="font-size:13.5px;color:var(--mut)">Onboarding + activity quiz · feed, browse, map · <b>"Tonight"/"Weekend" rails</b> · filters (party size, age) · venue profiles · <b>slot booking + waivers</b> · <b>party flow</b> · QR redemption · favorites · reviews · push/SMS · points + referrals</p></div>
-        <div><h4>Operator + Infra</h4><p style="font-size:13.5px;color:var(--mut)">Onboarding · inventory/capacity · deal creator + auto-discounts · package builder · calendar + QR check-in · analytics · payouts. <b>Tech:</b> single ECS + RDS Postgres (EXCLUDE + FOR UPDATE) + Redis holds · Stripe Connect · Algolia · no POS, rule-based pricing.</p></div>
+        <div><h4>Consumer</h4><p style="font-size:13.5px;color:var(--mut)">Onboarding + activity quiz · feed, browse, map · <b>"Free tonight?" button</b> · <b>"Tonight"/"Weekend" rails</b> · filters (party size, age) · venue profiles · <b>slot booking + waivers</b> · <b>party flow + group cashback</b> · <b>Zivvo Card cashback (no QR)</b> · favorites · reviews · push/SMS · points + referrals</p></div>
+        <div><h4>Operator + Infra</h4><p style="font-size:13.5px;color:var(--mut)">Onboarding · inventory/capacity · deal creator + auto-discounts · package builder · calendar + bookings view (no QR) · analytics · payouts. <b>Tech:</b> venue portal + mock DB with <b>Postgres RLS</b> + availability feed · single ECS + RDS Postgres (EXCLUDE + FOR UPDATE) + Redis holds · Stripe Connect + Issuing · Algolia · no POS, rule-based pricing.</p></div>
       </div></div>
       <div class="phase"><span class="ph ph1">PHASE 1 · Engagement &amp; liquidity</span><p style="font-size:13.5px;color:var(--mut);margin:0">Real-time pushes ("3 slots left") · lifecycle messaging · referral &amp; group-invite virality · richer analytics · first POS adapters · split-the-bill, RSVP, gamified passport.</p></div>
       <div class="phase"><span class="ph ph2">PHASE 2 · Scale &amp; moat</span><p style="font-size:13.5px;color:var(--mut);margin:0">Extract booking into a Go service if hot · ML dynamic pricing · deep POS integrations (Semnox/Embed/Qubica) · Elasticsearch · evaluate Adyen · venue SaaS tier · multi-region.</p></div>
