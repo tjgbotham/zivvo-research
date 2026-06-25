@@ -309,6 +309,21 @@ pre code{background:none;border:none;padding:0;color:var(--ink)}
 .ktile .dot{width:42px;height:42px;border-radius:12px;box-shadow:0 6px 14px rgba(0,0,0,.3)}
 .ktile .kl{font-size:11.5px;font-weight:600;color:var(--mut)}
 .ktile.on .kl{color:var(--ink)}
+
+/* ============ JOURNEY FLOWS ============ */
+.jintro{display:inline-flex;align-items:center;gap:8px;background:var(--card2);border:1px solid var(--line);border-radius:999px;padding:6px 14px;font-size:12.5px;color:var(--mut);margin:2px 0 4px}
+.jintro b{color:var(--ink)}
+.jflow{display:flex;align-items:center;gap:4px;overflow-x:auto;padding:12px 2px 20px}
+.jstep{flex:none;width:216px;display:flex;flex-direction:column;align-items:center}
+.jnum{width:27px;height:27px;border-radius:50%;background:var(--grad);color:#fff;font-weight:800;font-size:13px;display:grid;place-items:center;margin-bottom:12px;box-shadow:0 6px 14px rgba(0,0,0,.3)}
+.jframe{width:209px;height:449px;position:relative}
+.jframe .phone{position:absolute;top:0;left:0;transform:scale(.72);transform-origin:top left}
+.jcap{font-size:11.5px;color:var(--mut);text-align:center;margin-top:12px;line-height:1.45;max-width:202px}
+.jcap b{color:var(--ink)}
+.jarrow{flex:none;color:var(--brand-text);font-size:26px;font-weight:800;padding-bottom:46px}
+.zcard{margin:14px;border-radius:18px;padding:15px 16px;background:var(--grad);color:#fff;box-shadow:0 12px 26px rgba(0,0,0,.3);height:172px;display:flex;flex-direction:column;justify-content:space-between;position:relative;overflow:hidden}
+.zcard .num{font-size:15px;letter-spacing:2px;font-family:ui-monospace,Menlo,monospace}
+.holdcircle{width:74px;height:74px;border-radius:50%;display:grid;place-items:center;margin:0 auto}
 </style>
 </head>
 <body>
@@ -329,6 +344,7 @@ pre code{background:none;border:none;padding:0;color:var(--ink)}
     <button data-p="payments"><span class="ic"><svg viewBox="0 0 24 24" width="18" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 10h18"/></svg></span>Payments &amp; money flow</button>
     <button data-p="roadmap"><span class="ic"><svg viewBox="0 0 24 24" width="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>MVP &amp; roadmap</button>
     <button data-p="kit"><span class="ic"><svg viewBox="0 0 24 24" width="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l2.5 5 5.5.8-4 3.9 1 5.5L12 17l-5 2.6 1-5.5-4-3.9 5.5-.8z"/></svg></span>UI kit &amp; mockups</button>
+    <button data-p="journey"><span class="ic"><svg viewBox="0 0 24 24" width="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 18c0-7 14-7 14-14M5 18h3M5 18v-3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>User journey</button>
   </div>
 
   <div class="sidefoot"><b>Off-peak deals for going out.</b><br>Compiled 25 Jun 2026 · React Native (iOS + Android)</div>
@@ -974,16 +990,152 @@ ORDER BY s.starts_at;</code></pre></div>
 
       </div>
 
-      <div class="call"><span class="h">RN implementation notes</span> Stack/tab navigator (<code>@react-navigation</code>); gradient = <code>expo-linear-gradient</code>; icons = <code>lucide-react-native</code>; maps = <code>@rnmapbox/maps</code>; payment sheet = <code>@stripe/stripe-react-native</code> (Apple/Google Pay, card &amp; Klarna in one component); QR = <code>react-native-vision-camera</code> + <code>react-native-qrcode-svg</code>. Tokenize this kit as a theme object consumed via a <code>ThemeProvider</code> — exactly like the live theme switcher here.</div>
+      <div class="call"><span class="h">RN implementation notes</span> Stack/tab navigator (<code>@react-navigation</code>); gradient = <code>expo-linear-gradient</code>; icons = <code>lucide-react-native</code>; maps = <code>@rnmapbox/maps</code>; payment sheet = <code>@stripe/stripe-react-native</code> (Apple/Google Pay, card &amp; Klarna in one component); Zivvo Card in <code>expo-apple-wallet</code> / Google Wallet (no QR/scanner). Tokenize this kit as a theme object consumed via a <code>ThemeProvider</code> — exactly like the live theme switcher here.</div>
 
-      <div class="pagenav"><button onclick="go('roadmap')"><div class="d">Previous</div><div class="t">← MVP &amp; roadmap</div></button><button></button></div>
+      <div class="pagenav"><button onclick="go('roadmap')"><div class="d">Previous</div><div class="t">← MVP &amp; roadmap</div></button><button class="next" onclick="go('journey')"><div class="d">Next</div><div class="t">User journey →</div></button></div>
+    </section>
+
+    <!-- ===== JOURNEY ===== -->
+    <section class="panel-view" id="journey">
+      <div class="eyebrow">07 · Flows</div>
+      <h1 class="title">User journey</h1>
+      <p class="lead">Two ways to redeem a Zivvo deal. Discovery is shared; the paths split at the deal screen — <strong>pay now in the app</strong>, or <strong>reserve and pay at the venue with the Zivvo Card</strong> (card-linked cashback, no QR). Scroll each row →</p>
+      <div class="jintro"><b>Flow A</b> · Book &amp; pay in the app</div>&nbsp;
+      <div class="jintro"><b>Flow B</b> · Pay at the venue with the Zivvo Card</div>
+
+      <h2>Shared start</h2>
+      <div class="jflow">
+        <!-- S1 HOME -->
+        <div class="jstep"><div class="jnum">1</div><div class="jframe"><div class="phone"><div class="notch"></div><div class="screen"><div class="scroll">
+          <div class="statusbar"><span>9:41</span><span>📶 🔋</span></div>
+          <div class="pad"><div class="rowb"><div><div style="font-size:11px;color:var(--app-mut)">📍 Shoreditch</div><div class="h1" style="font-size:19px">What's on · Today</div></div><div class="avatar" style="background:var(--grad);width:34px;height:34px;font-size:13px">PA</div></div>
+            <div class="chips mt12"><span class="minichip on">Today</span><span class="minichip">Thu 26</span><span class="minichip">Fri 27</span><span class="minichip">Sat 28</span></div></div>
+          <div class="pad mt16">
+            <div class="deal"><div class="img bgrad"><span class="badge badge-deal tl">44% OFF</span><span class="bl">📍 1.2km · 3 left today</span></div><div class="b"><div class="t">Strike Lanes</div><div class="m">★ 4.6 · Bowling</div><div class="pr"><span class="n">£18</span><span class="w">£32</span><span class="sv">Save £14</span></div></div></div>
+            <div class="deal"><div class="img bgrad"><span class="badge badge-deal tl">30% OFF</span><span class="bl">📍 0.8km · 5 left today</span></div><div class="b"><div class="t">The Vault — Escape</div><div class="m">★ 4.9 · Escape room</div><div class="pr"><span class="n">£21</span><span class="w">£30</span><span class="sv">Save £9</span></div></div></div>
+          </div>
+        </div></div></div></div><div class="jcap"><b>Opens on today's deals.</b> Day picker to switch days; capacity shown ("3 left today").</div></div>
+
+        <div class="jarrow">→</div>
+
+        <!-- S2 DEAL DETAIL (branch) -->
+        <div class="jstep"><div class="jnum">2</div><div class="jframe"><div class="phone"><div class="notch"></div><div class="screen"><div class="scroll" style="bottom:104px">
+          <div class="vhero bgrad"><div class="statusbar onbrand"><span>9:41</span><span>📶 🔋</span></div><div class="vround" style="top:46px;left:14px"><svg viewBox="0 0 24 24" width="16" fill="none" stroke="#1a1430" stroke-width="2.4"><path d="M15 6l-6 6 6 6"/></svg></div><span class="badge badge-deal" style="position:absolute;bottom:36px;left:16px;font-size:12px;padding:6px 11px">⚡ 44% OFF TODAY</span></div>
+          <div class="sheet"><div class="rowb"><div><div class="h1" style="font-size:19px">Strike Lanes</div><div class="sub">Bowling · Shoreditch</div></div><span class="stars" style="font-size:13px">★ 4.6</span></div>
+            <div class="lrow mt16" style="background:rgba(168,85,247,.1);box-shadow:none;margin-bottom:0"><div class="ic" style="background:var(--app-surface)">🎳</div><div class="tx"><b>2 games + shoes + drink</b><span>Off-peak before 6pm</span></div><div style="text-align:right"><div style="font-weight:800;color:var(--brand-text)">£18</div><div style="font-size:11px;color:var(--app-faint);text-decoration:line-through">£32</div></div></div>
+            <div class="sectitle mt20" style="font-size:14px">Pick a time — Today</div>
+            <div class="hrail mt12"><div class="slot"><div class="tm">2:00</div><div class="sv">−44%</div></div><div class="slot on"><div class="tm">3:30</div><div class="sv">−44%</div></div><div class="slot"><div class="tm">4:00</div><div class="sv">−40%</div></div></div></div>
+          <div class="bottombar" style="flex-direction:column;gap:8px;align-items:stretch"><button class="btn btn-primary btn-lg">Book &amp; pay now · £18</button><button class="btn btn-ghost btn-lg">Reserve · pay at venue</button></div>
+        </div></div></div></div><div class="jcap"><b>The branch.</b> Two buttons: <b style="color:var(--brand-text)">Book &amp; pay now</b> (Flow A) or <b style="color:var(--brand-text)">Reserve · pay at venue</b> (Flow B).</div></div>
+      </div>
+
+      <h2>Flow A · Book &amp; pay in the app</h2>
+      <p class="muted" style="margin-top:0">Best for popular slots and groups who want it locked in. Pre-paid at the discounted price via Stripe; <strong>no QR</strong> — arrival is matched by name/booking.</p>
+      <div class="jflow">
+        <!-- A1 BUILDER -->
+        <div class="jstep"><div class="jnum">3</div><div class="jframe"><div class="phone"><div class="notch"></div><div class="screen"><div class="scroll" style="bottom:74px">
+          <div class="statusbar"><span>9:41</span><span>📶 🔋</span></div>
+          <div class="pad"><div class="h1 mt8" style="font-size:18px">Your booking</div><div class="sub">Strike Lanes · Today 3:30pm</div>
+            <div class="lrow mt16"><div class="ic">👥</div><div class="tx"><b>Players</b><span>Lane holds up to 8</span></div><div class="qty"><button>−</button><b>4</b><button>+</button></div></div>
+            <div class="lrow"><div class="ic">🍕</div><div class="tx"><b>Sharing pizza</b><span>+ £12</span></div><div class="qty"><button>−</button><b>1</b><button>+</button></div></div>
+            <div class="summary mt16"><div class="sr"><span>2 games × 4 (44% off)</span><span>£40</span></div><div class="sr"><span>Add-ons + fee</span><span>£14.60</span></div><div class="sr tot"><span>Total</span><span>£54.60</span></div><div class="sr"><span style="color:var(--good);font-weight:700">You save</span><span class="free">£32</span></div></div></div>
+          <div class="bottombar"><button class="btn btn-primary btn-lg">Continue to payment</button></div>
+        </div></div></div></div><div class="jcap">Party size + add-ons; live total &amp; saving.</div></div>
+
+        <div class="jarrow">→</div>
+
+        <!-- A2 PAY -->
+        <div class="jstep"><div class="jnum">4</div><div class="jframe"><div class="phone"><div class="notch"></div><div class="screen"><div class="scroll" style="bottom:74px">
+          <div class="statusbar"><span>9:41</span><span>📶 🔋</span></div>
+          <div class="pad"><div class="h1 mt8" style="font-size:18px">Payment</div>
+            <button class="btn btn-dark btn-lg mt16" style="font-size:16px"> Pay</button>
+            <div class="rowb mt16" style="color:var(--app-faint);font-size:12px"><div style="height:1px;background:var(--app-line);flex:1"></div><span style="padding:0 10px">or card</span><div style="height:1px;background:var(--app-line);flex:1"></div></div>
+            <div class="lrow mt16"><svg viewBox="0 0 24 24" width="20" fill="none" stroke="var(--app-mut)" stroke-width="2" style="margin:0 4px"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 10h18"/></svg><div class="tx"><b>4242 4242 4242 4242</b><span>Visa · 06/28</span></div><span style="color:var(--good)">✓</span></div>
+            <div class="summary mt16"><div class="sr tot"><span>Total today</span><span>£54.60</span></div></div>
+            <div class="chips mt16" style="gap:6px;font-size:11px;color:var(--app-mut);align-items:center"><svg viewBox="0 0 24 24" width="14" fill="none" stroke="var(--good)" stroke-width="2"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 018 0v3"/></svg>Secured by Stripe</div></div>
+          <div class="bottombar"><button class="btn btn-primary btn-lg">Pay £54.60</button></div>
+        </div></div></div></div><div class="jcap">Pre-pay the discounted price in-app (Stripe).</div></div>
+
+        <div class="jarrow">→</div>
+
+        <!-- A3 BOOKED -->
+        <div class="jstep"><div class="jnum">5</div><div class="jframe"><div class="phone"><div class="notch"></div><div class="screen"><div class="scroll">
+          <div class="statusbar"><span>9:41</span><span>📶 🔋</span></div>
+          <div class="pad" style="text-align:center;padding-top:30px">
+            <div class="successcheck"><svg viewBox="0 0 24 24" width="34" fill="none" stroke="var(--good)" stroke-width="3"><path d="M20 6 9 17l-5-5"/></svg></div>
+            <div class="h1 mt16" style="font-size:20px">You're booked! 🎳</div><p class="sub mt8">Strike Lanes · Today 3:30pm · 4 players</p>
+            <div class="summary mt20" style="text-align:left"><div class="sr"><span>Paid</span><span style="color:var(--brand-text);font-weight:800">£54.60</span></div><div class="sr"><span>Booking</span><span>#VZ-4821</span></div></div>
+            <div class="lrow mt16" style="background:rgba(16,185,129,.1);box-shadow:none;text-align:left"><div class="ic" style="background:var(--app-surface)">✅</div><div class="tx"><b>No QR needed</b><span>Just arrive — we've matched the booking to your name.</span></div></div>
+          </div>
+        </div></div></div></div><div class="jcap"><b>Done.</b> Walk in, give your name — no code to show.</div></div>
+      </div>
+
+      <h2>Flow B · Pay at the venue (Zivvo Card)</h2>
+      <p class="muted" style="margin-top:0">The default, friction-free path. Reserve the slot for free now, tap the <strong>Zivvo Card</strong> at the venue, and the discount comes back automatically as <strong>cashback</strong> — no coupons, no QR.</p>
+      <div class="jflow">
+        <!-- B1 RESERVED -->
+        <div class="jstep"><div class="jnum">3</div><div class="jframe"><div class="phone"><div class="notch"></div><div class="screen"><div class="scroll">
+          <div class="statusbar"><span>9:41</span><span>📶 🔋</span></div>
+          <div class="pad" style="text-align:center;padding-top:26px">
+            <div class="holdcircle" style="background:rgba(245,158,11,.15)"><svg viewBox="0 0 24 24" width="34" fill="none" stroke="var(--amber)" stroke-width="2.4"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2" stroke-linecap="round"/></svg></div>
+            <div class="h1 mt16" style="font-size:20px">Slot reserved 🎳</div><p class="sub mt8">Strike Lanes · Today 3:30pm · held 2h</p>
+            <div class="lrow mt20" style="background:rgba(168,85,247,.1);box-shadow:none;text-align:left"><div class="ic" style="background:var(--app-surface)">💳</div><div class="tx"><b>Pay with your Zivvo Card</b><span>Tap it at the venue to unlock <b style="color:var(--good)">£14 back</b>. Pay any other way = no reward.</span></div></div>
+            <div class="summary mt16" style="text-align:left"><div class="sr"><span>Pay at venue</span><span>£32</span></div><div class="sr"><span style="color:var(--good);font-weight:700">Cashback after</span><span class="free">£14</span></div><div class="sr tot"><span>Effective</span><span>£18</span></div></div>
+          </div>
+        </div></div></div></div><div class="jcap"><b>No upfront payment.</b> The slot is held; you're nudged to pay with the Zivvo Card.</div></div>
+
+        <div class="jarrow">→</div>
+
+        <!-- B2 ZIVVO CARD WALLET -->
+        <div class="jstep"><div class="jnum">4</div><div class="jframe"><div class="phone"><div class="notch"></div><div class="screen"><div class="scroll">
+          <div class="statusbar"><span>9:41</span><span>📶 🔋</span></div>
+          <div class="pad"><div class="h1 mt8" style="font-size:18px">Your Zivvo Card</div><p class="sub">Linked to your real card — earns rewards at Zivvo venues.</p></div>
+          <div class="zcard">
+            <div class="rowb"><div style="font-weight:800;font-size:18px;letter-spacing:-.5px">zivvo</div><svg viewBox="0 0 24 24" width="22" fill="none" stroke="#fff" stroke-width="2"><path d="M8.5 8a6 6 0 010 8M11.5 5.5a9.5 9.5 0 010 13M5.5 10.5a2.5 2.5 0 010 3" stroke-linecap="round"/></svg></div>
+            <div class="num">•••• •••• •••• 4242</div>
+            <div class="rowb" style="font-size:11px"><div><div style="opacity:.8">LINKED TO</div><div style="font-weight:700">Visa •• 42</div></div><div style="opacity:.85;font-weight:700">VIRTUAL</div></div>
+          </div>
+          <div class="pad"><button class="btn btn-dark btn-lg" style="font-size:14px"> Add to Apple Wallet</button>
+            <div class="lrow mt16" style="box-shadow:none;background:var(--app-bg)"><div class="ic">ℹ️</div><div class="tx"><span>Spend on the Zivvo Card is charged to your linked Visa; eligible deals are rewarded as cashback.</span></div></div></div>
+        </div></div></div></div><div class="jcap">A virtual card (Stripe Issuing) in Apple/Google Wallet, funded by your real card.</div></div>
+
+        <div class="jarrow">→</div>
+
+        <!-- B3 TAP AT VENUE -->
+        <div class="jstep"><div class="jnum">5</div><div class="jframe"><div class="phone"><div class="notch"></div><div class="screen" style="background:#0c0a1c;color:#fff">
+          <div class="statusbar onbrand"><span>9:41</span><span>📶 🔋</span></div>
+          <div style="text-align:center;padding:14px 16px 0"><div style="font-size:13px;opacity:.7">Pay at Strike Lanes</div></div>
+          <div class="zcard" style="margin:18px 16px;height:158px;transform:scale(.96)"><div class="rowb"><div style="font-weight:800;font-size:17px">zivvo</div><svg viewBox="0 0 24 24" width="20" fill="none" stroke="#fff" stroke-width="2"><path d="M8.5 8a6 6 0 010 8M11.5 5.5a9.5 9.5 0 010 13" stroke-linecap="round"/></svg></div><div class="num" style="font-size:14px">•••• 4242</div><div style="font-size:11px;opacity:.85">Visa •• 42</div></div>
+          <div style="text-align:center;padding:0 24px"><div class="holdcircle" style="background:rgba(34,211,238,.15);margin-bottom:12px"><svg viewBox="0 0 24 24" width="34" fill="none" stroke="var(--accent)" stroke-width="2"><path d="M8.5 8a6 6 0 010 8M11.5 5.5a9.5 9.5 0 010 13M5.5 10.5a2.5 2.5 0 010 3" stroke-linecap="round"/></svg></div>
+            <div style="font-weight:700;font-size:15px">Hold near the reader</div>
+            <div style="margin-top:18px;background:rgba(16,185,129,.16);color:#34d399;border-radius:12px;padding:11px;font-weight:700;font-size:14px">✓ Paid £32.00</div>
+          </div>
+        </div></div></div><div class="jcap"><b>Tap to pay</b> like any contactless card — venue is paid in full. Nothing for staff to learn.</div></div>
+
+        <div class="jarrow">→</div>
+
+        <!-- B4 CASHBACK -->
+        <div class="jstep"><div class="jnum">6</div><div class="jframe"><div class="phone"><div class="notch"></div><div class="screen"><div class="scroll">
+          <div class="statusbar"><span>9:41</span><span>📶 🔋</span></div>
+          <div class="pad" style="text-align:center;padding-top:30px">
+            <div class="successcheck"><svg viewBox="0 0 24 24" width="34" fill="none" stroke="var(--good)" stroke-width="3"><path d="M12 1v22M17 6H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+            <div class="h1 mt16" style="font-size:20px">£14 cashback! 🎉</div><p class="sub mt8">Zivvo matched your tap at Strike Lanes.</p>
+            <div class="summary mt20" style="text-align:left"><div class="sr"><span>You paid (tap)</span><span>£32.00</span></div><div class="sr"><span style="color:var(--good);font-weight:700">Cashback to Visa •• 42</span><span class="free">£14.00</span></div><div class="sr tot"><span>Effective price</span><span style="color:var(--brand-text)">£18.00</span></div></div>
+            <div class="lrow mt16" style="background:rgba(16,185,129,.1);box-shadow:none;text-align:left"><div class="ic" style="background:var(--app-surface)">⚡</div><div class="tx"><b>Credited within 24h</b><span>No coupon, no QR — automatic because you used the Zivvo Card.</span></div></div>
+          </div>
+        </div></div></div></div><div class="jcap"><b>Done.</b> Discount returned as cashback to the linked card — automatically.</div></div>
+      </div>
+
+      <div class="call key"><span class="h">Same end state, two routes</span> Flow A takes the money up front (locks in popular/group slots, kills no-shows); Flow B keeps it zero-friction and is what unlocks <strong>group cashback</strong> (everyone taps their own Zivvo Card, each gets their own reward). Both gate on the live availability feed and need <strong>no coupons and no QR</strong>.</div>
+
+      <div class="pagenav"><button onclick="go('kit')"><div class="d">Previous</div><div class="t">← UI kit &amp; mockups</div></button><button></button></div>
     </section>
 
   </div>
 </div>
 
 <script>
-const titles={overview:'Overview',market:'Market & competitors',tech:'Tech stack',features:'Features & UX',payments:'Payments & money flow',roadmap:'MVP & roadmap',kit:'UI kit & mockups'};
+const titles={overview:'Overview',market:'Market & competitors',tech:'Tech stack',features:'Features & UX',payments:'Payments & money flow',roadmap:'MVP & roadmap',kit:'UI kit & mockups',journey:'User journey'};
 function go(id){
   document.querySelectorAll('.panel-view').forEach(p=>p.classList.toggle('show',p.id===id));
   document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('active',b.dataset.p===id));
