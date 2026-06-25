@@ -477,7 +477,7 @@ COMMIT;</code></pre><p style="font-size:13px;color:var(--mut)"><code>FOR UPDATE<
       </div>
       <p><strong>Cart "hold":</strong> on checkout, create <code>Booking(status='held', expires_at=now()+10min)</code>; a BullMQ job releases expired holds. <strong>Dynamic pricing:</strong> start rule-based, materialize the final price onto each slot. Defer ML.</p>
       <h2>Venue portal &amp; availability sync</h2>
-      <p>Venues need their own <strong>web portal</strong> to log in, post deals and expose how much capacity is left. Two design choices matter here: <strong>multi-tenant isolation</strong> (a venue must only ever see its own data) and a clean <strong>availability feed</strong> the consumer app can read in real time ("are there bookings left for the day?").</p>
+      <p>Venues need their own <strong>web portal</strong> to log in, post deals (<strong>capped at 5 live deals</strong> — see Features) and expose how much capacity is left. Two design choices matter here: <strong>multi-tenant isolation</strong> (a venue must only ever see its own data) and a clean <strong>availability feed</strong> the consumer app can read in real time ("are there bookings left for the day?").</p>
       <div class="grid2">
         <div class="kbox"><h4>Multi-tenant isolation — Postgres RLS</h4><p style="font-size:13px;color:var(--mut)">Every venue-owned row is filtered by the database itself, not app code — so a bug can never leak one venue's bookings to another. The server sets the tenant per request; <code>FORCE ROW LEVEL SECURITY</code> + a non-superuser app role makes it real.</p><pre><code>ALTER TABLE deal ENABLE ROW LEVEL SECURITY;
 ALTER TABLE deal FORCE ROW LEVEL SECURITY;
@@ -498,7 +498,7 @@ WHERE s.venue_id = :id
   AND s.capacity_reserved &lt; s.capacity_total
 ORDER BY s.starts_at;</code></pre></div>
       </div>
-      <p><strong>Mock first, integrate later.</strong> For development we seed a <strong>mock venue database</strong> with several real-looking venues (a bowling alley, an escape-room operator, a karting track) — each with its own operator login, deals and daily capacity — so the whole loop works before any real POS exists. The same <code>availability</code> contract later gets fed by real systems via adapters.</p>
+      <p><strong>Mock first, integrate later.</strong> For development we seed a <strong>mock venue database</strong> with several real-looking venues (a bowling alley, an escape-room operator, a karting track) — each with its own operator login, up to 5 live deals and daily capacity — so the whole loop works before any real POS exists. The same <code>availability</code> contract later gets fed by real systems via adapters.</p>
       <div class="call warn"><span class="h">POS integration is the hardest non-engineering problem</span>
         The entertainment-POS landscape (Semnox, Intercard, Embed; QubicaAMF, Brunswick) is fragmented and often closed. <strong>MVP ships with NO POS integration and NO QR/coupons</strong> — operators manage capacity in the Zivvo portal (or our mock DB), and redemption happens automatically when the customer pays with the <strong>Zivvo Card</strong> (see Payments). Real venue systems plug into the same availability feed later via an adapter pattern (FareHarbor/Bookeo/Resova first), then deep partnerships.</div>
       <div class="pagenav"><button onclick="go('market')"><div class="d">Previous</div><div class="t">← Market &amp; competitors</div></button><button class="next" onclick="go('features')"><div class="d">Next</div><div class="t">Features &amp; UX →</div></button></div>
@@ -544,6 +544,8 @@ ORDER BY s.starts_at;</code></pre></div>
         <div class="kbox"><h4>3 · Off-peak streak <span class="badge b-later">Phase 2</span></h4><p>Extra cashback for picking the quiet slots venues most want filled (weekday daytime) — the more off-peak you go, the bigger the reward.</p><p style="font-size:12.5px"><strong>vs EatClub:</strong> turns a passive discount into an active habit — and directly serves the yield goal that earns venue trust. <strong>Simple:</strong> a multiplier on the reward.</p></div>
         <div class="kbox"><h4>4 · Try-something-new bonus <span class="badge b-later">Phase 2</span></h4><p>A one-time bonus the first time you try a new <em>type</em> of activity (first escape room, first karting).</p><p style="font-size:12.5px"><strong>vs EatClub:</strong> restaurants are all "eating" — entertainment spans bowling → theatre. Variety is the moat. <strong>Simple:</strong> one flag per category per user.</p></div>
       </div>
+
+      <div class="call key"><span class="h">Exclusive by design — max 5 deals per venue</span> Every venue lists <strong>at most five live deals at a time</strong>. Scarcity is the point: it keeps the feed curated, makes each deal feel worth grabbing, and forces venues to put their <em>best</em> offer forward rather than dumping a long list (the anti-Groupon). Fewer, better deals = a premium, "members'-club" feel — and easier choices for the customer.</div>
 
       <div class="pagenav"><button onclick="go('tech')"><div class="d">Previous</div><div class="t">← Tech stack</div></button><button class="next" onclick="go('payments')"><div class="d">Next</div><div class="t">Payments &amp; money flow →</div></button></div>
     </section>
