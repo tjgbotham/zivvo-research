@@ -488,13 +488,15 @@ CREATE POLICY venue_isolation ON deal
 
 -- per request, after login:
 SET LOCAL app.venue_id = '42';</code></pre></div>
-        <div class="kbox"><h4>"Bookings left today" — availability feed</h4><p style="font-size:13px;color:var(--mut)">Each slot tracks total vs reserved capacity; remaining is what the app shows and what gates a booking. Exposed as a small JSON API the consumer app polls.</p><pre><code>-- GET /api/venues/:id/availability?date=
+        <div class="kbox"><h4>Availability feed — by selected day</h4><p style="font-size:13px;color:var(--mut)">Deals run in a rolling 7-day window; the app requests <strong>one chosen day at a time</strong> and shows only that day's slots with capacity left. Each slot tracks total vs reserved; remaining gates a booking.</p><pre><code>-- GET /api/venues/:id/availability?date=YYYY-MM-DD
 SELECT s.id, s.starts_at,
        s.capacity_total
          - s.capacity_reserved AS remaining
 FROM inventory_slot s
 WHERE s.venue_id = :id
-  AND s.date = :date
+  AND s.date = :date               -- the chosen day,
+  AND s.date BETWEEN current_date  -- within the
+              AND current_date + 6 -- 7-day window
   AND s.capacity_reserved &lt; s.capacity_total
 ORDER BY s.starts_at;</code></pre></div>
       </div>
@@ -509,11 +511,14 @@ ORDER BY s.starts_at;</code></pre></div>
       <div class="eyebrow">03 · Product</div>
       <h1 class="title">Features &amp; UX</h1>
       <p class="lead">Restaurants discount a fungible table; entertainment sells <strong>time-boxed, capacity-constrained, pre-bookable slots</strong>. Zivvo is a hybrid of <strong>EatClub's yield + Fever's discovery + Peek Pro's slot/waiver/add-on engine</strong>. <span class="badge b-must">MVP</span> <span class="badge b-nice">Nice</span> <span class="badge b-later">Later</span></p>
+
+      <div class="call key"><span class="h">7-day window · opens on today</span> Deals run in a rolling <strong>7-day window</strong>. The app <strong>always opens on today's deals</strong> by default; a day picker lets the user switch to any day (today → +6), and they see only <strong>that day's deals that still have capacity left</strong>. With the 5-deal cap each day stays a short, curated list, and slots visibly disappearing as a day fills creates the urgency. <em>Implication:</em> far-out birthday/party bookings still sit beyond the window (a separate later flow), while <strong>group outings + group cashback</strong> inside the 7 days are fully in scope.</div>
+
       <h2>Consumer app</h2>
       <div class="grid2">
-        <div class="kbox"><h4>Discovery — the heart</h4><p><span class="badge b-must">MVP</span> Personalized feed (venue, % off, time, distance)</p><p><span class="badge b-must">MVP</span> Category browse (bowling, escape, karting…)</p><p><span class="badge b-must">MVP</span> Map view with deal pins</p><p><span class="badge b-must">MVP</span> <b>"Tonight"</b> + <b>"This weekend"</b> rails</p><p><span class="badge b-nice">Nice</span> Curated collections</p></div>
+        <div class="kbox"><h4>Discovery — the heart</h4><p><span class="badge b-must">MVP</span> Personalized feed (venue, % off, time, distance)</p><p><span class="badge b-must">MVP</span> Category browse (bowling, escape, karting…)</p><p><span class="badge b-must">MVP</span> Map view with deal pins</p><p><span class="badge b-must">MVP</span> <b>Opens on today</b>; day picker to switch to any day (→ +6)</p><p><span class="badge b-nice">Nice</span> Curated collections</p></div>
         <div class="kbox"><h4>Booking flow</h4><p><span class="badge b-must">MVP</span> Activity → date → slot → party → add-ons → pay</p><p><span class="badge b-must">MVP</span> Real-time capacity check</p><p><span class="badge b-must">MVP</span> In-app payment + deposits</p><p><span class="badge b-must">MVP</span> <b>Digital waiver per participant</b></p><p><span class="badge b-must">MVP</span> QR confirmation + calendar</p></div>
-        <div class="kbox"><h4>Group / party — flagship</h4><p><span class="badge b-must">MVP</span> Dedicated party flow</p><p><span class="badge b-must">MVP</span> Package selection</p><p><span class="badge b-must">MVP</span> Per-guest waiver via link</p><p><span class="badge b-nice">Nice</span> Split-the-bill, RSVP</p><p style="color:var(--c2);font-size:12.5px;margin-top:8px"><b>The high-LTV wedge restaurants can't match. Don't cut this.</b></p></div>
+        <div class="kbox"><h4>Group outings &amp; cashback — flagship</h4><p><span class="badge b-must">MVP</span> Group booking within the 7-day window</p><p><span class="badge b-must">MVP</span> <b>Everyone taps their own Zivvo Card → each gets cashback</b></p><p><span class="badge b-must">MVP</span> Per-guest waiver via link</p><p><span class="badge b-later">Later</span> Advance birthday/party flow (beyond the 7-day window), split-the-bill, RSVP</p><p style="color:var(--c2);font-size:12.5px;margin-top:8px"><b>Group cashback is the entertainment-native wedge restaurants can't match.</b></p></div>
         <div class="kbox"><h4>Retention &amp; loyalty</h4><p><span class="badge b-must">MVP</span> Points/credits + referrals</p><p><span class="badge b-must">MVP</span> Favorites + deal alerts</p><p><span class="badge b-must">MVP</span> Verified reviews</p><p><span class="badge b-nice">Nice</span> Activity passport, streaks</p><p><span class="badge b-nice">Nice</span> <b>Birthday engine</b></p></div>
       </div>
       <div class="call"><span class="h">Design principle</span> Make gamification <strong>pull users toward the slots operators most need filled</strong> — that's the line between gimmick and growth engine.</div>
@@ -615,7 +620,7 @@ ORDER BY s.starts_at;</code></pre></div>
       <h1 class="title">MVP &amp; roadmap</h1>
       <p class="lead">Ship a tight, defensible v1 that proves the core loop: <strong>operator lists off-peak slots → consumer discovers &amp; books → redeems → both see value.</strong></p>
       <div class="phase"><span class="ph ph0">PHASE 0 · MVP</span><div class="grid2">
-        <div><h4>Consumer</h4><p style="font-size:13.5px;color:var(--mut)">Onboarding + activity quiz · feed, browse, map · <b>"Free tonight?" button</b> · <b>"Tonight"/"Weekend" rails</b> · filters (party size, age) · venue profiles · <b>slot booking + waivers</b> · <b>party flow + group cashback</b> · <b>Zivvo Card cashback (no QR)</b> · favorites · reviews · push/SMS · points + referrals</p></div>
+        <div><h4>Consumer</h4><p style="font-size:13.5px;color:var(--mut)">Onboarding + activity quiz · feed, browse, map · <b>"Free tonight?" button</b> · <b>day picker (7-day window)</b> · filters (party size, age) · venue profiles · <b>slot booking + waivers</b> · <b>party flow + group cashback</b> · <b>Zivvo Card cashback (no QR)</b> · favorites · reviews · push/SMS · points + referrals</p></div>
         <div><h4>Operator + Infra</h4><p style="font-size:13.5px;color:var(--mut)">Onboarding · inventory/capacity · deal creator + auto-discounts · package builder · calendar + bookings view (no QR) · analytics · payouts. <b>Tech:</b> venue portal + mock DB with <b>Postgres RLS</b> + availability feed · single ECS + RDS Postgres (EXCLUDE + FOR UPDATE) + Redis holds · Stripe Connect + Issuing · Algolia · no POS, rule-based pricing.</p></div>
       </div></div>
       <div class="phase"><span class="ph ph1">PHASE 1 · Engagement &amp; liquidity</span><p style="font-size:13.5px;color:var(--mut);margin:0">Real-time pushes ("3 slots left") · lifecycle messaging · referral &amp; group-invite virality · richer analytics · first POS adapters · split-the-bill, RSVP, gamified passport.</p></div>
@@ -782,9 +787,9 @@ ORDER BY s.starts_at;</code></pre></div>
         <div class="device"><div class="phone"><div class="notch"></div><div class="screen"><div class="scroll">
           <div class="statusbar"><span>9:41</span><span>📶 🔋</span></div>
           <div class="pad">
-            <div class="rowb"><div><div style="font-size:11px;color:var(--app-mut)">📍 Shoreditch, London</div><div class="h1" style="font-size:21px">Tonight near you</div></div><div class="avatar" style="background:var(--grad);width:38px;height:38px">PA</div></div>
+            <div class="rowb"><div><div style="font-size:11px;color:var(--app-mut)">📍 Shoreditch, London</div><div class="h1" style="font-size:21px">What's on near you</div></div><div class="avatar" style="background:var(--grad);width:38px;height:38px">PA</div></div>
             <div class="searchbar mt12"><svg viewBox="0 0 24 24" width="17" fill="none" stroke="var(--app-mut)" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg>Search activities or venues</div>
-            <div class="chips mt12"><span class="minichip on">⚡ Tonight</span><span class="minichip">Weekend</span><span class="minichip">Under £15</span><span class="minichip">Kids</span></div>
+            <div class="chips mt12"><span class="minichip on">Today</span><span class="minichip">Thu 26</span><span class="minichip">Fri 27</span><span class="minichip">Sat 28</span><span class="minichip">Sun 29</span></div>
           </div>
           <div class="pad mt16"><div class="hrail">
             <div class="acat"><div class="ic" style="background:rgba(168,85,247,.14)">🎳</div><div class="lb">Bowling</div></div>
@@ -847,7 +852,7 @@ ORDER BY s.starts_at;</code></pre></div>
             </div>
             <div class="sectitle mt20" style="font-size:14px">The deal</div>
             <div class="lrow mt12" style="background:rgba(168,85,247,.1);box-shadow:none;margin-bottom:0"><div class="ic" style="background:var(--app-surface)">🎳</div><div class="tx"><b>2 games + shoes + a drink</b><span>Mon–Thu before 6pm</span></div><div style="text-align:right"><div style="font-weight:800;color:var(--brand-text)">£18</div><div style="font-size:11px;color:var(--app-faint);text-decoration:line-through">£32</div></div></div>
-            <div class="sectitle mt20" style="font-size:14px">Pick a time — tonight</div>
+            <div class="sectitle mt20" style="font-size:14px">Pick a time — Today</div>
             <div class="hrail mt12"><div class="slot"><div class="tm">2:00</div><div class="sv">−44%</div></div><div class="slot on"><div class="tm">3:30</div><div class="sv">−44%</div></div><div class="slot"><div class="tm">4:00</div><div class="sv">−40%</div></div><div class="slot full"><div class="tm">5:30</div><div class="sv">full</div></div></div>
             <div class="sectitle mt20" style="font-size:14px">Good to know</div>
             <div class="sub mt8" style="line-height:1.6;padding-bottom:14px">Socks required. Lanes hold up to 8. Free cancellation up to 2h before. ★ 4.6 from 212 verified bookings.</div>
