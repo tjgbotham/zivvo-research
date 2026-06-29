@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zivvo — Alignment Review & Discussion Guide</title>
+<style>
+:root {
+  --bg: #080b16; --panel: #0f1422; --card: #151b2c; --card2: #1b2236; --line: #28324a;
+  --ink: #eef2fb; --mut: #9aa6c4; --faint: #6b7596;
+  --good: #10b981; --amber: #f59e0b; --red: #ef4444; --blue: #3b82f6; --purple: #6366f1;
+  --grad: linear-gradient(120deg, #3b82f6, #6366f1);
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.65 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; -webkit-font-smoothing: antialiased; }
+a { color: var(--blue); }
+
+.topbar { background: var(--panel); border-bottom: 1px solid var(--line); padding: 18px 48px; display: flex; align-items: center; justify-content: space-between; }
+.topbar .logo { font-size: 22px; font-weight: 800; letter-spacing: -1px; background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.topbar .meta { font-size: 12px; color: var(--faint); }
+
+.wrap { max-width: 960px; margin: 0 auto; padding: 48px 48px 120px; }
+
+h1 { font-size: 32px; font-weight: 800; letter-spacing: -1px; margin: 0 0 6px; }
+.eyebrow { font-size: 11px; letter-spacing: 2.5px; text-transform: uppercase; color: var(--blue); font-weight: 800; margin-bottom: 10px; }
+.lead { font-size: 17px; color: var(--mut); margin: 0 0 36px; max-width: 780px; line-height: 1.7; }
+h2 { font-size: 20px; margin: 52px 0 16px; letter-spacing: -.3px; display: flex; align-items: center; gap: 10px; }
+h2:before { content: ""; width: 6px; height: 20px; border-radius: 3px; background: var(--grad); display: inline-block; flex: none; }
+h3 { font-size: 15px; color: var(--ink); margin: 24px 0 10px; font-weight: 700; }
+p { margin: 10px 0; }
+strong { color: var(--ink); }
+.muted { color: var(--mut); }
+
+/* severity badges */
+.sev { display: inline-block; font-size: 10px; font-weight: 800; padding: 3px 9px; border-radius: 6px; letter-spacing: .5px; white-space: nowrap; vertical-align: middle; margin-left: 8px; }
+.high { background: rgba(239,68,68,.18); color: var(--red); }
+.medium { background: rgba(245,158,11,.16); color: var(--amber); }
+.low { background: rgba(99,102,241,.18); color: #a5b4fc; }
+.resolved { background: rgba(16,185,129,.16); color: var(--good); }
+
+/* issue cards */
+.issue { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 20px 24px; margin: 16px 0; }
+.issue.sev-high { border-left: 4px solid var(--red); }
+.issue.sev-medium { border-left: 4px solid var(--amber); }
+.issue.sev-low { border-left: 4px solid #6366f1; }
+.issue.sev-resolved { border-left: 4px solid var(--good); opacity: .75; }
+.issue-title { font-weight: 800; font-size: 15px; color: var(--ink); margin: 0 0 8px; }
+.issue-body { font-size: 14px; color: var(--mut); line-height: 1.6; }
+.issue-body strong { color: var(--ink); }
+.source { font-size: 11.5px; color: var(--faint); margin-top: 10px; font-style: italic; }
+
+/* question cards */
+.q { background: var(--card2); border: 1px solid var(--line); border-radius: 14px; padding: 16px 20px; margin: 12px 0; display: flex; gap: 14px; align-items: flex-start; }
+.q .num { width: 28px; height: 28px; border-radius: 50%; background: var(--grad); color: #fff; font-weight: 800; font-size: 13px; display: grid; place-items: center; flex: none; }
+.q .body { flex: 1; }
+.q .body b { font-size: 14px; color: var(--ink); display: block; margin-bottom: 4px; }
+.q .body span { font-size: 13px; color: var(--mut); }
+.q .tag { font-size: 10px; font-weight: 800; padding: 2px 7px; border-radius: 5px; white-space: nowrap; flex: none; align-self: flex-start; margin-top: 3px; }
+.q .tag.product { background: rgba(99,102,241,.18); color: #a5b4fc; }
+.q .tag.commercial { background: rgba(245,158,11,.16); color: var(--amber); }
+.q .tag.design { background: rgba(16,185,129,.16); color: var(--good); }
+.q .tag.numbers { background: rgba(239,68,68,.18); color: #fca5a5; }
+
+/* summary table */
+.tblwrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 14px; margin: 16px 0; }
+table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+th, td { padding: 11px 14px; text-align: left; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { background: var(--card2); color: #60a5fa; font-size: 10.5px; text-transform: uppercase; letter-spacing: .6px; font-weight: 700; }
+tr:last-child td { border-bottom: none; }
+td:first-child { font-weight: 700; color: var(--ink); }
+
+.callout { border-left: 4px solid var(--blue); background: var(--card); border-radius: 0 12px 12px 0; padding: 14px 18px; margin: 20px 0; font-size: 14px; color: var(--mut); }
+.callout strong { color: var(--ink); }
+
+.section-count { font-size: 12px; color: var(--faint); font-weight: 400; margin-left: 8px; }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="logo">zivvo</div>
+  <div class="meta">Alignment Review &amp; Discussion Guide · Prepared 29 Jun 2026 · Confidential</div>
+</div>
+
+<div class="wrap">
+
+  <div class="eyebrow">Tommy → Pulkit</div>
+  <h1>Alignment Review &amp; Discussion Guide</h1>
+  <p class="lead">This document flags every discrepancy, inconsistency, and open question identified across the three Zivvo source files — the research dossier (index.html), the Strategic Review (.docx), and the Unit Economics spreadsheet (.xlsx). Nothing has been changed. This is a list of things that need to be discussed and decided before the dossier is updated.</p>
+
+  <div class="callout">
+    <strong>How to use this:</strong> Issues are grouped by topic and rated High / Medium / Low. Questions at the end are the decisions that need to come out of your conversation. One resolved item is included for completeness — the consumer service fee was removed from the dossier prior to this review.
+  </div>
+
+  <!-- SUMMARY TABLE -->
+  <h2>At a glance</h2>
+  <div class="tblwrap">
+    <table>
+      <thead><tr><th>#</th><th>Issue</th><th>Severity</th><th>Topic</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>QR codes appear in mockups but "no QR" is the stated principle</td><td><span class="sev high">HIGH</span></td><td>Product / Design</td></tr>
+        <tr><td>2</td><td>Zivvo Card included in Phase 0 MVP — review says defer it</td><td><span class="sev high">HIGH</span></td><td>Scope / Risk</td></tr>
+        <tr><td>3</td><td>Currency is £ GBP and locations are London — launch market is Melbourne</td><td><span class="sev medium">MEDIUM</span></td><td>Geography</td></tr>
+        <tr><td>4</td><td>Stripe fee rates quoted are US rates, not Australian</td><td><span class="sev medium">MEDIUM</span></td><td>Numbers</td></tr>
+        <tr><td>5</td><td>Settlement flow example uses $40 USD, not A$48 AUD</td><td><span class="sev medium">MEDIUM</span></td><td>Numbers</td></tr>
+        <tr><td>6</td><td>Stale prices (£54.60) in payment screens after fee removal</td><td><span class="sev medium">MEDIUM</span></td><td>Design</td></tr>
+        <tr><td>7</td><td>Market data is US-sourced; no Australian/Melbourne-specific figures</td><td><span class="sev medium">MEDIUM</span></td><td>Numbers</td></tr>
+        <tr><td>8</td><td>Five-deal cap stated as fixed policy — review says it's an unvalidated hypothesis</td><td><span class="sev medium">MEDIUM</span></td><td>Product</td></tr>
+        <tr><td>9</td><td>Theatre rated ★★★★★ and "co-equal pillar" but review says it's de-scoped</td><td><span class="sev medium">MEDIUM</span></td><td>Scope</td></tr>
+        <tr><td>10</td><td>Walk-in venue redemption model undefined if Card is deferred</td><td><span class="sev medium">MEDIUM</span></td><td>Product</td></tr>
+        <tr><td>11</td><td>No launch vertical specified — dossier treats all ★★★★★ categories as equal</td><td><span class="sev medium">MEDIUM</span></td><td>Strategy</td></tr>
+        <tr><td>12</td><td>Onboarding screen claims "2,400+ venues" — no basis for this at launch</td><td><span class="sev low">LOW</span></td><td>Design</td></tr>
+        <tr><td>13</td><td>Payment screen CTA and Klarna split still reference old £54.60 total</td><td><span class="sev low">LOW</span></td><td>Design</td></tr>
+        <tr><td>14</td><td>Confirmation screen (Screen 8) shows £54.60 in the PAID field</td><td><span class="sev low">LOW</span></td><td>Design</td></tr>
+        <tr><td>15</td><td>Journey flow confirmation screen also shows £54.60 total</td><td><span class="sev low">LOW</span></td><td>Design</td></tr>
+        <tr><td>16</td><td>SaaS tier pricing quoted in USD ($0 / $49 / $99) not AUD</td><td><span class="sev low">LOW</span></td><td>Numbers</td></tr>
+        <tr><td>17</td><td>Klarna/Afterpay threshold quoted in USD ("above ~$150")</td><td><span class="sev low">LOW</span></td><td>Numbers</td></tr>
+        <tr><td>18</td><td>Defensibility framed as Zivvo Card + AI pricing — neither exists at launch</td><td><span class="sev low">LOW</span></td><td>Strategy</td></tr>
+        <tr><td>19</td><td>EatClub competitive data may be stale (compiled Jun 2025)</td><td><span class="sev low">LOW</span></td><td>Research</td></tr>
+        <tr><td>20</td><td>Consumer service fee removed from dossier</td><td><span class="sev resolved">RESOLVED</span></td><td>Commercial</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- SECTION 1: HIGH SEVERITY -->
+  <h2>High severity — must resolve before any design or build work <span class="section-count">2 issues</span></h2>
+
+  <div class="issue sev-high">
+    <div class="issue-title">1 · QR codes appear throughout the mockups, contradicting the "no QR" principle <span class="sev high">HIGH</span></div>
+    <div class="issue-body">
+      The Payments section states clearly: <strong>"No coupons, no QR codes"</strong> and <strong>"No QR; arrival matched by name."</strong> The Features section also says booking confirmation is "(no QR)". Despite this, three screens directly contradict it:
+      <ul>
+        <li><strong>Screen 8 · Confirmation:</strong> Displays a large QR code with the caption "Show this QR at the desk."</li>
+        <li><strong>Screen 11 · Operator Scanner:</strong> An entire operator-facing screen titled "Scan booking QR" with a live scanning UI and a "Check in &amp; redeem" button — only possible if QR exists.</li>
+        <li><strong>Journey flow Screen 4 · Confirmation:</strong> Also shows a QR code and "£54.60 Paid" label.</li>
+      </ul>
+      The Strategic Review calls this a <strong>"substantive product decision, not a cosmetic correction"</strong> — the two models (name-match vs QR) are mutually exclusive and affect both operator workflow and consumer interface. This must be resolved before any further design work.
+    </div>
+    <div class="source">Source conflict: index.html Payments section (text) vs Screens 8, 11, Journey Screen 4 (mockups) · Strategic Review Issue 2.2</div>
+  </div>
+
+  <div class="issue sev-high">
+    <div class="issue-title">2 · Zivvo Card is included in Phase 0 MVP — the Strategic Review says defer it <span class="sev high">HIGH</span></div>
+    <div class="issue-body">
+      The Phase 0 MVP list in the Roadmap section explicitly includes <strong>"Zivvo Card cashback (no QR)"</strong> and the tech stack lists <strong>"Stripe Connect + Issuing"</strong> as MVP items. The RN implementation notes also include <strong>"Zivvo Card in expo-apple-wallet / Google Wallet"</strong> as part of the kit build.
+      <br><br>
+      The Strategic Review rates this <strong>HIGH IMPACT</strong> and recommends deferral: the Card combines card issuance, transaction-matching, cashback settlement, reconciliation, dispute liability, and Australian compliance obligations — a full fintech workstream embedded within the marketplace build. The core demand question — <em>will consumers book discounted off-peak activities?</em> — does not require the Card to be answered.
+      <br><br>
+      If the Card is deferred, the walk-in venue redemption model (currently "pay with Zivvo Card, get cashback") is also undefined. See Issue 10.
+    </div>
+    <div class="source">Source conflict: index.html Roadmap Phase 0 + RN notes vs Strategic Review Issue 2.1</div>
+  </div>
+
+  <!-- SECTION 2: MEDIUM SEVERITY -->
+  <h2>Medium severity — misalignments that affect the dossier's credibility <span class="section-count">8 issues</span></h2>
+
+  <div class="issue sev-medium">
+    <div class="issue-title">3 · All mockups, prices, and locations are UK — launch market is Melbourne, Australia <span class="sev medium">MEDIUM</span></div>
+    <div class="issue-body">
+      Every consumer-facing screen in the dossier uses British pounds (£) and London locations. Specific instances:
+      <ul>
+        <li>Screen 3 (Home): "📍 Shoreditch, London"</li>
+        <li>Screen 4 (Map): "Deals near Shoreditch" · filter chip shows "£"</li>
+        <li>Screen 5 (Venue): "Strike Lanes — Shoreditch" · prices in £</li>
+        <li>Screen 8 (Confirmation): "Strike Lanes — Shoreditch"</li>
+        <li>Typography example: "Strike Lanes — Shoreditch" · prices in £</li>
+        <li>Onboarding: "£14 avg saving"</li>
+        <li>Journey flow: "📍 Shoreditch" throughout</li>
+      </ul>
+      The Strategic Review confirms Melbourne as the launch market and notes that the <strong>UK-oriented styling should be retired</strong> so that venue-facing materials present an Australian product. This matters for early venue conversations — pitching with London-branded screens to Melbourne operators is a credibility issue.
+    </div>
+    <div class="source">Source conflict: All mockup screens (index.html) vs Strategic Review Issue 2.3 · Unit Economics (AU rates)</div>
+  </div>
+
+  <div class="issue sev-medium">
+    <div class="issue-title">4 · Stripe fee rates in the payments table are US rates, not Australian <span class="sev medium">MEDIUM</span></div>
+    <div class="issue-body">
+      The Provider Comparison table in the Payments section shows: <strong>Stripe Connect: "2.9% + $0.30"</strong> — labelled explicitly as <strong>"Fee (US)"</strong> in the column header. The Unit Economics spreadsheet and Strategic Review model on the correct Australian domestic card rate: <strong>1.7% + A$0.30</strong>. This is a material difference — on a A$48 booking, the US rate costs A$1.69 vs the AU rate of A$1.12. The dossier's payments section is currently built on the wrong jurisdiction.
+    </div>
+    <div class="source">Source conflict: index.html Payments table vs Unit Economics spreadsheet (AU rates) · Strategic Review Section 4</div>
+  </div>
+
+  <div class="issue sev-medium">
+    <div class="issue-title">5 · The settlement flow example uses a $40 USD booking, not A$48 AUD <span class="sev medium">MEDIUM</span></div>
+    <div class="issue-body">
+      The "Underlying settlement" flow in the Payments section works through a <strong>$40 booking</strong> with an <strong>18% commission = $7.20</strong>, a <strong>Stripe fee of ~$1.46</strong> (calculated at the US 2.9% + $0.30 rate), netting <strong>~$5.74</strong> to the platform and <strong>$32.80</strong> to the venue.
+      <br><br>
+      The Strategic Review and spreadsheet model a <strong>A$48 deal price</strong> at AU rates: commission A$8.64, Stripe A$1.12, net contribution <strong>A$7.52</strong>, venue receives <strong>A$39.36</strong>. Both the booking amount and the fee rates need to be updated to reflect the actual Australian model.
+    </div>
+    <div class="source">Source conflict: index.html Payments flow ($40 USD / US rates) vs Strategic Review Section 4 + Unit Economics (A$48 / AU rates)</div>
+  </div>
+
+  <div class="issue sev-medium">
+    <div class="issue-title">6 · Stale total of £54.60 persists in multiple screens after the service fee was removed <span class="sev medium">MEDIUM</span></div>
+    <div class="issue-body">
+      The consumer service fee (£2.60) was removed from the dossier, but the old total of £54.60 still appears in four places:
+      <ul>
+        <li><strong>Screen 7 (Payment) · CTA button:</strong> "Pay £54.60 · save £32" — should now be £52</li>
+        <li><strong>Screen 7 (Payment) · Klarna split:</strong> "3 × £18.20" — based on £54.60, should recalculate</li>
+        <li><strong>Screen 8 (Confirmation) · PAID field:</strong> Shows £54.60</li>
+        <li><strong>Journey flow Screens 4 &amp; 5:</strong> Total shows £54.60 and "Paid £54.60"</li>
+      </ul>
+      These are internal consistency errors that will be noticed immediately by anyone reading the dossier carefully.
+    </div>
+    <div class="source">Source: index.html Screens 7, 8, Journey Screens 4–5</div>
+  </div>
+
+  <div class="issue sev-medium">
+    <div class="issue-title">7 · Market sizing data is US-sourced; no Australian or Melbourne-specific figures <span class="sev medium">MEDIUM</span></div>
+    <div class="issue-body">
+      The overview stat cards cite <strong>$11.9B US bowling (2024) → $16.8B by 2030</strong> and a <strong>~26% CAGR</strong> for the location-based entertainment market — both from US sources. The competitive benchmark for EatClub uses USD valuation figures ($27M Series B, ~$200M valuation). The dossier makes no reference to the size of the Australian entertainment market, Melbourne's leisure spend, or local venue density.
+      <br><br>
+      For a Melbourne-first launch, the relevant market data is Australian. US figures may be directionally useful but are not the operating environment.
+    </div>
+    <div class="source">Source: index.html Overview section · Strategic Review Issue 2.3</div>
+  </div>
+
+  <div class="issue sev-medium">
+    <div class="issue-title">8 · The five-deal cap is presented as fixed design doctrine — it's an untested hypothesis <span class="sev medium">MEDIUM</span></div>
+    <div class="issue-body">
+      The dossier states: <strong>"Every venue lists at most five live deals at a time. Scarcity is the point."</strong> It is framed as an intentional, non-negotiable design principle — the "anti-Groupon" and a "members'-club feel."
+      <br><br>
+      The Strategic Review rates this LOW IMPACT but flags it explicitly: the proposition is <strong>plausible but unvalidated</strong>. For venues with deep off-peak troughs, a five-deal limit may leave incremental capacity unsold — the exact capacity the platform exists to fill. The recommendation is to implement it as a <strong>configurable default</strong> and treat it as a candidate for A/B testing once venues are live, rather than presenting it as fixed policy in the dossier.
+    </div>
+    <div class="source">Source conflict: index.html Features section vs Strategic Review Issue 2.4</div>
+  </div>
+
+  <div class="issue sev-medium">
+    <div class="issue-title">9 · Theatre and live shows rated ★★★★★ and treated as co-equal — the review says they're de-scoped <span class="sev medium">MEDIUM</span></div>
+    <div class="issue-body">
+      The Overview's category table rates Live shows &amp; theatre <strong>★★★★★</strong> — the highest possible rating — with the note "Empty seats expire at curtain-up — classic yield play." The footnote says <strong>"shows &amp; theatre add a second, high-volume yield play."</strong>
+      <br><br>
+      The Strategic Review notes this has been quietly de-scoped: the product is structured around a rolling <strong>7-day window</strong> and a live availability engine, which suit competitive-socialising venues far better than theatre — a production booking weeks ahead <strong>does not fit a 7-day window</strong>. If theatre is to be served later, it requires a distinct "upcoming events" model. The dossier should reflect this as a deliberate scoping decision, not leave theatre rated the same as bowling and escape rooms.
+    </div>
+    <div class="source">Source conflict: index.html Overview category table vs Strategic Review Issue 2.5</div>
+  </div>
+
+  <div class="issue sev-medium">
+    <div class="issue-title">10 · If the Zivvo Card is deferred, walk-in venue redemption has no defined model <span class="sev medium">MEDIUM</span></div>
+    <div class="issue-body">
+      The dossier defines two redemption modes: pre-paid booking for reserved activities, and <strong>Zivvo Card cashback for walk-in venues</strong> (bars, restaurants, arcades). The entire walk-in model — including the "How the Zivvo Card works" flow (Steps 1–5) — is built around the Card.
+      <br><br>
+      If the Card is deferred per the Strategic Review's recommendation, <strong>walk-in venues have no redemption mechanism</strong>. The dossier does not address this gap. Either walk-in venues are also deferred from MVP, or a different mechanism (e.g. in-app QR, code at POS, or name-check) is needed — but this conflicts with the "no QR, no codes" principle. This needs an explicit decision.
+    </div>
+    <div class="source">Source: index.html Payments section (walk-in flow) · Strategic Review Issue 2.1</div>
+  </div>
+
+  <div class="issue sev-medium">
+    <div class="issue-title">11 · No launch vertical is specified — all ★★★★★ categories are treated as equal <span class="sev medium">MEDIUM</span></div>
+    <div class="issue-body">
+      The dossier's roadmap does not name a launch vertical. The Strategic Review is explicit: <strong>bowling and escape rooms are the strongest candidates</strong> and recommends picking one to concentrate on in Melbourne. The dossier lists competitive socialising, adrenaline &amp; action, and puzzles &amp; immersive all at ★★★★★ with no guidance on which to pursue first.
+      <br><br>
+      This matters practically — supply acquisition, venue pitch materials, and the mock venue database all need to be built for a specific category. "All of the above" is not a launch strategy.
+    </div>
+    <div class="source">Source: index.html Overview + Roadmap vs Strategic Review Section 5.1</div>
+  </div>
+
+  <!-- SECTION 3: LOW SEVERITY -->
+  <h2>Low severity — internal consistency and detail errors <span class="section-count">8 issues</span></h2>
+
+  <div class="issue sev-low">
+    <div class="issue-title">12 · Onboarding screen claims "2,400+ venues" — no basis for this at launch <span class="sev low">LOW</span></div>
+    <div class="issue-body">
+      Screen 1 (Onboarding) displays a social-proof bar with <strong>"2,400+ venues"</strong>, <strong>"£14 avg saving"</strong>, and <strong>"⚡ last-minute"</strong>. At launch in Melbourne with a handful of seed venues, this figure is entirely fabricated. Presenting it to investors, partners, or early venues as part of the dossier undermines credibility. The figure and currency both need updating when actual launch scope is defined.
+    </div>
+    <div class="source">Source: index.html Screen 1 (Onboarding mockup)</div>
+  </div>
+
+  <div class="issue sev-low">
+    <div class="issue-title">13 · Payment screen CTA and Klarna split still reference the old £54.60 total <span class="sev low">LOW</span></div>
+    <div class="issue-body">
+      Screen 7 (Payment): the primary CTA button reads <strong>"Pay £54.60 · save £32"</strong> — should now be £52. The Klarna option shows <strong>"3 × £18.20"</strong> which is £54.60 ÷ 3 — this also needs to recalculate to £52 ÷ 3 = £17.33. Both are stale after the service fee removal.
+    </div>
+    <div class="source">Source: index.html Screen 7 (Payment mockup)</div>
+  </div>
+
+  <div class="issue sev-low">
+    <div class="issue-title">14 · Confirmation screen (Screen 8) shows £54.60 in the PAID field <span class="sev low">LOW</span></div>
+    <div class="issue-body">
+      Screen 8 (Booking Confirmation): the booking summary shows <strong>PAID: £54.60</strong>. This is the old total including the removed service fee. Should now read £52.
+    </div>
+    <div class="source">Source: index.html Screen 8 (Confirmation mockup)</div>
+  </div>
+
+  <div class="issue sev-low">
+    <div class="issue-title">15 · Journey flow confirmation screen also shows £54.60 total and a QR code <span class="sev low">LOW</span></div>
+    <div class="issue-body">
+      In the User Journey section, the confirmation step (Screen 4 of the journey) shows a summary with <strong>Total: £54.60</strong> and <strong>Paid: £54.60</strong>. It also shows a QR code on the confirmation screen — contradicting the no-QR principle (see Issue 1). Both the stale price and the QR need resolution.
+    </div>
+    <div class="source">Source: index.html Journey section, Screen 4</div>
+  </div>
+
+  <div class="issue sev-low">
+    <div class="issue-title">16 · SaaS tier pricing is in USD — should be AUD for the Australian market <span class="sev low">LOW</span></div>
+    <div class="issue-body">
+      The future commission model section mentions a SaaS tier at <strong>"$0 / $49 / $99/mo"</strong> — using the $ symbol without specifying currency, but in the context of a US-rate document this reads as USD. For Melbourne, this should be specified as AUD and validated against Australian SaaS pricing norms.
+    </div>
+    <div class="source">Source: index.html Payments section — commission model</div>
+  </div>
+
+  <div class="issue sev-low">
+    <div class="issue-title">17 · Klarna/Afterpay threshold is quoted in USD ("above ~$150") <span class="sev low">LOW</span></div>
+    <div class="issue-body">
+      The Payment Methods section recommends <strong>"Klarna/Afterpay above ~$150 (parties)"</strong>. For Australia this should be in AUD. Additionally, Afterpay is Australian-founded and highly relevant to the local market — it may warrant being called out more prominently rather than listed as a secondary option.
+    </div>
+    <div class="source">Source: index.html Payments section — methods, deposits &amp; compliance</div>
+  </div>
+
+  <div class="issue sev-low">
+    <div class="issue-title">18 · Defensibility is framed around the Zivvo Card and AI pricing — neither exists at launch <span class="sev low">LOW</span></div>
+    <div class="issue-body">
+      The "Where Zivvo wins" section lists <strong>"Copy EatClub-Pay frictionless redemption"</strong> as the first strategic move — the defensible UX moat. The Strategic Review directly challenges this: <strong>"The Card is a feature, not a structural barrier, and AI-based pricing requires transaction data the platform will not possess at launch."</strong>
+      <br><br>
+      The review argues that real defensibility comes from local venue density, exclusivity terms, and becoming the consumer default for spontaneous leisure — none of which are designed in the dossier, only assumed. This framing needs updating so the dossier's competitive moat argument reflects what is actually achievable at launch.
+    </div>
+    <div class="source">Source conflict: index.html Market section ("five strategic moves") vs Strategic Review Section 3.3</div>
+  </div>
+
+  <div class="issue sev-low">
+    <div class="issue-title">19 · EatClub competitive data may be stale — benchmark should be verified before venue pitches <span class="sev low">LOW</span></div>
+    <div class="issue-body">
+      The dossier benchmarks EatClub at <strong>"~3,000–5,000 venues, 2M+ downloads, AU + UK (London May 2025), ~$27M Series B at ~$200M valuation."</strong> This was compiled June 2025 — over a year ago. EatClub's UK expansion, venue count, and any funding updates should be verified before this data is used in venue conversations or investor materials. Using stale competitor data in a pitch is a credibility risk.
+    </div>
+    <div class="source">Source: index.html Market section · dossier compiled 25 Jun 2026 (note: data cited as of 2025)</div>
+  </div>
+
+  <div class="issue sev-resolved">
+    <div class="issue-title">20 · Consumer service fee (~5%) has been removed from the dossier <span class="sev resolved">RESOLVED</span></div>
+    <div class="issue-body">
+      The original dossier included a "~5% consumer service fee" as a separate revenue line. The Strategic Review and Unit Economics model both treat revenue as <strong>venue commission only</strong> — the consumer pays a single clean price with all costs built in. The fee box has been removed from the commission model section, and checkout totals in the booking builder have been updated to reflect the no-fee model. Remaining stale prices (Issues 13–15) are a follow-on from this change.
+    </div>
+    <div class="source">Source: resolved prior to this review</div>
+  </div>
+
+  <!-- SECTION 4: QUESTIONS -->
+  <h2>Questions to answer in your discussion <span class="section-count">16 questions</span></h2>
+  <p class="muted">These are the decisions that need to come out of the Pulkit conversation. Each unresolved question blocks something downstream.</p>
+
+  <h3>Product &amp; design decisions</h3>
+
+  <div class="q">
+    <div class="num">1</div>
+    <div class="body">
+      <b>QR or no-QR — which is the actual redemption model?</b>
+      <span>The text says name-match, the mockups show QR scanning. These cannot coexist. If name-match: Screens 8 and 11 need to be redrawn. If QR: the text needs to change and the "frictionless, no-staff-training" advantage disappears.</span>
+    </div>
+    <div class="tag product">Product</div>
+  </div>
+
+  <div class="q">
+    <div class="num">2</div>
+    <div class="body">
+      <b>Is the Zivvo Card in or out of MVP?</b>
+      <span>The Strategic Review recommends deferring it to reduce build complexity and validate demand first. If it's deferred, what replaces it for walk-in venues? If it stays, who is building the fintech compliance side?</span>
+    </div>
+    <div class="tag product">Product</div>
+  </div>
+
+  <div class="q">
+    <div class="num">3</div>
+    <div class="body">
+      <b>If the Card is deferred, what is the walk-in venue redemption model?</b>
+      <span>Currently the entire walk-in flow depends on the Card. Options are: (a) defer walk-in venues entirely from MVP; (b) use a code or QR — but this contradicts the no-QR position; (c) some other mechanism. Needs an explicit answer.</span>
+    </div>
+    <div class="tag product">Product</div>
+  </div>
+
+  <div class="q">
+    <div class="num">4</div>
+    <div class="body">
+      <b>Is the five-deal cap per venue fixed policy or a configurable default to A/B test?</b>
+      <span>The dossier treats it as gospel. The Review says it's a hypothesis that might leave capacity unsold. Should it be presented as a design principle or a starting point?</span>
+    </div>
+    <div class="tag product">Product</div>
+  </div>
+
+  <div class="q">
+    <div class="num">5</div>
+    <div class="body">
+      <b>Is theatre explicitly de-scoped from the MVP and Phase 1?</b>
+      <span>It's rated ★★★★★ in the overview but doesn't fit the 7-day rolling window. If it's deferred, should it be marked as a separate future model in the dossier rather than listed alongside bowling and escape rooms?</span>
+    </div>
+    <div class="tag product">Product</div>
+  </div>
+
+  <div class="q">
+    <div class="num">6</div>
+    <div class="body">
+      <b>What is the exact MVP feature list — and what is explicitly excluded?</b>
+      <span>The Strategic Review recommends a frozen one-page first-release feature list with an explicit deferral list. Points, referrals, and reviews are currently in Phase 0 — are these actually MVP or nice-to-have?</span>
+    </div>
+    <div class="tag product">Product</div>
+  </div>
+
+  <h3>Commercial &amp; strategy decisions</h3>
+
+  <div class="q">
+    <div class="num">7</div>
+    <div class="body">
+      <b>Which launch vertical — bowling or escape rooms?</b>
+      <span>The Strategic Review names these as the two strongest candidates. The dossier doesn't pick one. This decision drives the mock venue database, the venue pitch materials, the supply acquisition plan, and which POS systems to research first.</span>
+    </div>
+    <div class="tag commercial">Commercial</div>
+  </div>
+
+  <div class="q">
+    <div class="num">8</div>
+    <div class="body">
+      <b>What is the opening commission rate — 18% standard or 15% anchor for early venues?</b>
+      <span>The Unit Economics model shows 18% nets A$7.52 per standard booking; 15% reduces this to ~A$6.10. The difference matters more now there's no consumer fee. What's the commercial position for the first venue conversations?</span>
+    </div>
+    <div class="tag commercial">Commercial</div>
+  </div>
+
+  <div class="q">
+    <div class="num">9</div>
+    <div class="body">
+      <b>Will Zivvo pursue exclusivity or preferential terms with early venues?</b>
+      <span>The Strategic Review recommends this as the primary defensibility lever — "secure preferential or exclusive terms with early venues to raise the cost of replication." Is this the approach? What's the offer to a venue in exchange for exclusivity?</span>
+    </div>
+    <div class="tag commercial">Commercial</div>
+  </div>
+
+  <div class="q">
+    <div class="num">10</div>
+    <div class="body">
+      <b>Who is conducting the 8–10 Melbourne venue conversations, and when?</b>
+      <span>The Strategic Review says this is the single most important pre-build step and must happen before development. Is this Tommy, Pulkit, or both? What's the timeline and target venues?</span>
+    </div>
+    <div class="tag commercial">Commercial</div>
+  </div>
+
+  <div class="q">
+    <div class="num">11</div>
+    <div class="body">
+      <b>What are the specific Melbourne venue targets for the launch vertical?</b>
+      <span>The dossier is generic. For the supply-first acquisition plan, you need a list of actual venues — bowling alleys, escape rooms, or whichever vertical you pick — in central Melbourne. Has either of you started this list?</span>
+    </div>
+    <div class="tag commercial">Commercial</div>
+  </div>
+
+  <div class="q">
+    <div class="num">12</div>
+    <div class="body">
+      <b>Who is on the team, and is this full-time or part-time?</b>
+      <span>The Strategic Review's timeline assumes a part-time team. The indicative build effort (2–4 weeks discovery, 10–16 weeks build) implies a meaningful time commitment. What are the actual resources and constraints?</span>
+    </div>
+    <div class="tag commercial">Commercial</div>
+  </div>
+
+  <h3>Numbers &amp; economics</h3>
+
+  <div class="q">
+    <div class="num">13</div>
+    <div class="body">
+      <b>What is the realistic average order value for the launch vertical in Melbourne?</b>
+      <span>The Unit Economics model is highly sensitive to average order value. The standard example uses A$48, the group example A$120. What do bowling lanes and escape rooms actually charge in Melbourne, and what is the expected party size?</span>
+    </div>
+    <div class="tag numbers">Numbers</div>
+  </div>
+
+  <div class="q">
+    <div class="num">14</div>
+    <div class="body">
+      <b>Has GST been factored into the Australian unit economics?</b>
+      <span>The Strategic Review flags that "Australian payment-processing fees, local interchange rates and GST treatment are not reflected in the figures presented." The Unit Economics spreadsheet uses pre-tax figures. How does GST affect the commission model and what the venue actually receives?</span>
+    </div>
+    <div class="tag numbers">Numbers</div>
+  </div>
+
+  <div class="q">
+    <div class="num">15</div>
+    <div class="body">
+      <b>What are the actual monthly fixed costs — hosting, tooling, Stripe fees, operations?</b>
+      <span>The spreadsheet has a monthly fixed costs input that drives break-even. The Strategic Review says break-even requires "a few hundred bookings per month." Has this been modelled against real cost estimates (AWS, Algolia, Stripe Connect monthly fees, etc.)?</span>
+    </div>
+    <div class="tag numbers">Numbers</div>
+  </div>
+
+  <div class="q">
+    <div class="num">16</div>
+    <div class="body">
+      <b>Is the dossier being shared with investors or external parties?</b>
+      <span>The dossier has UK pricing, aspirational venue counts, and US market data. The Strategic Review is marked "Confidential working draft for review." Before either document goes external, the geographic inconsistencies and unvalidated claims need to be resolved. What is the intended audience?</span>
+    </div>
+    <div class="tag commercial">Commercial</div>
+  </div>
+
+  <div style="margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--line); font-size: 12.5px; color: var(--faint);">
+    Prepared by Tommy · 29 Jun 2026 · Based on: index.html (compiled 25 Jun 2026 by Pulkit), Zivvo_Strategic_Review.docx (27 Jun 2026), Zivvo_Unit_Economics.xlsx · All issues are as-found — nothing in the dossier has been changed except the consumer service fee removal (Issue 20).
+  </div>
+
+</div>
+</body>
+</html>
